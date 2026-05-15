@@ -1,0 +1,327 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|c:\\users\\081240045\\onedrive - funda\u00E7\u00E3o salvador arena\\ec5\\linguagem de programa\u00E7\u00E3o i\\pbl-glittercomputer\\pbl\\pbl\\dao\\helperdao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|solutionrelative:pbl\\dao\\helperdao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|c:\\users\\081240045\\onedrive - funda\u00E7\u00E3o salvador arena\\ec5\\linguagem de programa\u00E7\u00E3o i\\pbl-glittercomputer\\pbl\\pbl\\dao\\conexaobd.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|solutionrelative:pbl\\dao\\conexaobd.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|c:\\users\\081240045\\onedrive - funda\u00E7\u00E3o salvador arena\\ec5\\linguagem de programa\u00E7\u00E3o i\\pbl-glittercomputer\\pbl\\pbl\\controllers\\helpercontrollers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|solutionrelative:pbl\\controllers\\helpercontrollers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|c:\\users\\081240045\\onedrive - funda\u00E7\u00E3o salvador arena\\ec5\\linguagem de programa\u00E7\u00E3o i\\pbl-glittercomputer\\pbl\\pbl\\models\\usuarioviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|solutionrelative:pbl\\models\\usuarioviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|c:\\users\\081240045\\onedrive - funda\u00E7\u00E3o salvador arena\\ec5\\linguagem de programa\u00E7\u00E3o i\\pbl-glittercomputer\\pbl\\pbl\\views\\login\\cadastrar.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|solutionrelative:pbl\\views\\login\\cadastrar.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|c:\\users\\081240045\\onedrive - funda\u00E7\u00E3o salvador arena\\ec5\\linguagem de programa\u00E7\u00E3o i\\pbl-glittercomputer\\pbl\\pbl\\views\\login\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|solutionrelative:pbl\\views\\login\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|c:\\users\\081240045\\onedrive - funda\u00E7\u00E3o salvador arena\\ec5\\linguagem de programa\u00E7\u00E3o i\\pbl-glittercomputer\\pbl\\pbl\\views\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|solutionrelative:pbl\\views\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|c:\\users\\081240045\\onedrive - funda\u00E7\u00E3o salvador arena\\ec5\\linguagem de programa\u00E7\u00E3o i\\pbl-glittercomputer\\pbl\\pbl\\views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|solutionrelative:pbl\\views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|c:\\users\\081240045\\onedrive - funda\u00E7\u00E3o salvador arena\\ec5\\linguagem de programa\u00E7\u00E3o i\\pbl-glittercomputer\\pbl\\pbl\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|solutionrelative:pbl\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|c:\\users\\081240045\\onedrive - funda\u00E7\u00E3o salvador arena\\ec5\\linguagem de programa\u00E7\u00E3o i\\pbl-glittercomputer\\pbl\\pbl\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|solutionrelative:pbl\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|c:\\users\\081240045\\onedrive - funda\u00E7\u00E3o salvador arena\\ec5\\linguagem de programa\u00E7\u00E3o i\\pbl-glittercomputer\\pbl\\pbl\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|solutionrelative:pbl\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|c:\\users\\081240045\\onedrive - funda\u00E7\u00E3o salvador arena\\ec5\\linguagem de programa\u00E7\u00E3o i\\pbl-glittercomputer\\pbl\\pbl\\startup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|solutionrelative:pbl\\startup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|c:\\users\\081240045\\onedrive - funda\u00E7\u00E3o salvador arena\\ec5\\linguagem de programa\u00E7\u00E3o i\\pbl-glittercomputer\\pbl\\pbl\\models\\padraoviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|solutionrelative:pbl\\models\\padraoviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|c:\\users\\081240045\\onedrive - funda\u00E7\u00E3o salvador arena\\ec5\\linguagem de programa\u00E7\u00E3o i\\pbl-glittercomputer\\pbl\\pbl\\models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|solutionrelative:pbl\\models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|c:\\users\\081240045\\onedrive - funda\u00E7\u00E3o salvador arena\\ec5\\linguagem de programa\u00E7\u00E3o i\\pbl-glittercomputer\\pbl\\pbl\\dao\\usuariodao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|solutionrelative:pbl\\dao\\usuariodao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|c:\\users\\081240045\\onedrive - funda\u00E7\u00E3o salvador arena\\ec5\\linguagem de programa\u00E7\u00E3o i\\pbl-glittercomputer\\pbl\\pbl\\dao\\padraodao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|solutionrelative:pbl\\dao\\padraodao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|c:\\users\\081240045\\onedrive - funda\u00E7\u00E3o salvador arena\\ec5\\linguagem de programa\u00E7\u00E3o i\\pbl-glittercomputer\\pbl\\pbl\\controllers\\padraocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|solutionrelative:pbl\\controllers\\padraocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|c:\\users\\081240045\\onedrive - funda\u00E7\u00E3o salvador arena\\ec5\\linguagem de programa\u00E7\u00E3o i\\pbl-glittercomputer\\pbl\\pbl\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|solutionrelative:pbl\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|c:\\users\\081240045\\onedrive - funda\u00E7\u00E3o salvador arena\\ec5\\linguagem de programa\u00E7\u00E3o i\\pbl-glittercomputer\\pbl\\pbl\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|solutionrelative:pbl\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Views\\Login\\Index.cshtml",
+              "RelativeDocumentMoniker": "PBL\\Views\\Login\\Index.cshtml",
+              "ToolTip": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Views\\Login\\Index.cshtml",
+              "RelativeToolTip": "PBL\\Views\\Login\\Index.cshtml",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-15T00:58:22.723Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "_ViewImports.cshtml",
+              "DocumentMoniker": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Views\\_ViewImports.cshtml",
+              "RelativeDocumentMoniker": "PBL\\Views\\_ViewImports.cshtml",
+              "ToolTip": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Views\\_ViewImports.cshtml",
+              "RelativeToolTip": "PBL\\Views\\_ViewImports.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-15T00:58:01.547Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "_ViewStart.cshtml",
+              "DocumentMoniker": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Views\\_ViewStart.cshtml",
+              "RelativeDocumentMoniker": "PBL\\Views\\_ViewStart.cshtml",
+              "ToolTip": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Views\\_ViewStart.cshtml",
+              "RelativeToolTip": "PBL\\Views\\_ViewStart.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-15T00:57:59.565Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "PBL\\appsettings.Development.json",
+              "ToolTip": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\appsettings.Development.json",
+              "RelativeToolTip": "PBL\\appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-05-15T00:57:56.804Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\appsettings.json",
+              "RelativeDocumentMoniker": "PBL\\appsettings.json",
+              "ToolTip": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\appsettings.json",
+              "RelativeToolTip": "PBL\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-05-15T00:57:52.267Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Cadastrar.cshtml",
+              "DocumentMoniker": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Views\\Login\\Cadastrar.cshtml",
+              "RelativeDocumentMoniker": "PBL\\Views\\Login\\Cadastrar.cshtml",
+              "ToolTip": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Views\\Login\\Cadastrar.cshtml",
+              "RelativeToolTip": "PBL\\Views\\Login\\Cadastrar.cshtml",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-15T00:57:08.148Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "HelperDAO.cs",
+              "DocumentMoniker": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\DAO\\HelperDAO.cs",
+              "RelativeDocumentMoniker": "PBL\\DAO\\HelperDAO.cs",
+              "ToolTip": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\DAO\\HelperDAO.cs",
+              "RelativeToolTip": "PBL\\DAO\\HelperDAO.cs",
+              "ViewState": "AgIAACwAAAAAAAAAAAAiwD8AAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-15T00:55:24.964Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ConexaoBD.cs",
+              "DocumentMoniker": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\DAO\\ConexaoBD.cs",
+              "RelativeDocumentMoniker": "PBL\\DAO\\ConexaoBD.cs",
+              "ToolTip": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\DAO\\ConexaoBD.cs",
+              "RelativeToolTip": "PBL\\DAO\\ConexaoBD.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-15T00:55:20.947Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UsuarioViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Models\\UsuarioViewModel.cs",
+              "RelativeDocumentMoniker": "PBL\\Models\\UsuarioViewModel.cs",
+              "ToolTip": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Models\\UsuarioViewModel.cs",
+              "RelativeToolTip": "PBL\\Models\\UsuarioViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-15T00:55:59.284Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "HelperControllers.cs",
+              "DocumentMoniker": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Controllers\\HelperControllers.cs",
+              "RelativeDocumentMoniker": "PBL\\Controllers\\HelperControllers.cs",
+              "ToolTip": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Controllers\\HelperControllers.cs",
+              "RelativeToolTip": "PBL\\Controllers\\HelperControllers.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-15T00:56:05.955Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "PadraoController.cs",
+              "DocumentMoniker": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Controllers\\PadraoController.cs",
+              "RelativeDocumentMoniker": "PBL\\Controllers\\PadraoController.cs",
+              "ToolTip": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Controllers\\PadraoController.cs",
+              "RelativeToolTip": "PBL\\Controllers\\PadraoController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-15T00:56:33.499Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "LoginController.cs",
+              "DocumentMoniker": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Controllers\\LoginController.cs",
+              "RelativeDocumentMoniker": "PBL\\Controllers\\LoginController.cs",
+              "ToolTip": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Controllers\\LoginController.cs",
+              "RelativeToolTip": "PBL\\Controllers\\LoginController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-15T00:56:23.58Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "PadraoDAO.cs",
+              "DocumentMoniker": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\DAO\\PadraoDAO.cs",
+              "RelativeDocumentMoniker": "PBL\\DAO\\PadraoDAO.cs",
+              "ToolTip": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\DAO\\PadraoDAO.cs",
+              "RelativeToolTip": "PBL\\DAO\\PadraoDAO.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAA5wAsAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-15T00:55:28.459Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "UsuarioDAO.cs",
+              "DocumentMoniker": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\DAO\\UsuarioDAO.cs",
+              "RelativeDocumentMoniker": "PBL\\DAO\\UsuarioDAO.cs",
+              "ToolTip": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\DAO\\UsuarioDAO.cs",
+              "RelativeToolTip": "PBL\\DAO\\UsuarioDAO.cs",
+              "ViewState": "AgIAAD8AAAAAAAAAAAAmwAYAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-15T00:55:47.259Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ErrorViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Models\\ErrorViewModel.cs",
+              "RelativeDocumentMoniker": "PBL\\Models\\ErrorViewModel.cs",
+              "ToolTip": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Models\\ErrorViewModel.cs",
+              "RelativeToolTip": "PBL\\Models\\ErrorViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-15T00:55:53.635Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "PadraoViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Models\\PadraoViewModel.cs",
+              "RelativeDocumentMoniker": "PBL\\Models\\PadraoViewModel.cs",
+              "ToolTip": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Models\\PadraoViewModel.cs",
+              "RelativeToolTip": "PBL\\Models\\PadraoViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-15T00:55:56.387Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Startup.cs",
+              "DocumentMoniker": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Startup.cs",
+              "RelativeDocumentMoniker": "PBL\\Startup.cs",
+              "ToolTip": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Startup.cs",
+              "RelativeToolTip": "PBL\\Startup.cs",
+              "ViewState": "AgIAACwAAAAAAAAAAAAIwBIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-15T00:55:03.57Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Program.cs",
+              "RelativeDocumentMoniker": "PBL\\Program.cs",
+              "ToolTip": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Program.cs",
+              "RelativeToolTip": "PBL\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-15T00:55:12.443Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "PBL\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\081240045\\OneDrive - Funda\u00E7\u00E3o Salvador Arena\\EC5\\Linguagem de Programa\u00E7\u00E3o I\\PBL-GlitterComputer\\PBL\\PBL\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "PBL\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-15T00:56:13.059Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

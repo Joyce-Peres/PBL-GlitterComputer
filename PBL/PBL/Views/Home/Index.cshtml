@@ -1,0 +1,49 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Sistema de Cadastro de Fotos de Viagem</h1>
+<hr />
+
+<div class="jumbotron">
+    <h2>Bem-vindo!</h2>
+    <p class="lead">Compartilhe suas melhores fotos de viagem com a comunidade.</p>
+
+    @if (ViewBag.Logado == true)
+    {
+        <p>
+            <a class="btn btn-primary btn-lg" href="/fotoviagem/create" role="button">
+                Adicionar Foto &raquo;
+            </a>
+            <a class="btn btn-info btn-lg" href="/fotoviagem/index" role="button">
+                Ver Todas as Fotos &raquo;
+            </a>
+        </p>
+    }
+    else
+    {
+        <p>
+            <a class="btn btn-success btn-lg" href="/login/index" role="button">
+                Faça Login &raquo;
+            </a>
+            <a class="btn btn-primary btn-lg" href="/login/cadastrar" role="button">
+                Cadastre-se &raquo;
+            </a>
+        </p>
+    }
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h3>Compartilhe</h3>
+        <p>Cadastre suas fotos de viagem e compartilhe com outros usuários do sistema.</p>
+    </div>
+    <div class="col-md-4">
+        <h3>Explore</h3>
+        <p>Veja as fotos de viagem de todos os usuários cadastrados no sistema.</p>
+    </div>
+    <div class="col-md-4">
+        <h3>Gerencie</h3>
+        <p>Edite ou delete suas fotos de forma fácil e rápida.</p>
+    </div>
+</div>

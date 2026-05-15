@@ -1,0 +1,3 @@
+﻿@using CadAlunoMVC
+@using CadAlunoMVC.Models
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
