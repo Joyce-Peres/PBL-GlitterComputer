@@ -1,0 +1,57 @@
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Dashboard — Monitoramento IoT</h2>
+<hr />
+<p class="lead">Acompanhe as leituras dos sensores do aquário inteligente em tempo real.</p>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">Filtros</h5>
+        <form id="formFiltroDashboard" class="form-row">
+            <div class="form-group col-md-4">
+                <label for="aquarioId">Aquário</label>
+                <select id="aquarioId" name="aquarioId" class="form-control" asp-items="ViewBag.Aquarios">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="dataInicio">Data Início</label>
+                <input type="date" id="dataInicio" name="dataInicio" class="form-control" />
+            </div>
+            <div class="form-group col-md-3">
+                <label for="dataFim">Data Fim</label>
+                <input type="date" id="dataFim" name="dataFim" class="form-control" />
+            </div>
+            <div class="form-group col-md-2 d-flex align-items-end">
+                <button type="button" id="btnFiltrar" class="btn btn-primary btn-block">Filtrar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="resultadoDashboard">
+    <p class="text-muted">Clique em Filtrar para carregar os dados.</p>
+</div>
+
+@section Scripts {
+    <script>
+        function carregarDashboard() {
+            var params = {
+                aquarioId: $('#aquarioId').val() || null,
+                dataInicio: $('#dataInicio').val() || null,
+                dataFim: $('#dataFim').val() || null
+            };
+            $('#resultadoDashboard').html('<p class="text-info">Carregando...</p>');
+            $.get('/Dashboard/DadosFiltrados', params, function (html) {
+                $('#resultadoDashboard').html(html);
+            }).fail(function () {
+                $('#resultadoDashboard').html('<div class="alert alert-danger">Erro ao carregar dados.</div>');
+            });
+        }
+        $('#btnFiltrar').click(carregarDashboard);
+        $(document).ready(carregarDashboard);
+    </script>
+}

@@ -1,0 +1,45 @@
+@model PBL.Models.AquarioViewModel
+@{
+    ViewData["Title"] = ViewBag.Operacao == "I" ? "Novo Aquário" : "Editar Aquário";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewData["Title"]</h2>
+<hr />
+
+<form asp-action="Salvar" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input type="hidden" name="Operacao" value="@ViewBag.Operacao" />
+    <div class="form-group">
+        <label asp-for="Id">Código</label>
+        <input asp-for="Id" class="form-control" readonly />
+        <span asp-validation-for="Id" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Nome">Nome do Aquário</label>
+        <input asp-for="Nome" class="form-control" required />
+        <span asp-validation-for="Nome" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CapacidadeLitros">Capacidade (litros)</label>
+        <input asp-for="CapacidadeLitros" type="number" step="0.01" class="form-control" required />
+        <span asp-validation-for="CapacidadeLitros" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="TipoAgua">Tipo de Água</label>
+        <select asp-for="TipoAgua" asp-items="ViewBag.TiposAgua" class="form-control" required>
+            <option value="">Selecione...</option>
+        </select>
+        <span asp-validation-for="TipoAgua" class="text-danger"></span>
+    </div>
+    @if (Model.UsuarioId > 0)
+    {
+        <input type="hidden" asp-for="UsuarioId" />
+    }
+    <button type="submit" class="btn btn-success">Salvar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

@@ -9,6 +9,7 @@ namespace PBL.Controllers
     {
         public IActionResult Index()
         {
+            ViewBag.Logado = HelperControllers.VerificaUserLogado(HttpContext.Session);
             return View();
         }
 
@@ -40,7 +41,23 @@ namespace PBL.Controllers
 
         public IActionResult Cadastrar()
         {
+            ViewBag.Logado = HelperControllers.VerificaUserLogado(HttpContext.Session);
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult VerificarLogin(string login)
+        {
+            if (string.IsNullOrWhiteSpace(login))
+                return Json(new { disponivel = false, mensagem = "Informe um e-mail." });
+
+            var usuarioDAO = new UsuarioDAO();
+            var existente = usuarioDAO.ConsultaPorLogin(login);
+            return Json(new
+            {
+                disponivel = existente == null,
+                mensagem = existente == null ? "E-mail disponível." : "Este e-mail já está cadastrado."
+            });
         }
 
         public IActionResult FazCadastro(string nome, string login, string senha, string confirmarSenha)

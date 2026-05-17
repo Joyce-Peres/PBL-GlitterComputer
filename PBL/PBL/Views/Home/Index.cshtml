@@ -1,49 +1,46 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Home";
 }
 
-<h1>Sistema de Cadastro de Fotos de Viagem</h1>
+<h1>Aquário Inteligente</h1>
 <hr />
 
-<div class="jumbotron">
+<div class="jumbotron bg-light">
     <h2>Bem-vindo!</h2>
-    <p class="lead">Compartilhe suas melhores fotos de viagem com a comunidade.</p>
+    <p class="lead">
+        Monitore temperatura, pH e nível de água do seu aquário em tempo real
+        com sensores IoT e gerencie peixes e aquários pelo sistema web.
+    </p>
 
     @if (ViewBag.Logado == true)
     {
         <p>
-            <a class="btn btn-primary btn-lg" href="/fotoviagem/create" role="button">
-                Adicionar Foto &raquo;
-            </a>
-            <a class="btn btn-info btn-lg" href="/fotoviagem/index" role="button">
-                Ver Todas as Fotos &raquo;
-            </a>
+            <a class="btn btn-primary btn-lg" asp-controller="Aquario" asp-action="Create">Novo Aquário &raquo;</a>
+            <a class="btn btn-success btn-lg" asp-controller="Peixe" asp-action="Create">Cadastrar Peixe &raquo;</a>
+            <a class="btn btn-info btn-lg" asp-controller="Dashboard" asp-action="Index">Dashboard IoT &raquo;</a>
         </p>
     }
     else
     {
         <p>
-            <a class="btn btn-success btn-lg" href="/login/index" role="button">
-                Faça Login &raquo;
-            </a>
-            <a class="btn btn-primary btn-lg" href="/login/cadastrar" role="button">
-                Cadastre-se &raquo;
-            </a>
+            <a class="btn btn-success btn-lg" asp-controller="Login" asp-action="Index">Faça Login &raquo;</a>
+            <a class="btn btn-primary btn-lg" asp-controller="Login" asp-action="Cadastrar">Cadastre-se &raquo;</a>
         </p>
     }
 </div>
 
 <div class="row">
     <div class="col-md-4">
-        <h3>Compartilhe</h3>
-        <p>Cadastre suas fotos de viagem e compartilhe com outros usuários do sistema.</p>
-    </div>
-    <div class="col-md-4">
-        <h3>Explore</h3>
-        <p>Veja as fotos de viagem de todos os usuários cadastrados no sistema.</p>
-    </div>
-    <div class="col-md-4">
         <h3>Gerencie</h3>
-        <p>Edite ou delete suas fotos de forma fácil e rápida.</p>
+        <p>Cadastre aquários e peixes com fotos, vinculados ao responsável e ao aquário.</p>
+    </div>
+    <div class="col-md-4">
+        <h3>Monitore</h3>
+        <p>Acompanhe leituras dos sensores IoT no dashboard com filtros por aquário e período.</p>
+    </div>
+    <div class="col-md-4">
+        <h3>Integre</h3>
+        <p>Utilize a API REST documentada no Swagger para receber dados do dispositivo IoT.</p>
     </div>
 </div>

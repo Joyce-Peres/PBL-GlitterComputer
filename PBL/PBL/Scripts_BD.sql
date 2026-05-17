@@ -1,8 +1,8 @@
 -- ==========================================
--- SCRIPT DE CRIA��O DAS STORED PROCEDURES
--- Projeto: CadFotosViagem
+-- SCRIPT DE CRIAÇÃO - Aquário Inteligente
+-- Projeto: PBL GlitterComputer
 -- ==========================================
- 
+
 -- ==========================================
 -- TABELA USUARIOS
 -- ==========================================
@@ -16,12 +16,72 @@ BEGIN
     )
 END
 GO
- 
+
 -- ==========================================
--- STORED PROCEDURES GEN�RICAS (PadraoDAO)
+-- TABELA AQUARIOS (relaciona com Usuarios)
 -- ==========================================
- 
--- SP: spListagem - Listagem gen�rica
+IF OBJECT_ID('Aquarios', 'U') IS NULL
+BEGIN
+    CREATE TABLE Aquarios (
+        id INT PRIMARY KEY IDENTITY(1,1),
+        nome VARCHAR(100) NOT NULL,
+        capacidadeLitros DECIMAL(10,2) NOT NULL,
+        tipoAgua VARCHAR(20) NOT NULL,
+        usuarioId INT NOT NULL,
+        CONSTRAINT FK_Aquarios_Usuarios FOREIGN KEY (usuarioId) REFERENCES Usuarios(id)
+    )
+END
+GO
+
+-- ==========================================
+-- TABELA PEIXES (relaciona com Aquarios + foto)
+-- ==========================================
+IF OBJECT_ID('Peixes', 'U') IS NULL
+BEGIN
+    CREATE TABLE Peixes (
+        id INT PRIMARY KEY IDENTITY(1,1),
+        nome VARCHAR(100) NOT NULL,
+        especie VARCHAR(100) NOT NULL,
+        tamanhoCm DECIMAL(6,2) NOT NULL,
+        aquarioId INT NOT NULL,
+        foto VARCHAR(255) NULL,
+        CONSTRAINT FK_Peixes_Aquarios FOREIGN KEY (aquarioId) REFERENCES Aquarios(id)
+    )
+END
+GO
+
+-- ==========================================
+-- TABELA LEITURAS SENSOR IoT (relaciona com Aquarios)
+-- ==========================================
+IF OBJECT_ID('LeiturasSensor', 'U') IS NULL
+BEGIN
+    CREATE TABLE LeiturasSensor (
+        id INT PRIMARY KEY IDENTITY(1,1),
+        aquarioId INT NOT NULL,
+        temperatura DECIMAL(5,2) NOT NULL,
+        ph DECIMAL(4,2) NOT NULL,
+        nivelAgua DECIMAL(5,2) NOT NULL,
+        dataLeitura DATETIME NOT NULL DEFAULT GETDATE(),
+        CONSTRAINT FK_Leituras_Aquarios FOREIGN KEY (aquarioId) REFERENCES Aquarios(id)
+    )
+END
+GO
+
+-- Dados de exemplo para demonstração IoT
+IF NOT EXISTS (SELECT 1 FROM LeiturasSensor)
+BEGIN
+    IF EXISTS (SELECT 1 FROM Aquarios)
+    BEGIN
+        INSERT INTO LeiturasSensor (aquarioId, temperatura, ph, nivelAgua, dataLeitura)
+        SELECT TOP 1 id, 25.5, 7.2, 85.0, GETDATE() FROM Aquarios
+    END
+END
+GO
+
+-- ==========================================
+-- STORED PROCEDURES GENÉRICAS (PadraoDAO)
+-- ==========================================
+
 CREATE OR ALTER PROCEDURE spListagem
     @tabela NVARCHAR(100),
     @Ordem INT
@@ -31,49 +91,76 @@ BEGIN
     BEGIN
         SELECT id, nome, login, senha FROM Usuarios ORDER BY id
     END
-    ELSE IF @tabela = 'FotosViagem'
+    ELSE IF @tabela = 'Aquarios'
     BEGIN
-        SELECT id, localViagem, dataViagem, imagem1, imagem2, imagem3, usuarioId, dataCriacao, dataUltimaAlteracao
-        FROM FotosViagem ORDER BY id
+        SELECT a.id, a.nome, a.capacidadeLitros, a.tipoAgua, a.usuarioId,
+               u.nome AS nomeUsuario
+        FROM Aquarios a
+        INNER JOIN Usuarios u ON a.usuarioId = u.id
+        ORDER BY a.id
+    END
+    ELSE IF @tabela = 'Peixes'
+    BEGIN
+        SELECT p.id, p.nome, p.especie, p.tamanhoCm, p.aquarioId, p.foto,
+               aq.nome AS nomeAquario
+        FROM Peixes p
+        INNER JOIN Aquarios aq ON p.aquarioId = aq.id
+        ORDER BY p.id
+    END
+    ELSE IF @tabela = 'LeiturasSensor'
+    BEGIN
+        SELECT l.id, l.aquarioId, l.temperatura, l.ph, l.nivelAgua, l.dataLeitura,
+               aq.nome AS nomeAquario
+        FROM LeiturasSensor l
+        INNER JOIN Aquarios aq ON l.aquarioId = aq.id
+        ORDER BY l.dataLeitura DESC
     END
 END
 GO
- 
--- SP: spProximoId - Obt�m o pr�ximo ID
+
 CREATE OR ALTER PROCEDURE spProximoId
     @tabela NVARCHAR(100)
 AS
 BEGIN
     IF @tabela = 'Usuarios'
-    BEGIN
         SELECT ISNULL(MAX(id), 0) + 1 FROM Usuarios
-    END
-    ELSE IF @tabela = 'PBL'
-    BEGIN
-        SELECT ISNULL(MAX(id), 0) + 1 FROM PBL
-    END
+    ELSE IF @tabela = 'Aquarios'
+        SELECT ISNULL(MAX(id), 0) + 1 FROM Aquarios
+    ELSE IF @tabela = 'Peixes'
+        SELECT ISNULL(MAX(id), 0) + 1 FROM Peixes
+    ELSE IF @tabela = 'LeiturasSensor'
+        SELECT ISNULL(MAX(id), 0) + 1 FROM LeiturasSensor
 END
 GO
- 
--- SP: spConsulta - Consulta gen�rica por ID
+
 CREATE OR ALTER PROCEDURE spConsulta
     @id INT,
     @tabela NVARCHAR(100)
 AS
 BEGIN
     IF @tabela = 'Usuarios'
-    BEGIN
         SELECT id, nome, login, senha FROM Usuarios WHERE id = @id
-    END
-    ELSE IF @tabela = 'PBL'
-    BEGIN
-        SELECT id, localViagem, dataViagem, imagem1, imagem2, imagem3, usuarioId, dataCriacao, dataUltimaAlteracao
-        FROM PBL WHERE id = @id
-    END
+    ELSE IF @tabela = 'Aquarios'
+        SELECT a.id, a.nome, a.capacidadeLitros, a.tipoAgua, a.usuarioId,
+               u.nome AS nomeUsuario
+        FROM Aquarios a
+        INNER JOIN Usuarios u ON a.usuarioId = u.id
+        WHERE a.id = @id
+    ELSE IF @tabela = 'Peixes'
+        SELECT p.id, p.nome, p.especie, p.tamanhoCm, p.aquarioId, p.foto,
+               aq.nome AS nomeAquario
+        FROM Peixes p
+        INNER JOIN Aquarios aq ON p.aquarioId = aq.id
+        WHERE p.id = @id
+    ELSE IF @tabela = 'LeiturasSensor'
+        SELECT l.id, l.aquarioId, l.temperatura, l.ph, l.nivelAgua, l.dataLeitura,
+               aq.nome AS nomeAquario
+        FROM LeiturasSensor l
+        INNER JOIN Aquarios aq ON l.aquarioId = aq.id
+        WHERE l.id = @id
 END
 GO
- 
--- SP: spDelete - Exclus�o gen�rica
+
 CREATE OR ALTER PROCEDURE spDelete
     @id INT,
     @tabela NVARCHAR(100)
@@ -81,21 +168,95 @@ AS
 BEGIN
     IF @tabela = 'Usuarios'
     BEGIN
-        DELETE FROM PBL WHERE usuarioId = @id
+        DELETE FROM LeiturasSensor WHERE aquarioId IN (SELECT id FROM Aquarios WHERE usuarioId = @id)
+        DELETE FROM Peixes WHERE aquarioId IN (SELECT id FROM Aquarios WHERE usuarioId = @id)
+        DELETE FROM Aquarios WHERE usuarioId = @id
         DELETE FROM Usuarios WHERE id = @id
     END
-    ELSE IF @tabela = 'PBL'
+    ELSE IF @tabela = 'Aquarios'
     BEGIN
-        DELETE FROM PBL WHERE id = @id
+        DELETE FROM LeiturasSensor WHERE aquarioId = @id
+        DELETE FROM Peixes WHERE aquarioId = @id
+        DELETE FROM Aquarios WHERE id = @id
     END
+    ELSE IF @tabela = 'Peixes'
+        DELETE FROM Peixes WHERE id = @id
+    ELSE IF @tabela = 'LeiturasSensor'
+        DELETE FROM LeiturasSensor WHERE id = @id
 END
 GO
- 
+
 -- ==========================================
--- STORED PROCEDURES ESPEC�FICAS - USUARIO
+-- STORED PROCEDURES - AQUARIOS
 -- ==========================================
- 
--- SP: spIncluiUsuario - Insere novo usu�rio
+CREATE OR ALTER PROCEDURE spInsert_Aquarios
+    @id INT,
+    @nome VARCHAR(100),
+    @capacidadeLitros DECIMAL(10,2),
+    @tipoAgua VARCHAR(20),
+    @usuarioId INT
+AS
+BEGIN
+    SET IDENTITY_INSERT Aquarios ON
+    INSERT INTO Aquarios (id, nome, capacidadeLitros, tipoAgua, usuarioId)
+    VALUES (@id, @nome, @capacidadeLitros, @tipoAgua, @usuarioId)
+    SET IDENTITY_INSERT Aquarios OFF
+END
+GO
+
+CREATE OR ALTER PROCEDURE spUpdate_Aquarios
+    @id INT,
+    @nome VARCHAR(100),
+    @capacidadeLitros DECIMAL(10,2),
+    @tipoAgua VARCHAR(20),
+    @usuarioId INT
+AS
+BEGIN
+    UPDATE Aquarios
+    SET nome = @nome, capacidadeLitros = @capacidadeLitros,
+        tipoAgua = @tipoAgua, usuarioId = @usuarioId
+    WHERE id = @id
+END
+GO
+
+-- ==========================================
+-- STORED PROCEDURES - PEIXES
+-- ==========================================
+CREATE OR ALTER PROCEDURE spInsert_Peixes
+    @id INT,
+    @nome VARCHAR(100),
+    @especie VARCHAR(100),
+    @tamanhoCm DECIMAL(6,2),
+    @aquarioId INT,
+    @foto VARCHAR(255)
+AS
+BEGIN
+    SET IDENTITY_INSERT Peixes ON
+    INSERT INTO Peixes (id, nome, especie, tamanhoCm, aquarioId, foto)
+    VALUES (@id, @nome, @especie, @tamanhoCm, @aquarioId, @foto)
+    SET IDENTITY_INSERT Peixes OFF
+END
+GO
+
+CREATE OR ALTER PROCEDURE spUpdate_Peixes
+    @id INT,
+    @nome VARCHAR(100),
+    @especie VARCHAR(100),
+    @tamanhoCm DECIMAL(6,2),
+    @aquarioId INT,
+    @foto VARCHAR(255)
+AS
+BEGIN
+    UPDATE Peixes
+    SET nome = @nome, especie = @especie, tamanhoCm = @tamanhoCm,
+        aquarioId = @aquarioId, foto = @foto
+    WHERE id = @id
+END
+GO
+
+-- ==========================================
+-- STORED PROCEDURES - USUARIO
+-- ==========================================
 CREATE OR ALTER PROCEDURE spIncluiUsuario
     @id INT,
     @nome VARCHAR(150),
@@ -107,8 +268,7 @@ BEGIN
     VALUES (@nome, @login, @senha)
 END
 GO
- 
--- SP: spConsultaUsuario - Consulta usu�rio por ID
+
 CREATE OR ALTER PROCEDURE spConsultaUsuario
     @id INT
 AS
@@ -116,8 +276,7 @@ BEGIN
     SELECT id, nome, login, senha FROM Usuarios WHERE id = @id
 END
 GO
- 
--- SP: spConsultaUsuarioPorLogin - Consulta usu�rio por Login
+
 CREATE OR ALTER PROCEDURE spConsultaUsuarioPorLogin
     @login VARCHAR(50)
 AS
@@ -125,4 +284,73 @@ BEGIN
     SELECT id, nome, login, senha FROM Usuarios WHERE login = @login
 END
 GO
- 
+
+-- ==========================================
+-- CONSULTAS COM FILTROS (Dados Gerenciais)
+-- ==========================================
+CREATE OR ALTER PROCEDURE spConsultaPeixesFiltro
+    @nome VARCHAR(100) = NULL,
+    @especie VARCHAR(100) = NULL,
+    @aquarioId INT = NULL
+AS
+BEGIN
+    SELECT p.id, p.nome, p.especie, p.tamanhoCm, p.aquarioId, p.foto,
+           aq.nome AS nomeAquario
+    FROM Peixes p
+    INNER JOIN Aquarios aq ON p.aquarioId = aq.id
+    WHERE (@nome IS NULL OR @nome = '' OR p.nome LIKE '%' + @nome + '%')
+      AND (@especie IS NULL OR @especie = '' OR p.especie LIKE '%' + @especie + '%')
+      AND (@aquarioId IS NULL OR @aquarioId = 0 OR p.aquarioId = @aquarioId)
+    ORDER BY p.nome
+END
+GO
+
+CREATE OR ALTER PROCEDURE spConsultaLeiturasFiltro
+    @aquarioId INT = NULL,
+    @dataInicio DATETIME = NULL,
+    @dataFim DATETIME = NULL,
+    @temperaturaMin DECIMAL(5,2) = NULL,
+    @temperaturaMax DECIMAL(5,2) = NULL
+AS
+BEGIN
+    SELECT l.id, l.aquarioId, l.temperatura, l.ph, l.nivelAgua, l.dataLeitura,
+           aq.nome AS nomeAquario
+    FROM LeiturasSensor l
+    INNER JOIN Aquarios aq ON l.aquarioId = aq.id
+    WHERE (@aquarioId IS NULL OR @aquarioId = 0 OR l.aquarioId = @aquarioId)
+      AND (@dataInicio IS NULL OR l.dataLeitura >= @dataInicio)
+      AND (@dataFim IS NULL OR l.dataLeitura <= @dataFim)
+      AND (@temperaturaMin IS NULL OR l.temperatura >= @temperaturaMin)
+      AND (@temperaturaMax IS NULL OR l.temperatura <= @temperaturaMax)
+    ORDER BY l.dataLeitura DESC
+END
+GO
+
+CREATE OR ALTER PROCEDURE spDashboardLeituras
+    @aquarioId INT = NULL,
+    @dataInicio DATETIME = NULL,
+    @dataFim DATETIME = NULL
+AS
+BEGIN
+    SELECT l.id, l.aquarioId, l.temperatura, l.ph, l.nivelAgua, l.dataLeitura,
+           aq.nome AS nomeAquario
+    FROM LeiturasSensor l
+    INNER JOIN Aquarios aq ON l.aquarioId = aq.id
+    WHERE (@aquarioId IS NULL OR @aquarioId = 0 OR l.aquarioId = @aquarioId)
+      AND (@dataInicio IS NULL OR l.dataLeitura >= @dataInicio)
+      AND (@dataFim IS NULL OR l.dataLeitura <= @dataFim)
+    ORDER BY l.dataLeitura DESC
+END
+GO
+
+CREATE OR ALTER PROCEDURE spInserirLeituraSensor
+    @aquarioId INT,
+    @temperatura DECIMAL(5,2),
+    @ph DECIMAL(4,2),
+    @nivelAgua DECIMAL(5,2)
+AS
+BEGIN
+    INSERT INTO LeiturasSensor (aquarioId, temperatura, ph, nivelAgua, dataLeitura)
+    VALUES (@aquarioId, @temperatura, @ph, @nivelAgua, GETDATE())
+END
+GO
