@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyProductAttribute("PBL")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+095df7f713c04ecd7525dc5668af7946e2ff1cc8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d13e1961fe422f809e237cc4348824d75a97fedc")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PBL.Views")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 

@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Joyce\\OneDrive - Fundação Salvador Arena\\EC5\\Linguagem de Programação I\\PBL-GlitterComputer\\PBL\\PBL\\PBL.csproj": {}
+    "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\PBL.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Joyce\\OneDrive - Fundação Salvador Arena\\EC5\\Linguagem de Programação I\\PBL-GlitterComputer\\PBL\\PBL\\PBL.csproj": {
+    "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\PBL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Joyce\\OneDrive - Fundação Salvador Arena\\EC5\\Linguagem de Programação I\\PBL-GlitterComputer\\PBL\\PBL\\PBL.csproj",
+        "projectUniqueName": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\PBL.csproj",
         "projectName": "PBL",
-        "projectPath": "C:\\Users\\Joyce\\OneDrive - Fundação Salvador Arena\\EC5\\Linguagem de Programação I\\PBL-GlitterComputer\\PBL\\PBL\\PBL.csproj",
-        "packagesPath": "C:\\Users\\Joyce\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Joyce\\OneDrive - Fundação Salvador Arena\\EC5\\Linguagem de Programação I\\PBL-GlitterComputer\\PBL\\PBL\\obj\\",
+        "projectPath": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\PBL.csproj",
+        "packagesPath": "C:\\Users\\elaineg\\.nuget\\packages\\",
+        "outputPath": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Joyce\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\elaineg\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -50,6 +50,10 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "dependencies": {
+            "MQTTnet": {
+              "target": "Package",
+              "version": "[3.1.2, )"
+            },
             "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation": {
               "target": "Package",
               "version": "[3.1.32, )"
@@ -82,7 +86,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.311\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.314\\RuntimeIdentifierGraph.json"
         }
       }
     }

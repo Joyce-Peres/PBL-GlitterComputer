@@ -25,6 +25,10 @@ namespace PBL
                 options.IdleTimeout = TimeSpan.FromSeconds(3600);
             });
             services.AddControllersWithViews();
+
+            services.AddSingleton<PBL.Services.FishAiService>();
+            services.AddSingleton<PBL.Services.SmartLampMqttService>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo

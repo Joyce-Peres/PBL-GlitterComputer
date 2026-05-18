@@ -42,10 +42,44 @@ BEGIN
         id INT PRIMARY KEY IDENTITY(1,1),
         nome VARCHAR(100) NOT NULL,
         especie VARCHAR(100) NOT NULL,
+        nomeCientifico VARCHAR(150) NULL,
+        temperaturaIdeal DECIMAL(5,2) NULL,
+        luminosidadeIdeal INT NULL,
         tamanhoCm DECIMAL(6,2) NOT NULL,
         aquarioId INT NOT NULL,
         foto VARCHAR(255) NULL,
         CONSTRAINT FK_Peixes_Aquarios FOREIGN KEY (aquarioId) REFERENCES Aquarios(id)
+    )
+END
+GO
+
+-- Compatibilidade: adiciona colunas se a tabela já existir
+IF COL_LENGTH('Peixes', 'nomeCientifico') IS NULL
+    ALTER TABLE Peixes ADD nomeCientifico VARCHAR(150) NULL
+GO
+IF COL_LENGTH('Peixes', 'temperaturaIdeal') IS NULL
+    ALTER TABLE Peixes ADD temperaturaIdeal DECIMAL(5,2) NULL
+GO
+IF COL_LENGTH('Peixes', 'luminosidadeIdeal') IS NULL
+    ALTER TABLE Peixes ADD luminosidadeIdeal INT NULL
+GO
+
+-- ==========================================
+-- TABELA LAMP CONFIG (relaciona com Aquarios)
+-- ==========================================
+IF OBJECT_ID('LampConfigs', 'U') IS NULL
+BEGIN
+    CREATE TABLE LampConfigs (
+        aquarioId INT NOT NULL PRIMARY KEY,
+        modo INT NOT NULL DEFAULT 4,
+        brilho INT NOT NULL DEFAULT 80,
+        r INT NOT NULL DEFAULT 255,
+        g INT NOT NULL DEFAULT 255,
+        b INT NOT NULL DEFAULT 255,
+        luzAlvo INT NULL,
+        tempAlvo DECIMAL(5,2) NULL,
+        atualizadoEm DATETIME NOT NULL DEFAULT GETDATE(),
+        CONSTRAINT FK_LampConfigs_Aquarios FOREIGN KEY (aquarioId) REFERENCES Aquarios(id)
     )
 END
 GO
@@ -101,7 +135,8 @@ BEGIN
     END
     ELSE IF @tabela = 'Peixes'
     BEGIN
-        SELECT p.id, p.nome, p.especie, p.tamanhoCm, p.aquarioId, p.foto,
+         SELECT p.id, p.nome, p.especie, p.nomeCientifico, p.temperaturaIdeal, p.luminosidadeIdeal,
+             p.tamanhoCm, p.aquarioId, p.foto,
                aq.nome AS nomeAquario
         FROM Peixes p
         INNER JOIN Aquarios aq ON p.aquarioId = aq.id
@@ -147,7 +182,8 @@ BEGIN
         INNER JOIN Usuarios u ON a.usuarioId = u.id
         WHERE a.id = @id
     ELSE IF @tabela = 'Peixes'
-        SELECT p.id, p.nome, p.especie, p.tamanhoCm, p.aquarioId, p.foto,
+        SELECT p.id, p.nome, p.especie, p.nomeCientifico, p.temperaturaIdeal, p.luminosidadeIdeal,
+               p.tamanhoCm, p.aquarioId, p.foto,
                aq.nome AS nomeAquario
         FROM Peixes p
         INNER JOIN Aquarios aq ON p.aquarioId = aq.id
@@ -226,14 +262,17 @@ CREATE OR ALTER PROCEDURE spInsert_Peixes
     @id INT,
     @nome VARCHAR(100),
     @especie VARCHAR(100),
+    @nomeCientifico VARCHAR(150) = NULL,
+    @temperaturaIdeal DECIMAL(5,2) = NULL,
+    @luminosidadeIdeal INT = NULL,
     @tamanhoCm DECIMAL(6,2),
     @aquarioId INT,
     @foto VARCHAR(255)
 AS
 BEGIN
     SET IDENTITY_INSERT Peixes ON
-    INSERT INTO Peixes (id, nome, especie, tamanhoCm, aquarioId, foto)
-    VALUES (@id, @nome, @especie, @tamanhoCm, @aquarioId, @foto)
+    INSERT INTO Peixes (id, nome, especie, nomeCientifico, temperaturaIdeal, luminosidadeIdeal, tamanhoCm, aquarioId, foto)
+    VALUES (@id, @nome, @especie, @nomeCientifico, @temperaturaIdeal, @luminosidadeIdeal, @tamanhoCm, @aquarioId, @foto)
     SET IDENTITY_INSERT Peixes OFF
 END
 GO
@@ -242,14 +281,23 @@ CREATE OR ALTER PROCEDURE spUpdate_Peixes
     @id INT,
     @nome VARCHAR(100),
     @especie VARCHAR(100),
+    @nomeCientifico VARCHAR(150) = NULL,
+    @temperaturaIdeal DECIMAL(5,2) = NULL,
+    @luminosidadeIdeal INT = NULL,
     @tamanhoCm DECIMAL(6,2),
     @aquarioId INT,
     @foto VARCHAR(255)
 AS
 BEGIN
     UPDATE Peixes
-    SET nome = @nome, especie = @especie, tamanhoCm = @tamanhoCm,
-        aquarioId = @aquarioId, foto = @foto
+    SET nome = @nome,
+        especie = @especie,
+        nomeCientifico = @nomeCientifico,
+        temperaturaIdeal = @temperaturaIdeal,
+        luminosidadeIdeal = @luminosidadeIdeal,
+        tamanhoCm = @tamanhoCm,
+        aquarioId = @aquarioId,
+        foto = @foto
     WHERE id = @id
 END
 GO
@@ -294,7 +342,8 @@ CREATE OR ALTER PROCEDURE spConsultaPeixesFiltro
     @aquarioId INT = NULL
 AS
 BEGIN
-    SELECT p.id, p.nome, p.especie, p.tamanhoCm, p.aquarioId, p.foto,
+    SELECT p.id, p.nome, p.especie, p.nomeCientifico, p.temperaturaIdeal, p.luminosidadeIdeal,
+           p.tamanhoCm, p.aquarioId, p.foto,
            aq.nome AS nomeAquario
     FROM Peixes p
     INNER JOIN Aquarios aq ON p.aquarioId = aq.id

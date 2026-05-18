@@ -4,17 +4,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PBL.DAO;
 using PBL.Models;
+using PBL.Services;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 namespace PBL.Controllers
 {
     public class PeixeController : PadraoController<PeixeViewModel>
     {
         private readonly IWebHostEnvironment _env;
+        private readonly FishAiService _fishAi;
+        private readonly SmartLampMqttService _mqtt;
+        private readonly SmartLampConfigDAO _lampDao = new SmartLampConfigDAO();
 
-        public PeixeController(IWebHostEnvironment env)
+        public PeixeController(IWebHostEnvironment env, FishAiService fishAi, SmartLampMqttService mqtt)
         {
             _env = env;
+            _fishAi = fishAi;
+            _mqtt = mqtt;
             DAO = new PeixeDAO();
             GeraProximoId = true;
         }
@@ -53,11 +60,100 @@ namespace PBL.Controllers
                         model.Foto = existente.Foto;
                 }
 
-                return base.Save(model, Operacao);
+                // Repete a lógica do PadraoController para permitir ação pós-save.
+                ValidaDados(model, Operacao);
+                if (ModelState.IsValid == false)
+                {
+                    ViewBag.Operacao = Operacao;
+                    PreencheDadosParaView(Operacao, model);
+                    return View(NomeViewForm, model);
+                }
+
+                if (Operacao == "I")
+                    DAO.Insert(model);
+                else
+                    DAO.Update(model);
+
+                // Automação: aplica parâmetros ideais (se existirem) à configuração da lâmpada.
+                if (model.LuminosidadeIdeal.HasValue || model.TemperaturaIdeal.HasValue)
+                {
+                    _lampDao.AplicarAlvos(model.AquarioId, model.LuminosidadeIdeal, model.TemperaturaIdeal);
+                    if (model.LuminosidadeIdeal.HasValue)
+                    {
+                        // tenta enviar para a smart lamp automaticamente
+                        _ = _mqtt.AplicarBrilhoAsync(model.LuminosidadeIdeal.Value);
+                    }
+                }
+
+                return RedirectToAction(NomeViewIndex);
             }
             catch (Exception erro)
             {
                 return View("Error", new ErrorViewModel(erro.ToString()));
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DetectarParametros(IFormFile arquivoFoto)
+        {
+            try
+            {
+                if (arquivoFoto == null || arquivoFoto.Length == 0)
+                    return Json(new { sucesso = false, mensagem = "Envie uma imagem válida." });
+
+                var pastaTemp = Path.Combine(_env.WebRootPath, "uploads", "temp");
+                if (!Directory.Exists(pastaTemp))
+                    Directory.CreateDirectory(pastaTemp);
+
+                var extensao = Path.GetExtension(arquivoFoto.FileName);
+                if (string.IsNullOrWhiteSpace(extensao))
+                    extensao = ".jpg";
+
+                var nomeArquivo = $"peixe_ai_{DateTime.Now:yyyyMMddHHmmssfff}{extensao}";
+                var caminho = Path.Combine(pastaTemp, nomeArquivo);
+
+                using (var stream = new FileStream(caminho, FileMode.Create))
+                    await arquivoFoto.CopyToAsync(stream);
+
+                var result = await _fishAi.AnalisarImagemAsync(caminho);
+                try { System.IO.File.Delete(caminho); } catch { }
+
+                return Json(new
+                {
+                    sucesso = true,
+                    especie = result.Especie,
+                    nomeCientifico = result.NomeCientifico,
+                    temperaturaIdeal = result.TemperaturaIdeal,
+                    luminosidadeIdeal = result.LuminosidadeIdeal
+                });
+            }
+            catch (Exception erro)
+            {
+                return Json(new { sucesso = false, mensagem = erro.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DetectarParametrosPorEspecie(string especie)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(especie))
+                    return Json(new { sucesso = false, mensagem = "Informe a espécie." });
+
+                var result = await _fishAi.AnalisarEspecieAsync(especie);
+                return Json(new
+                {
+                    sucesso = true,
+                    especie = result.Especie,
+                    nomeCientifico = result.NomeCientifico,
+                    temperaturaIdeal = result.TemperaturaIdeal,
+                    luminosidadeIdeal = result.LuminosidadeIdeal
+                });
+            }
+            catch (Exception erro)
+            {
+                return Json(new { sucesso = false, mensagem = erro.Message });
             }
         }
 

@@ -6,6 +6,8 @@
             <th>Id</th>
             <th>Nome</th>
             <th>Espécie</th>
+            <th>Temp. ideal</th>
+            <th>Luz ideal</th>
             <th>Tamanho (cm)</th>
             <th>Aquário</th>
             <th>Foto</th>
@@ -20,6 +22,8 @@
                     <td>@item.Id</td>
                     <td>@item.Nome</td>
                     <td>@item.Especie</td>
+                    <td>@(item.TemperaturaIdeal.HasValue ? item.TemperaturaIdeal.Value.ToString("0.0") + " °C" : "-")</td>
+                    <td>@(item.LuminosidadeIdeal.HasValue ? item.LuminosidadeIdeal.Value.ToString() + " %" : "-")</td>
                     <td>@item.TamanhoCm</td>
                     <td>@item.NomeAquario</td>
                     <td>
@@ -34,7 +38,7 @@
         else
         {
             <tr>
-                <td colspan="6" class="text-center text-muted">Nenhum registro encontrado.</td>
+                <td colspan="8" class="text-center text-muted">Nenhum registro encontrado.</td>
             </tr>
         }
     </tbody>

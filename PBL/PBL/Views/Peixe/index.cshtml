@@ -17,6 +17,8 @@
             <th>Foto</th>
             <th>Nome</th>
             <th>Espécie</th>
+            <th>Temp. ideal</th>
+            <th>Luz ideal</th>
             <th>Tamanho (cm)</th>
             <th>Aquário</th>
             <th>Ações</th>
@@ -39,6 +41,8 @@
                 </td>
                 <td>@item.Nome</td>
                 <td>@item.Especie</td>
+                <td>@(item.TemperaturaIdeal.HasValue ? item.TemperaturaIdeal.Value.ToString("0.0") + " °C" : "-")</td>
+                <td>@(item.LuminosidadeIdeal.HasValue ? item.LuminosidadeIdeal.Value.ToString() + " %" : "-")</td>
                 <td>@item.TamanhoCm</td>
                 <td>@item.NomeAquario</td>
                 <td>
