@@ -1,31 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Joyce\\OneDrive - Fundação Salvador Arena\\EC5\\Linguagem de Programação I\\PBL-GlitterComputer\\PBL\\PBL\\PBL.csproj": {}
+    "/home/runner/work/PBL-GlitterComputer/PBL-GlitterComputer/PBL/PBL/PBL.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Joyce\\OneDrive - Fundação Salvador Arena\\EC5\\Linguagem de Programação I\\PBL-GlitterComputer\\PBL\\PBL\\PBL.csproj": {
+    "/home/runner/work/PBL-GlitterComputer/PBL-GlitterComputer/PBL/PBL/PBL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Joyce\\OneDrive - Fundação Salvador Arena\\EC5\\Linguagem de Programação I\\PBL-GlitterComputer\\PBL\\PBL\\PBL.csproj",
+        "projectUniqueName": "/home/runner/work/PBL-GlitterComputer/PBL-GlitterComputer/PBL/PBL/PBL.csproj",
         "projectName": "PBL",
-        "projectPath": "C:\\Users\\Joyce\\OneDrive - Fundação Salvador Arena\\EC5\\Linguagem de Programação I\\PBL-GlitterComputer\\PBL\\PBL\\PBL.csproj",
-        "packagesPath": "C:\\Users\\Joyce\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Joyce\\OneDrive - Fundação Salvador Arena\\EC5\\Linguagem de Programação I\\PBL-GlitterComputer\\PBL\\PBL\\obj\\",
+        "projectPath": "/home/runner/work/PBL-GlitterComputer/PBL-GlitterComputer/PBL/PBL/PBL.csproj",
+        "packagesPath": "/home/runner/.nuget/packages/",
+        "outputPath": "/home/runner/work/PBL-GlitterComputer/PBL-GlitterComputer/PBL/PBL/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Joyce\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/runner/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -44,7 +38,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.200"
       },
       "frameworks": {
         "netcoreapp3.1": {
@@ -74,6 +68,20 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[3.1.10, 3.1.10]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.linux-x64",
+              "version": "[3.1.32, 3.1.32]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[3.1.0, 3.1.0]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -82,7 +90,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.311\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.201/RuntimeIdentifierGraph.json"
         }
       }
     }
