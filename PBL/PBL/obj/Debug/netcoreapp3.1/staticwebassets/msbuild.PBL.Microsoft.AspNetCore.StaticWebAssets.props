@@ -4,8 +4,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>css\site.css</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>css/site.css</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -20,7 +20,7 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
+      <BasePath>/</BasePath>
       <RelativePath>favicon.ico</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
@@ -36,8 +36,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>img\delete.png</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>img/delete.png</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -52,8 +52,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>img\edit.png</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>img/edit.png</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -68,8 +68,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>js\site.js</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>js/site.js</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -84,8 +84,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\bootstrap\dist\css\bootstrap-grid.css</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/bootstrap/dist/css/bootstrap-grid.css</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -100,8 +100,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\bootstrap\dist\css\bootstrap-grid.css.map</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/bootstrap/dist/css/bootstrap-grid.css.map</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -116,8 +116,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\bootstrap\dist\css\bootstrap-grid.min.css</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/bootstrap/dist/css/bootstrap-grid.min.css</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -132,8 +132,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\bootstrap\dist\css\bootstrap-grid.min.css.map</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/bootstrap/dist/css/bootstrap-grid.min.css.map</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -148,8 +148,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\bootstrap\dist\css\bootstrap-reboot.css</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/bootstrap/dist/css/bootstrap-reboot.css</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -164,8 +164,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\bootstrap\dist\css\bootstrap-reboot.css.map</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/bootstrap/dist/css/bootstrap-reboot.css.map</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -180,8 +180,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\bootstrap\dist\css\bootstrap-reboot.min.css</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/bootstrap/dist/css/bootstrap-reboot.min.css</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -196,8 +196,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\bootstrap\dist\css\bootstrap-reboot.min.css.map</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/bootstrap/dist/css/bootstrap-reboot.min.css.map</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -212,8 +212,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\bootstrap\dist\css\bootstrap.css</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/bootstrap/dist/css/bootstrap.css</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -228,8 +228,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\bootstrap\dist\css\bootstrap.css.map</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/bootstrap/dist/css/bootstrap.css.map</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -244,8 +244,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\bootstrap\dist\css\bootstrap.min.css</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/bootstrap/dist/css/bootstrap.min.css</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -260,8 +260,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\bootstrap\dist\css\bootstrap.min.css.map</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/bootstrap/dist/css/bootstrap.min.css.map</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -276,8 +276,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\bootstrap\dist\js\bootstrap.bundle.js</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/bootstrap/dist/js/bootstrap.bundle.js</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -292,8 +292,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\bootstrap\dist\js\bootstrap.bundle.js.map</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/bootstrap/dist/js/bootstrap.bundle.js.map</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -308,8 +308,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\bootstrap\dist\js\bootstrap.bundle.min.js</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/bootstrap/dist/js/bootstrap.bundle.min.js</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -324,8 +324,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\bootstrap\dist\js\bootstrap.bundle.min.js.map</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/bootstrap/dist/js/bootstrap.bundle.min.js.map</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -340,8 +340,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\bootstrap\dist\js\bootstrap.js</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/bootstrap/dist/js/bootstrap.js</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -356,8 +356,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\bootstrap\dist\js\bootstrap.js.map</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/bootstrap/dist/js/bootstrap.js.map</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -372,8 +372,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\bootstrap\dist\js\bootstrap.min.js</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/bootstrap/dist/js/bootstrap.min.js</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -388,8 +388,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\bootstrap\dist\js\bootstrap.min.js.map</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/bootstrap/dist/js/bootstrap.min.js.map</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -404,8 +404,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\bootstrap\LICENSE</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/bootstrap/LICENSE</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -420,8 +420,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -436,8 +436,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -452,8 +452,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\jquery-validation-unobtrusive\LICENSE.txt</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/jquery-validation-unobtrusive/LICENSE.txt</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -468,8 +468,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\jquery-validation\dist\additional-methods.js</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/jquery-validation/dist/additional-methods.js</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -484,8 +484,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\jquery-validation\dist\additional-methods.min.js</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/jquery-validation/dist/additional-methods.min.js</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -500,8 +500,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\jquery-validation\dist\jquery.validate.js</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/jquery-validation/dist/jquery.validate.js</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -516,8 +516,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\jquery-validation\dist\jquery.validate.min.js</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/jquery-validation/dist/jquery.validate.min.js</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -532,8 +532,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\jquery-validation\LICENSE.md</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/jquery-validation/LICENSE.md</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -548,8 +548,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\jquery\dist\jquery.js</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/jquery/dist/jquery.js</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -564,8 +564,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\jquery\dist\jquery.min.js</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/jquery/dist/jquery.min.js</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -580,8 +580,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\jquery\dist\jquery.min.map</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/jquery/dist/jquery.min.map</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -596,8 +596,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>lib\jquery\LICENSE.txt</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>lib/jquery/LICENSE.txt</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
@@ -612,8 +612,8 @@
       <SourceType>Package</SourceType>
       <SourceId>PBL</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/PBL</BasePath>
-      <RelativePath>uploads\peixes\.gitkeep</RelativePath>
+      <BasePath>/</BasePath>
+      <RelativePath>uploads/peixes/.gitkeep</RelativePath>
       <AssetKind></AssetKind>
       <AssetMode></AssetMode>
       <AssetRole></AssetRole>
