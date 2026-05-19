@@ -1,3 +1,15 @@
 .env
 .vs
 .vscode
+
+# .NET build outputs
+**/bin/
+**/obj/
+
+# User-specific / build artifacts
+*.user
+*.suo
+*.cache
+*.pdb
+*.dll
+*.exe
