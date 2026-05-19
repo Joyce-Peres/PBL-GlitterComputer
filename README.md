@@ -12,7 +12,7 @@
    - `PBL/PBL/Scripts_BD.sql`
 3. Confira/ajuste a string de conexão em:
    - `PBL/PBL/DAO/ConexaoBD.cs`
-   - Valor atual: `Data Source=LOCALHOST;Initial Catalog=PBL;user id=sa; password=123456`
+   - Ajuste servidor, usuário e senha conforme seu ambiente local.
 
 ### 2) Restaurar e compilar
 No terminal:
