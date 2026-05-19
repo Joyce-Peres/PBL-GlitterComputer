@@ -124,7 +124,13 @@ namespace PBL.Controllers
                     especie = result.Especie,
                     nomeCientifico = result.NomeCientifico,
                     temperaturaIdeal = result.TemperaturaIdeal,
-                    luminosidadeIdeal = result.LuminosidadeIdeal
+                    temperaturaMin = result.TemperaturaMin,
+                    temperaturaMax = result.TemperaturaMax,
+                    luminosidadeIdeal = result.LuminosidadeIdeal,
+                    luminosidadeMin = result.LuminosidadeMin,
+                    luminosidadeMax = result.LuminosidadeMax,
+                    phMin = result.PhMin,
+                    phMax = result.PhMax
                 });
             }
             catch (Exception erro)
@@ -148,7 +154,13 @@ namespace PBL.Controllers
                     especie = result.Especie,
                     nomeCientifico = result.NomeCientifico,
                     temperaturaIdeal = result.TemperaturaIdeal,
-                    luminosidadeIdeal = result.LuminosidadeIdeal
+                    temperaturaMin = result.TemperaturaMin,
+                    temperaturaMax = result.TemperaturaMax,
+                    luminosidadeIdeal = result.LuminosidadeIdeal,
+                    luminosidadeMin = result.LuminosidadeMin,
+                    luminosidadeMax = result.LuminosidadeMax,
+                    phMin = result.PhMin,
+                    phMax = result.PhMax
                 });
             }
             catch (Exception erro)

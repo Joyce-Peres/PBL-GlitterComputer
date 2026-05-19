@@ -23,6 +23,12 @@ namespace PBL.DAO
                 new SqlParameter("nomeCientifico", (object)model.NomeCientifico ?? DBNull.Value),
                 new SqlParameter("temperaturaIdeal", (object)model.TemperaturaIdeal ?? DBNull.Value),
                 new SqlParameter("luminosidadeIdeal", (object)model.LuminosidadeIdeal ?? DBNull.Value),
+                new SqlParameter("temperaturaMin", (object)model.TemperaturaMin ?? DBNull.Value),
+                new SqlParameter("temperaturaMax", (object)model.TemperaturaMax ?? DBNull.Value),
+                new SqlParameter("luminosidadeMin", (object)model.LuminosidadeMin ?? DBNull.Value),
+                new SqlParameter("luminosidadeMax", (object)model.LuminosidadeMax ?? DBNull.Value),
+                new SqlParameter("ph_min", (object)model.PhMin ?? DBNull.Value),
+                new SqlParameter("ph_max", (object)model.PhMax ?? DBNull.Value),
                 new SqlParameter("tamanhoCm", model.TamanhoCm),
                 new SqlParameter("aquarioId", model.AquarioId),
                 new SqlParameter("foto", (object)model.Foto ?? DBNull.Value)
@@ -42,13 +48,29 @@ namespace PBL.DAO
                 TemperaturaIdeal = registro.Table.Columns.Contains("temperaturaIdeal") && registro["temperaturaIdeal"] != DBNull.Value
                     ? (decimal?)Convert.ToDecimal(registro["temperaturaIdeal"])
                     : null,
+                TemperaturaMin = registro.Table.Columns.Contains("temperaturaMin") && registro["temperaturaMin"] != DBNull.Value
+                    ? (decimal?)Convert.ToDecimal(registro["temperaturaMin"]) 
+                    : null,
+                TemperaturaMax = registro.Table.Columns.Contains("temperaturaMax") && registro["temperaturaMax"] != DBNull.Value
+                    ? (decimal?)Convert.ToDecimal(registro["temperaturaMax"]) 
+                    : null,
                 LuminosidadeIdeal = registro.Table.Columns.Contains("luminosidadeIdeal") && registro["luminosidadeIdeal"] != DBNull.Value
                     ? (int?)Convert.ToInt32(registro["luminosidadeIdeal"])
+                    : null,
+                LuminosidadeMin = registro.Table.Columns.Contains("luminosidadeMin") && registro["luminosidadeMin"] != DBNull.Value
+                    ? (int?)Convert.ToInt32(registro["luminosidadeMin"]) 
+                    : null,
+                LuminosidadeMax = registro.Table.Columns.Contains("luminosidadeMax") && registro["luminosidadeMax"] != DBNull.Value
+                    ? (int?)Convert.ToInt32(registro["luminosidadeMax"]) 
                     : null,
                 TamanhoCm = Convert.ToDecimal(registro["tamanhoCm"]),
                 AquarioId = Convert.ToInt32(registro["aquarioId"]),
                 Foto = registro["foto"] != DBNull.Value ? registro["foto"].ToString() : null
             };
+            if (registro.Table.Columns.Contains("ph_min") && registro["ph_min"] != DBNull.Value)
+                model.PhMin = Convert.ToDecimal(registro["ph_min"]);
+            if (registro.Table.Columns.Contains("ph_max") && registro["ph_max"] != DBNull.Value)
+                model.PhMax = Convert.ToDecimal(registro["ph_max"]);
             if (registro.Table.Columns.Contains("nomeAquario") && registro["nomeAquario"] != DBNull.Value)
                 model.NomeAquario = registro["nomeAquario"].ToString();
             return model;

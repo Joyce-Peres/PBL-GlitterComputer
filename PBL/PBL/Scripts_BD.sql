@@ -159,12 +159,12 @@ BEGIN
     END
     ELSE IF @tabela = 'Peixes'
     BEGIN
-         SELECT p.id, p.nome, p.especie, p.nomeCientifico, p.temperaturaIdeal, p.luminosidadeIdeal,
-             p.tamanhoCm, p.aquarioId, p.foto,
-               aq.nome AS nomeAquario
-        FROM Peixes p
-        INNER JOIN Aquarios aq ON p.aquarioId = aq.id
-        ORDER BY p.id
+                 SELECT p.id, p.nome, p.especie, p.nomeCientifico, p.temperaturaIdeal, p.temperaturaMin, p.temperaturaMax, p.luminosidadeIdeal, p.luminosidadeMin, p.luminosidadeMax, p.ph_min, p.ph_max,
+                         p.tamanhoCm, p.aquarioId, p.foto,
+                             aq.nome AS nomeAquario
+                FROM Peixes p
+                INNER JOIN Aquarios aq ON p.aquarioId = aq.id
+                ORDER BY p.id
     END
     ELSE IF @tabela = 'LeiturasSensor'
     BEGIN
@@ -206,9 +206,9 @@ BEGIN
         INNER JOIN Usuarios u ON a.usuarioId = u.id
         WHERE a.id = @id
     ELSE IF @tabela = 'Peixes'
-        SELECT p.id, p.nome, p.especie, p.nomeCientifico, p.temperaturaIdeal, p.luminosidadeIdeal,
-               p.tamanhoCm, p.aquarioId, p.foto,
-               aq.nome AS nomeAquario
+         SELECT p.id, p.nome, p.especie, p.nomeCientifico, p.temperaturaIdeal, p.temperaturaMin, p.temperaturaMax, p.luminosidadeIdeal, p.luminosidadeMin, p.luminosidadeMax, p.ph_min, p.ph_max,
+             p.tamanhoCm, p.aquarioId, p.foto,
+             aq.nome AS nomeAquario
         FROM Peixes p
         INNER JOIN Aquarios aq ON p.aquarioId = aq.id
         WHERE p.id = @id
@@ -288,15 +288,21 @@ CREATE OR ALTER PROCEDURE spInsert_Peixes
     @especie VARCHAR(100),
     @nomeCientifico VARCHAR(150) = NULL,
     @temperaturaIdeal DECIMAL(5,2) = NULL,
+    @temperaturaMin DECIMAL(5,2) = NULL,
+    @temperaturaMax DECIMAL(5,2) = NULL,
     @luminosidadeIdeal INT = NULL,
+    @luminosidadeMin INT = NULL,
+    @luminosidadeMax INT = NULL,
+    @ph_min DECIMAL(3,1) = NULL,
+    @ph_max DECIMAL(3,1) = NULL,
     @tamanhoCm DECIMAL(6,2),
     @aquarioId INT,
     @foto VARCHAR(255)
 AS
 BEGIN
     SET IDENTITY_INSERT Peixes ON
-    INSERT INTO Peixes (id, nome, especie, nomeCientifico, temperaturaIdeal, luminosidadeIdeal, tamanhoCm, aquarioId, foto)
-    VALUES (@id, @nome, @especie, @nomeCientifico, @temperaturaIdeal, @luminosidadeIdeal, @tamanhoCm, @aquarioId, @foto)
+    INSERT INTO Peixes (id, nome, especie, nomeCientifico, temperaturaIdeal, temperaturaMin, temperaturaMax, luminosidadeIdeal, luminosidadeMin, luminosidadeMax, ph_min, ph_max, tamanhoCm, aquarioId, foto)
+    VALUES (@id, @nome, @especie, @nomeCientifico, @temperaturaIdeal, @temperaturaMin, @temperaturaMax, @luminosidadeIdeal, @luminosidadeMin, @luminosidadeMax, @ph_min, @ph_max, @tamanhoCm, @aquarioId, @foto)
     SET IDENTITY_INSERT Peixes OFF
 END
 GO
@@ -307,7 +313,13 @@ CREATE OR ALTER PROCEDURE spUpdate_Peixes
     @especie VARCHAR(100),
     @nomeCientifico VARCHAR(150) = NULL,
     @temperaturaIdeal DECIMAL(5,2) = NULL,
+    @temperaturaMin DECIMAL(5,2) = NULL,
+    @temperaturaMax DECIMAL(5,2) = NULL,
     @luminosidadeIdeal INT = NULL,
+    @luminosidadeMin INT = NULL,
+    @luminosidadeMax INT = NULL,
+    @ph_min DECIMAL(3,1) = NULL,
+    @ph_max DECIMAL(3,1) = NULL,
     @tamanhoCm DECIMAL(6,2),
     @aquarioId INT,
     @foto VARCHAR(255)
@@ -318,7 +330,13 @@ BEGIN
         especie = @especie,
         nomeCientifico = @nomeCientifico,
         temperaturaIdeal = @temperaturaIdeal,
+        temperaturaMin = @temperaturaMin,
+        temperaturaMax = @temperaturaMax,
         luminosidadeIdeal = @luminosidadeIdeal,
+        luminosidadeMin = @luminosidadeMin,
+        luminosidadeMax = @luminosidadeMax,
+        ph_min = @ph_min,
+        ph_max = @ph_max,
         tamanhoCm = @tamanhoCm,
         aquarioId = @aquarioId,
         foto = @foto
@@ -366,9 +384,9 @@ CREATE OR ALTER PROCEDURE spConsultaPeixesFiltro
     @aquarioId INT = NULL
 AS
 BEGIN
-    SELECT p.id, p.nome, p.especie, p.nomeCientifico, p.temperaturaIdeal, p.luminosidadeIdeal,
-           p.tamanhoCm, p.aquarioId, p.foto,
-           aq.nome AS nomeAquario
+        SELECT p.id, p.nome, p.especie, p.nomeCientifico, p.temperaturaIdeal, p.temperaturaMin, p.temperaturaMax, p.luminosidadeIdeal, p.luminosidadeMin, p.luminosidadeMax, p.ph_min, p.ph_max,
+            p.tamanhoCm, p.aquarioId, p.foto,
+            aq.nome AS nomeAquario
     FROM Peixes p
     INNER JOIN Aquarios aq ON p.aquarioId = aq.id
     WHERE (@nome IS NULL OR @nome = '' OR p.nome LIKE '%' + @nome + '%')

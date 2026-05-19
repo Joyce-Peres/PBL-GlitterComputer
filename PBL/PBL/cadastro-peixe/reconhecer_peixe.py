@@ -25,9 +25,10 @@ def analisar_aquario(caminho_foto):
     prompt_comando = (
         "Analise a imagem deste aquário doméstico. Identifique a espécie principal de peixe. "
         "Com base na literatura científica de aquarismo para essa espécie, defina os parâmetros ideais "
-        "para o sensor DHT22 (temperatura alvo) e para o sensor LDR (luminosidade alvo em escala de 0 a 100). "
+        "para o sensor DHT22 (temperatura alvo e faixa min/max), para o sensor LDR (luminosidade alvo e faixa min/max em escala de 0 a 100), "
+        "e, quando disponível, o intervalo de pH adequado (min/max). "
         "Retorne estritamente um objeto JSON válido seguindo exatamente o modelo: "
-        '{"especie": "Nome", "nome_cientifico": "Nome", "dht22_temp_alvo": 25.0, "ldr_luz_alvo": 40}'
+        '{"especie": "Nome", "nome_cientifico": "Nome", "dht22_temp_alvo": 25.0, "dht22_temp_min": 24.0, "dht22_temp_max": 27.0, "ldr_luz_alvo": 40, "ldr_luz_min": 20, "ldr_luz_max": 60, "ph_min": 6.5, "ph_max": 7.5}'
     )
 
     # 3. Atualizado para o modelo de nova geração suportado pela sua chave
@@ -52,7 +53,7 @@ def analisar_especie_texto(especie_texto):
         "Com base na literatura científica e boas práticas de aquarismo, "
         "dada a espécie informada, defina parâmetros ideais para um aquário doméstico. "
         "Retorne estritamente um objeto JSON válido seguindo exatamente o modelo: "
-        '{"especie": "Nome", "nome_cientifico": "Nome", "dht22_temp_alvo": 25.0, "ldr_luz_alvo": 40}'
+        '{"especie": "Nome", "nome_cientifico": "Nome", "dht22_temp_alvo": 25.0, "dht22_temp_min": 24.0, "dht22_temp_max": 27.0, "ldr_luz_alvo": 40, "ldr_luz_min": 20, "ldr_luz_max": 60, "ph_min": 6.5, "ph_max": 7.5}'
         "\n\nEspécie informada: " + especie_texto.strip()
     )
 

@@ -86,8 +86,12 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 7,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{56df62a4-05a3-4e5b-aa1a-99371ccfb997}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 5,
@@ -168,7 +172,7 @@
               "RelativeDocumentMoniker": "PBL\\DAO\\HelperDAO.cs",
               "ToolTip": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\DAO\\HelperDAO.cs",
               "RelativeToolTip": "PBL\\DAO\\HelperDAO.cs",
-              "ViewState": "AgIAACwAAAAAAAAAAAAiwEcAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACwAAAAAAAAAAAAiwDUAAABCAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-15T00:55:24.964Z",
               "EditorCaption": ""

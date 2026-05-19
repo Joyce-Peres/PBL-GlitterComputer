@@ -40,6 +40,23 @@
             <input asp-for="LuminosidadeIdeal" type="number" min="0" max="100" class="form-control" />
         </div>
     </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label asp-for="TemperaturaMin">Temperatura mínima (°C)</label>
+            <input asp-for="TemperaturaMin" type="number" step="0.1" class="form-control" />
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="TemperaturaMax">Temperatura máxima (°C)</label>
+            <input asp-for="TemperaturaMax" type="number" step="0.1" class="form-control" />
+        </div>
+        <div class="form-group col-md-4">
+            <label>pH mínimo / máximo</label>
+            <div class="input-group">
+                <input asp-for="PhMin" type="number" step="0.1" class="form-control" placeholder="pH min" />
+                <input asp-for="PhMax" type="number" step="0.1" class="form-control" placeholder="pH max" />
+            </div>
+        </div>
+    </div>
     <div class="form-group">
         <label asp-for="TamanhoCm">Tamanho (cm)</label>
         <input asp-for="TamanhoCm" type="number" step="0.01" class="form-control" required />
@@ -144,6 +161,22 @@
                             $('#TemperaturaIdeal').val(data.temperaturaIdeal);
                         if (data.luminosidadeIdeal !== null && data.luminosidadeIdeal !== undefined)
                             $('#LuminosidadeIdeal').val(data.luminosidadeIdeal);
+                    if (data.temperaturaMin !== null && data.temperaturaMin !== undefined)
+                        $('#TemperaturaMin').val(data.temperaturaMin);
+                    if (data.temperaturaMax !== null && data.temperaturaMax !== undefined)
+                        $('#TemperaturaMax').val(data.temperaturaMax);
+                    if (data.phMin !== null && data.phMin !== undefined)
+                        $('#PhMin').val(data.phMin);
+                    if (data.phMax !== null && data.phMax !== undefined)
+                        $('#PhMax').val(data.phMax);
+                    if (data.temperaturaMin !== null && data.temperaturaMin !== undefined)
+                        $('#TemperaturaMin').val(data.temperaturaMin);
+                    if (data.temperaturaMax !== null && data.temperaturaMax !== undefined)
+                        $('#TemperaturaMax').val(data.temperaturaMax);
+                    if (data.phMin !== null && data.phMin !== undefined)
+                        $('#PhMin').val(data.phMin);
+                    if (data.phMax !== null && data.phMax !== undefined)
+                        $('#PhMax').val(data.phMax);
                         $('#iaStatus').text('Parâmetros preenchidos.');
                     } else {
                         $('#iaStatus').text(data && data.mensagem ? data.mensagem : 'Falha ao analisar.');

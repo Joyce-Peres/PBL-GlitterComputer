@@ -14,7 +14,13 @@ namespace PBL.Services
         public string Especie { get; set; }
         public string NomeCientifico { get; set; }
         public decimal? TemperaturaIdeal { get; set; }
+        public decimal? TemperaturaMin { get; set; }
+        public decimal? TemperaturaMax { get; set; }
         public int? LuminosidadeIdeal { get; set; }
+        public int? LuminosidadeMin { get; set; }
+        public int? LuminosidadeMax { get; set; }
+        public decimal? PhMin { get; set; }
+        public decimal? PhMax { get; set; }
 
         public static FishAiResult FromJson(string json)
         {
@@ -29,12 +35,39 @@ namespace PBL.Services
             if (root.TryGetProperty("ldr_luz_alvo", out var luzEl) && luzEl.ValueKind == JsonValueKind.Number)
                 luz = luzEl.GetInt32();
 
+            decimal? tempMin = null;
+            if (root.TryGetProperty("dht22_temp_min", out var tminEl) && tminEl.ValueKind == JsonValueKind.Number)
+                tempMin = tminEl.GetDecimal();
+            decimal? tempMax = null;
+            if (root.TryGetProperty("dht22_temp_max", out var tmaxEl) && tmaxEl.ValueKind == JsonValueKind.Number)
+                tempMax = tmaxEl.GetDecimal();
+
+            int? luzMin = null;
+            if (root.TryGetProperty("ldr_luz_min", out var lminEl) && lminEl.ValueKind == JsonValueKind.Number)
+                luzMin = lminEl.GetInt32();
+            int? luzMax = null;
+            if (root.TryGetProperty("ldr_luz_max", out var lmaxEl) && lmaxEl.ValueKind == JsonValueKind.Number)
+                luzMax = lmaxEl.GetInt32();
+
+            decimal? phMin = null;
+            if (root.TryGetProperty("ph_min", out var phminEl) && phminEl.ValueKind == JsonValueKind.Number)
+                phMin = phminEl.GetDecimal();
+            decimal? phMax = null;
+            if (root.TryGetProperty("ph_max", out var phmaxEl) && phmaxEl.ValueKind == JsonValueKind.Number)
+                phMax = phmaxEl.GetDecimal();
+
             return new FishAiResult
             {
                 Especie = root.TryGetProperty("especie", out var espEl) ? espEl.GetString() : null,
                 NomeCientifico = root.TryGetProperty("nome_cientifico", out var ncEl) ? ncEl.GetString() : null,
                 TemperaturaIdeal = temp,
-                LuminosidadeIdeal = luz
+                LuminosidadeIdeal = luz,
+                TemperaturaMin = tempMin,
+                TemperaturaMax = tempMax,
+                LuminosidadeMin = luzMin,
+                LuminosidadeMax = luzMax,
+                PhMin = phMin,
+                PhMax = phMax
             };
         }
     }
