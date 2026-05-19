@@ -17,7 +17,7 @@
 export PBL_CONNECTION_STRING='Data Source=SEU_SERVIDOR;Initial Catalog=PBL;User ID=SEU_USUARIO;Password=SUA_SENHA'
 ```
 
-> No Windows (PowerShell), use `setx PBL_CONNECTION_STRING "Data Source=...;Initial Catalog=PBL;User ID=...;Password=..."`.
+> No Windows (PowerShell), use `$env:PBL_CONNECTION_STRING="Data Source=...;Initial Catalog=PBL;User ID=...;Password=..."` para a sessão atual, ou `setx PBL_CONNECTION_STRING "Data Source=...;Initial Catalog=PBL;User ID=...;Password=..."` para persistir em novas sessões.
 
 ### 2) Restaurar e compilar
 No terminal:
