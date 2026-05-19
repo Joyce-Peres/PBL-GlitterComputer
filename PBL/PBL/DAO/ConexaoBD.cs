@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
 
 namespace PBL.DAO
 {
@@ -6,7 +7,11 @@ namespace PBL.DAO
     {
         public static SqlConnection GetConexao()
         {
-            string strCon = "Data Source=LOCALHOST;Initial Catalog=PBL;user id=sa; password=123456";
+            string strCon = Environment.GetEnvironmentVariable("PBL_CONNECTION_STRING");
+            if (string.IsNullOrWhiteSpace(strCon))
+            {
+                strCon = "Data Source=LOCALHOST;Initial Catalog=PBL;user id=sa; password=123456";
+            }
             SqlConnection conexao = new SqlConnection(strCon);
             conexao.Open();
             return conexao;
