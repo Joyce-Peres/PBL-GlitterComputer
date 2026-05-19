@@ -9,16 +9,16 @@
 ### 1) Configurar banco de dados
 1. Crie um banco chamado **PBL** no SQL Server.
 2. Execute o script:
-   - `/home/runner/work/PBL-GlitterComputer/PBL-GlitterComputer/PBL/PBL/Scripts_BD.sql`
+   - `PBL/PBL/Scripts_BD.sql`
 3. Confira/ajuste a string de conexão em:
-   - `/home/runner/work/PBL-GlitterComputer/PBL-GlitterComputer/PBL/PBL/DAO/ConexaoBD.cs`
+   - `PBL/PBL/DAO/ConexaoBD.cs`
    - Valor atual: `Data Source=LOCALHOST;Initial Catalog=PBL;user id=sa; password=123456`
 
 ### 2) Restaurar e compilar
 No terminal:
 
 ```bash
-cd /home/runner/work/PBL-GlitterComputer/PBL-GlitterComputer/PBL
+cd PBL
 dotnet restore PBL.sln
 dotnet build PBL.sln
 ```
@@ -26,7 +26,7 @@ dotnet build PBL.sln
 ### 3) Executar a aplicação
 
 ```bash
-cd /home/runner/work/PBL-GlitterComputer/PBL-GlitterComputer/PBL
+cd PBL
 dotnet run --project PBL/PBL.csproj
 ```
 
