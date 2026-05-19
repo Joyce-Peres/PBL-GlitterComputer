@@ -13,7 +13,7 @@
 3. Verifique a string de conexão em:
    - `PBL/PBL/DAO/ConexaoBD.cs`
    - Ajuste para o seu ambiente (servidor, usuário e senha), por exemplo:
-     - `Data Source=localhost;Initial Catalog=PBL;User ID=sa;Password=SUA_SENHA_AQUI`
+     - `Data Source=localhost;Initial Catalog=PBL;User ID=sa;Password=SUA_SENHA_AQUI` *(substitua `SUA_SENHA_AQUI` pela sua senha real)*
    - Recomendação: não versionar credenciais reais. Use variável de ambiente ou mecanismo seguro de configuração no seu ambiente local/produção.
    - Recomendação de segurança: evite usar `sa` em produção; prefira autenticação integrada (quando disponível) ou um usuário dedicado com permissões mínimas.
 
