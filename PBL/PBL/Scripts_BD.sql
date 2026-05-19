@@ -48,6 +48,12 @@ BEGIN
         tamanhoCm DECIMAL(6,2) NOT NULL,
         aquarioId INT NOT NULL,
         foto VARCHAR(255) NULL,
+        temperaturaMin DECIMAL(5,2) NULL,
+        temperaturaMax DECIMAL(5,2) NULL,
+        luminosidadeMin INT NULL,
+        luminosidadeMax INT NULL,
+        ph_min DECIMAL(3,1) NULL,
+        ph_max DECIMAL(3,1) NULL,
         CONSTRAINT FK_Peixes_Aquarios FOREIGN KEY (aquarioId) REFERENCES Aquarios(id)
     )
 END
@@ -62,6 +68,24 @@ IF COL_LENGTH('Peixes', 'temperaturaIdeal') IS NULL
 GO
 IF COL_LENGTH('Peixes', 'luminosidadeIdeal') IS NULL
     ALTER TABLE Peixes ADD luminosidadeIdeal INT NULL
+GO
+IF COL_LENGTH('Peixes', 'temperaturaMin') IS NULL
+    ALTER TABLE Peixes ADD temperaturaMin DECIMAL(5,2) NULL
+GO
+IF COL_LENGTH('Peixes', 'temperaturaMax') IS NULL
+    ALTER TABLE Peixes ADD temperaturaMax DECIMAL(5,2) NULL
+GO
+IF COL_LENGTH('Peixes', 'luminosidadeMin') IS NULL
+    ALTER TABLE Peixes ADD luminosidadeMin INT NULL
+GO
+IF COL_LENGTH('Peixes', 'luminosidadeMax') IS NULL
+    ALTER TABLE Peixes ADD luminosidadeMax INT NULL
+GO
+IF COL_LENGTH('Peixes', 'ph_min') IS NULL
+    ALTER TABLE Peixes ADD ph_min DECIMAL(3,1) NULL
+GO
+IF COL_LENGTH('Peixes', 'ph_max') IS NULL
+    ALTER TABLE Peixes ADD ph_max DECIMAL(3,1) NULL
 GO
 
 -- ==========================================
