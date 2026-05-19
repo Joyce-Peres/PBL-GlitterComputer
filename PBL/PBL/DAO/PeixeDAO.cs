@@ -29,6 +29,8 @@ namespace PBL.DAO
                 new SqlParameter("luminosidadeMax", (object)model.LuminosidadeMax ?? DBNull.Value),
                 new SqlParameter("ph_min", (object)model.PhMin ?? DBNull.Value),
                 new SqlParameter("ph_max", (object)model.PhMax ?? DBNull.Value),
+                new SqlParameter("originFromAI", (object)model.OriginFromAI ?? DBNull.Value),
+                new SqlParameter("parametersUpdatedAt", (object)model.Parameters?.UpdatedAt ?? DBNull.Value),
                 new SqlParameter("tamanhoCm", model.TamanhoCm),
                 new SqlParameter("aquarioId", model.AquarioId),
                 new SqlParameter("foto", (object)model.Foto ?? DBNull.Value)
@@ -71,6 +73,10 @@ namespace PBL.DAO
                 model.PhMin = Convert.ToDecimal(registro["ph_min"]);
             if (registro.Table.Columns.Contains("ph_max") && registro["ph_max"] != DBNull.Value)
                 model.PhMax = Convert.ToDecimal(registro["ph_max"]);
+            if (registro.Table.Columns.Contains("originFromAI") && registro["originFromAI"] != DBNull.Value)
+                model.OriginFromAI = Convert.ToBoolean(registro["originFromAI"]);
+            if (registro.Table.Columns.Contains("parametersUpdatedAt") && registro["parametersUpdatedAt"] != DBNull.Value)
+                model.Parameters.UpdatedAt = Convert.ToDateTime(registro["parametersUpdatedAt"]);
             if (registro.Table.Columns.Contains("nomeAquario") && registro["nomeAquario"] != DBNull.Value)
                 model.NomeAquario = registro["nomeAquario"].ToString();
             return model;

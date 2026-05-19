@@ -9,182 +9,303 @@
 
 <form asp-action="Salvar" method="post" enctype="multipart/form-data">
     <input type="hidden" name="Operacao" value="@ViewBag.Operacao" />
-    <div class="form-group">
-        <label asp-for="Id">Código</label>
-        <input asp-for="Id" class="form-control" readonly />
-    </div>
-    <div class="form-group">
-        <label asp-for="Nome">Nome</label>
-        <input asp-for="Nome" class="form-control" required />
-        <span asp-validation-for="Nome" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Especie">Espécie</label>
-        <input asp-for="Especie" class="form-control" required />
-        <span asp-validation-for="Especie" class="text-danger"></span>
-        <div class="mt-2">
-            <button type="button" id="btnDetectarEspecieIA" class="btn btn-outline-primary btn-sm">Detectar pela espécie (IA)</button>
+    
+    <!-- INFORMAÇÕES BÁSICAS DO PEIXE -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Informações do Peixe</h5>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <label asp-for="Id">Código</label>
+                <input asp-for="Id" class="form-control" readonly />
+            </div>
+            <div class="form-group">
+                <label asp-for="Nome">Nome</label>
+                <input asp-for="Nome" class="form-control" required />
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Especie">Espécie</label>
+                <input asp-for="Especie" class="form-control" required />
+                <span asp-validation-for="Especie" class="text-danger"></span>
+                <div class="mt-2">
+                    <button type="button" id="btnDetectarEspecieIA" class="btn btn-outline-primary btn-sm">
+                        🧠 Detectar pela espécie (IA)
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="NomeCientifico">Nome científico (gerado pela IA)</label>
+                <input asp-for="NomeCientifico" class="form-control" readonly />
+            </div>
+            <div class="form-group">
+                <label asp-for="TamanhoCm">Tamanho (cm)</label>
+                <input asp-for="TamanhoCm" type="number" step="0.01" class="form-control" required />
+                <span asp-validation-for="TamanhoCm" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AquarioId">Aquário</label>
+                <select asp-for="AquarioId" asp-items="ViewBag.Aquarios" class="form-control" id="aquarioId" required>
+                    <option value="">Selecione...</option>
+                </select>
+                <span asp-validation-for="AquarioId" class="text-danger"></span>
+            </div>
+            <div id="infoAquario" class="alert alert-info" style="display:none;"></div>
         </div>
     </div>
-    <div class="form-group">
-        <label asp-for="NomeCientifico">Nome científico (IA)</label>
-        <input asp-for="NomeCientifico" class="form-control" readonly />
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label asp-for="TemperaturaIdeal">Temperatura ideal (°C) (IA)</label>
-            <input asp-for="TemperaturaIdeal" type="number" step="0.1" class="form-control" />
+
+    <!-- FOTO -->
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">Foto e Análise por IA</h5>
         </div>
-        <div class="form-group col-md-6">
-            <label asp-for="LuminosidadeIdeal">Luminosidade ideal (0-100) (IA)</label>
-            <input asp-for="LuminosidadeIdeal" type="number" min="0" max="100" class="form-control" />
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-4">
-            <label asp-for="TemperaturaMin">Temperatura mínima (°C)</label>
-            <input asp-for="TemperaturaMin" type="number" step="0.1" class="form-control" />
-        </div>
-        <div class="form-group col-md-4">
-            <label asp-for="TemperaturaMax">Temperatura máxima (°C)</label>
-            <input asp-for="TemperaturaMax" type="number" step="0.1" class="form-control" />
-        </div>
-        <div class="form-group col-md-4">
-            <label>pH mínimo / máximo</label>
-            <div class="input-group">
-                <input asp-for="PhMin" type="number" step="0.1" class="form-control" placeholder="pH min" />
-                <input asp-for="PhMax" type="number" step="0.1" class="form-control" placeholder="pH max" />
+        <div class="card-body">
+            <div class="form-group">
+                <label for="arquivoFoto">Foto do Peixe</label>
+                <input type="file" name="arquivoFoto" id="arquivoFoto" class="form-control-file" accept="image/*" />
+                <div class="mt-2">
+                    <button type="button" id="btnDetectarIA" class="btn btn-outline-success btn-sm">
+                        📷 Detectar parâmetros pela imagem (IA)
+                    </button>
+                    <span id="iaStatus" class="text-muted ml-2"></span>
+                </div>
+                @if (!string.IsNullOrEmpty(Model.Foto))
+                {
+                    <div class="mt-3">
+                        <img src="@Model.Foto" alt="Foto atual" style="max-height:150px;" class="img-thumbnail" />
+                    </div>
+                }
             </div>
         </div>
     </div>
-    <div class="form-group">
-        <label asp-for="TamanhoCm">Tamanho (cm)</label>
-        <input asp-for="TamanhoCm" type="number" step="0.01" class="form-control" required />
-        <span asp-validation-for="TamanhoCm" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="AquarioId">Aquário</label>
-        <select asp-for="AquarioId" asp-items="ViewBag.Aquarios" class="form-control" id="aquarioId" required>
-            <option value="">Selecione...</option>
-        </select>
-        <span asp-validation-for="AquarioId" class="text-danger"></span>
-    </div>
-    <div id="infoAquario" class="alert alert-info" style="display:none;"></div>
-    <div class="form-group">
-        <label for="arquivoFoto">Foto do Peixe</label>
-        <input type="file" name="arquivoFoto" id="arquivoFoto" class="form-control-file" accept="image/*" />
-        <div class="mt-2">
-            <button type="button" id="btnDetectarIA" class="btn btn-outline-primary btn-sm">Detectar parâmetros pela imagem (IA)</button>
-            <span id="iaStatus" class="text-muted ml-2"></span>
+
+    <!-- PARÂMETROS AMBIENTAIS - SEÇÃO COLAPSÁVEL -->
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white" style="cursor: pointer;" data-toggle="collapse" data-target="#advancedParams" aria-expanded="false">
+            <h5 class="mb-0">
+                ⚙️ Parâmetros Ambientais (Avançado)
+            </h5>
         </div>
-        @if (!string.IsNullOrEmpty(Model.Foto))
-        {
-            <div class="mt-2">
-                <img src="@Model.Foto" alt="Foto atual" style="max-height:120px;" />
+        <div class="collapse" id="advancedParams">
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <strong>💡 Dica:</strong> Estes campos podem ser preenchidos automaticamente pela IA ao analisar uma imagem ou espécie.
+                </div>
+
+                <!-- Temperatura -->
+                <fieldset class="border p-3 mb-4">
+                    <legend class="w-auto px-2">Temperatura (°C)</legend>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label asp-for="TemperaturaMin">Mínima</label>
+                            <input asp-for="TemperaturaMin" type="number" step="0.1" class="form-control" placeholder="Ex: 20.0" />
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label asp-for="TemperaturaIdeal">Ideal</label>
+                            <input asp-for="TemperaturaIdeal" type="number" step="0.1" class="form-control" placeholder="Ex: 25.0" />
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label asp-for="TemperaturaMax">Máxima</label>
+                            <input asp-for="TemperaturaMax" type="number" step="0.1" class="form-control" placeholder="Ex: 28.0" />
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Luminosidade -->
+                <fieldset class="border p-3 mb-4">
+                    <legend class="w-auto px-2">Luminosidade (0-100)</legend>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label asp-for="LuminosidadeMin">Mínima</label>
+                            <input asp-for="LuminosidadeMin" type="number" min="0" max="100" class="form-control" placeholder="Ex: 20" />
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label asp-for="LuminosidadeIdeal">Ideal</label>
+                            <input asp-for="LuminosidadeIdeal" type="number" min="0" max="100" class="form-control" placeholder="Ex: 40" />
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label asp-for="LuminosidadeMax">Máxima</label>
+                            <input asp-for="LuminosidadeMax" type="number" min="0" max="100" class="form-control" placeholder="Ex: 70" />
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- pH -->
+                <fieldset class="border p-3">
+                    <legend class="w-auto px-2">Potencial Hidrogênico (pH)</legend>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label asp-for="PhMin">Mínimo</label>
+                            <input asp-for="PhMin" type="number" step="0.1" class="form-control" placeholder="Ex: 6.5" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="PhMax">Máximo</label>
+                            <input asp-for="PhMax" type="number" step="0.1" class="form-control" placeholder="Ex: 7.5" />
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Rastreabilidade (somente leitura na UI) -->
+                @if (Model?.OriginFromAI == true && ViewBag.Operacao == "A")
+                {
+                    <div class="alert alert-light mt-3">
+                        <small class="text-muted">
+                            ℹ️ <strong>Parâmetros originários da IA</strong> — Estes valores foram detectados automaticamente.
+                            Você pode editá-los manualmente se necessário.
+                        </small>
+                    </div>
+                }
             </div>
-        }
+        </div>
     </div>
-    <button type="submit" class="btn btn-success">Salvar</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+
+    <!-- ERROS DE VALIDAÇÃO -->
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <!-- BOTÕES DE AÇÃO -->
+    <div class="form-group">
+        <button type="submit" class="btn btn-success btn-lg">
+            💾 Salvar
+        </button>
+        <a asp-action="Index" class="btn btn-secondary btn-lg">
+            ❌ Cancelar
+        </a>
+    </div>
 </form>
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     <script>
-        $('#aquarioId').change(function () {
-            var id = $(this).val();
-            if (!id) {
-                $('#infoAquario').hide();
-                return;
-            }
-            $.get('/Peixe/InfoAquario', { id: id }, function (data) {
-                if (data.sucesso) {
-                    $('#infoAquario').html(
-                        '<strong>' + data.nome + '</strong> — ' +
-                        data.capacidade + ' L, água ' + data.tipoAgua +
-                        ' (Responsável: ' + data.responsavel + ')'
-                    ).show();
-                } else {
-                    $('#infoAquario').text(data.mensagem).show();
+        $(function () {
+            // Mostrar/ocultar card de informações do aquário
+            $('#aquarioId').change(function () {
+                var id = $(this).val();
+                if (!id) {
+                    $('#infoAquario').hide();
+                    return;
                 }
+                $.get('/Peixe/InfoAquario', { id: id }, function (data) {
+                    if (data.sucesso) {
+                        $('#infoAquario').html(
+                            '<strong>' + data.nome + '</strong> — ' +
+                            data.capacidade + ' L, água ' + data.tipoAgua +
+                            ' (Responsável: ' + data.responsavel + ')'
+                        ).show();
+                    } else {
+                        $('#infoAquario').text(data.mensagem).show();
+                    }
+                });
             });
-        });
 
-        $('#btnDetectarIA').click(function () {
-            var fileInput = $('#arquivoFoto')[0];
-            if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-                $('#iaStatus').text('Selecione uma imagem primeiro.');
-                return;
-            }
-
-            var fd = new FormData();
-            fd.append('arquivoFoto', fileInput.files[0]);
-
-            $('#iaStatus').text('Analisando imagem...');
-            $.ajax({
-                url: '/Peixe/DetectarParametros',
-                method: 'POST',
-                data: fd,
-                processData: false,
-                contentType: false
-            }).done(function (data) {
-                if (data && data.sucesso) {
-                    if (data.especie) $('#Especie').val(data.especie);
-                    if (data.nomeCientifico) $('#NomeCientifico').val(data.nomeCientifico);
-                    if (data.temperaturaIdeal !== null && data.temperaturaIdeal !== undefined)
-                        $('#TemperaturaIdeal').val(data.temperaturaIdeal);
-                    if (data.luminosidadeIdeal !== null && data.luminosidadeIdeal !== undefined)
-                        $('#LuminosidadeIdeal').val(data.luminosidadeIdeal);
-                    $('#iaStatus').text('Parâmetros preenchidos.');
-                } else {
-                    $('#iaStatus').text(data && data.mensagem ? data.mensagem : 'Falha ao analisar.');
+            // Detectar parâmetros pela imagem
+            $('#btnDetectarIA').click(function () {
+                var fileInput = $('#arquivoFoto')[0];
+                if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+                    $('#iaStatus').text('❌ Selecione uma imagem primeiro.').addClass('text-danger');
+                    return;
                 }
-            }).fail(function () {
-                $('#iaStatus').text('Erro ao chamar a IA.');
-            });
-        });
 
-        $('#btnDetectarEspecieIA').click(function () {
-            var especie = $('#Especie').val();
-            if (!especie) {
-                $('#iaStatus').text('Informe a espécie primeiro.');
-                return;
-            }
+                var fd = new FormData();
+                fd.append('arquivoFoto', fileInput.files[0]);
 
-            $('#iaStatus').text('Consultando IA pela espécie...');
-            $.post('/Peixe/DetectarParametrosPorEspecie', { especie: especie })
-                .done(function (data) {
+                $('#iaStatus').text('⏳ Analisando imagem...').removeClass('text-danger').addClass('text-warning');
+                $.ajax({
+                    url: '/Peixe/DetectarParametros',
+                    method: 'POST',
+                    data: fd,
+                    processData: false,
+                    contentType: false
+                }).done(function (data) {
                     if (data && data.sucesso) {
+                        // Preencher campos básicos
                         if (data.especie) $('#Especie').val(data.especie);
                         if (data.nomeCientifico) $('#NomeCientifico').val(data.nomeCientifico);
+
+                        // Preencher temperatura
                         if (data.temperaturaIdeal !== null && data.temperaturaIdeal !== undefined)
                             $('#TemperaturaIdeal').val(data.temperaturaIdeal);
+                        if (data.temperaturaMin !== null && data.temperaturaMin !== undefined)
+                            $('#TemperaturaMin').val(data.temperaturaMin);
+                        if (data.temperaturaMax !== null && data.temperaturaMax !== undefined)
+                            $('#TemperaturaMax').val(data.temperaturaMax);
+
+                        // Preencher luminosidade
                         if (data.luminosidadeIdeal !== null && data.luminosidadeIdeal !== undefined)
                             $('#LuminosidadeIdeal').val(data.luminosidadeIdeal);
-                    if (data.temperaturaMin !== null && data.temperaturaMin !== undefined)
-                        $('#TemperaturaMin').val(data.temperaturaMin);
-                    if (data.temperaturaMax !== null && data.temperaturaMax !== undefined)
-                        $('#TemperaturaMax').val(data.temperaturaMax);
-                    if (data.phMin !== null && data.phMin !== undefined)
-                        $('#PhMin').val(data.phMin);
-                    if (data.phMax !== null && data.phMax !== undefined)
-                        $('#PhMax').val(data.phMax);
-                    if (data.temperaturaMin !== null && data.temperaturaMin !== undefined)
-                        $('#TemperaturaMin').val(data.temperaturaMin);
-                    if (data.temperaturaMax !== null && data.temperaturaMax !== undefined)
-                        $('#TemperaturaMax').val(data.temperaturaMax);
-                    if (data.phMin !== null && data.phMin !== undefined)
-                        $('#PhMin').val(data.phMin);
-                    if (data.phMax !== null && data.phMax !== undefined)
-                        $('#PhMax').val(data.phMax);
-                        $('#iaStatus').text('Parâmetros preenchidos.');
+                        if (data.luminosidadeMin !== null && data.luminosidadeMin !== undefined)
+                            $('#LuminosidadeMin').val(data.luminosidadeMin);
+                        if (data.luminosidadeMax !== null && data.luminosidadeMax !== undefined)
+                            $('#LuminosidadeMax').val(data.luminosidadeMax);
+
+                        // Preencher pH
+                        if (data.phMin !== null && data.phMin !== undefined)
+                            $('#PhMin').val(data.phMin);
+                        if (data.phMax !== null && data.phMax !== undefined)
+                            $('#PhMax').val(data.phMax);
+
+                        // Expandir a seção de parâmetros avançados
+                        $('#advancedParams').collapse('show');
+
+                        $('#iaStatus').text('✅ Parâmetros preenchidos!').removeClass('text-danger').addClass('text-success');
                     } else {
-                        $('#iaStatus').text(data && data.mensagem ? data.mensagem : 'Falha ao analisar.');
+                        $('#iaStatus').text('❌ ' + (data && data.mensagem ? data.mensagem : 'Falha ao analisar.')).addClass('text-danger').removeClass('text-warning');
                     }
-                })
-                .fail(function () {
-                    $('#iaStatus').text('Erro ao chamar a IA.');
+                }).fail(function () {
+                    $('#iaStatus').text('❌ Erro ao chamar a IA.').addClass('text-danger').removeClass('text-warning');
                 });
+            });
+
+            // Detectar parâmetros pela espécie
+            $('#btnDetectarEspecieIA').click(function () {
+                var especie = $('#Especie').val();
+                if (!especie || especie.trim() === '') {
+                    $('#iaStatus').text('❌ Informe a espécie primeiro.').addClass('text-danger');
+                    return;
+                }
+
+                $('#iaStatus').text('⏳ Consultando IA...').removeClass('text-danger').addClass('text-warning');
+                $.post('/Peixe/DetectarParametrosPorEspecie', { especie: especie })
+                    .done(function (data) {
+                        if (data && data.sucesso) {
+                            // Preencher campos básicos
+                            if (data.especie) $('#Especie').val(data.especie);
+                            if (data.nomeCientifico) $('#NomeCientifico').val(data.nomeCientifico);
+
+                            // Preencher temperatura
+                            if (data.temperaturaIdeal !== null && data.temperaturaIdeal !== undefined)
+                                $('#TemperaturaIdeal').val(data.temperaturaIdeal);
+                            if (data.temperaturaMin !== null && data.temperaturaMin !== undefined)
+                                $('#TemperaturaMin').val(data.temperaturaMin);
+                            if (data.temperaturaMax !== null && data.temperaturaMax !== undefined)
+                                $('#TemperaturaMax').val(data.temperaturaMax);
+
+                            // Preencher luminosidade
+                            if (data.luminosidadeIdeal !== null && data.luminosidadeIdeal !== undefined)
+                                $('#LuminosidadeIdeal').val(data.luminosidadeIdeal);
+                            if (data.luminosidadeMin !== null && data.luminosidadeMin !== undefined)
+                                $('#LuminosidadeMin').val(data.luminosidadeMin);
+                            if (data.luminosidadeMax !== null && data.luminosidadeMax !== undefined)
+                                $('#LuminosidadeMax').val(data.luminosidadeMax);
+
+                            // Preencher pH
+                            if (data.phMin !== null && data.phMin !== undefined)
+                                $('#PhMin').val(data.phMin);
+                            if (data.phMax !== null && data.phMax !== undefined)
+                                $('#PhMax').val(data.phMax);
+
+                            // Expandir a seção de parâmetros avançados
+                            $('#advancedParams').collapse('show');
+
+                            $('#iaStatus').text('✅ Parâmetros preenchidos!').removeClass('text-danger').addClass('text-success');
+                        } else {
+                            $('#iaStatus').text('❌ ' + (data && data.mensagem ? data.mensagem : 'Falha ao analisar.')).addClass('text-danger').removeClass('text-warning');
+                        }
+                    })
+                    .fail(function () {
+                        $('#iaStatus').text('❌ Erro ao chamar a IA.').addClass('text-danger').removeClass('text-warning');
+                    });
+            });
         });
     </script>
 }

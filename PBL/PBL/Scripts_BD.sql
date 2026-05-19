@@ -54,6 +54,8 @@ BEGIN
         luminosidadeMax INT NULL,
         ph_min DECIMAL(3,1) NULL,
         ph_max DECIMAL(3,1) NULL,
+        originFromAI BIT NULL DEFAULT 0,
+        parametersUpdatedAt DATETIME NULL,
         CONSTRAINT FK_Peixes_Aquarios FOREIGN KEY (aquarioId) REFERENCES Aquarios(id)
     )
 END
@@ -86,6 +88,12 @@ IF COL_LENGTH('Peixes', 'ph_min') IS NULL
 GO
 IF COL_LENGTH('Peixes', 'ph_max') IS NULL
     ALTER TABLE Peixes ADD ph_max DECIMAL(3,1) NULL
+GO
+IF COL_LENGTH('Peixes', 'originFromAI') IS NULL
+    ALTER TABLE Peixes ADD originFromAI BIT NULL DEFAULT 0
+GO
+IF COL_LENGTH('Peixes', 'parametersUpdatedAt') IS NULL
+    ALTER TABLE Peixes ADD parametersUpdatedAt DATETIME NULL
 GO
 
 -- ==========================================
@@ -295,14 +303,16 @@ CREATE OR ALTER PROCEDURE spInsert_Peixes
     @luminosidadeMax INT = NULL,
     @ph_min DECIMAL(3,1) = NULL,
     @ph_max DECIMAL(3,1) = NULL,
+    @originFromAI BIT = NULL,
+    @parametersUpdatedAt DATETIME = NULL,
     @tamanhoCm DECIMAL(6,2),
     @aquarioId INT,
     @foto VARCHAR(255)
 AS
 BEGIN
     SET IDENTITY_INSERT Peixes ON
-    INSERT INTO Peixes (id, nome, especie, nomeCientifico, temperaturaIdeal, temperaturaMin, temperaturaMax, luminosidadeIdeal, luminosidadeMin, luminosidadeMax, ph_min, ph_max, tamanhoCm, aquarioId, foto)
-    VALUES (@id, @nome, @especie, @nomeCientifico, @temperaturaIdeal, @temperaturaMin, @temperaturaMax, @luminosidadeIdeal, @luminosidadeMin, @luminosidadeMax, @ph_min, @ph_max, @tamanhoCm, @aquarioId, @foto)
+    INSERT INTO Peixes (id, nome, especie, nomeCientifico, temperaturaIdeal, temperaturaMin, temperaturaMax, luminosidadeIdeal, luminosidadeMin, luminosidadeMax, ph_min, ph_max, originFromAI, parametersUpdatedAt, tamanhoCm, aquarioId, foto)
+    VALUES (@id, @nome, @especie, @nomeCientifico, @temperaturaIdeal, @temperaturaMin, @temperaturaMax, @luminosidadeIdeal, @luminosidadeMin, @luminosidadeMax, @ph_min, @ph_max, @originFromAI, @parametersUpdatedAt, @tamanhoCm, @aquarioId, @foto)
     SET IDENTITY_INSERT Peixes OFF
 END
 GO
@@ -320,6 +330,8 @@ CREATE OR ALTER PROCEDURE spUpdate_Peixes
     @luminosidadeMax INT = NULL,
     @ph_min DECIMAL(3,1) = NULL,
     @ph_max DECIMAL(3,1) = NULL,
+    @originFromAI BIT = NULL,
+    @parametersUpdatedAt DATETIME = NULL,
     @tamanhoCm DECIMAL(6,2),
     @aquarioId INT,
     @foto VARCHAR(255)
@@ -337,6 +349,8 @@ BEGIN
         luminosidadeMax = @luminosidadeMax,
         ph_min = @ph_min,
         ph_max = @ph_max,
+        originFromAI = @originFromAI,
+        parametersUpdatedAt = @parametersUpdatedAt,
         tamanhoCm = @tamanhoCm,
         aquarioId = @aquarioId,
         foto = @foto

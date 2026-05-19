@@ -44,6 +44,10 @@ namespace PBL.Controllers
                 ModelState.AddModelError("TamanhoCm", "Tamanho deve ser maior que zero.");
             if (model.AquarioId <= 0)
                 ModelState.AddModelError("AquarioId", "Selecione um aquário.");
+
+            // Validar coerência dos parâmetros ambientais
+            if (!model.Parameters.IsValid(out string parametersError))
+                ModelState.AddModelError("Parameters", parametersError);
         }
 
         public override IActionResult Save(PeixeViewModel model, string Operacao)
@@ -68,6 +72,12 @@ namespace PBL.Controllers
                     PreencheDadosParaView(Operacao, model);
                     return View(NomeViewForm, model);
                 }
+
+                // Marcar origem: IA ou manual
+                if (Operacao == "I")
+                    model.Parameters.UpdatedAt = System.DateTime.Now;
+                else if (Operacao == "A")
+                    model.Parameters.UpdatedAt = System.DateTime.Now;
 
                 if (Operacao == "I")
                     DAO.Insert(model);
@@ -118,7 +128,8 @@ namespace PBL.Controllers
                 var result = await _fishAi.AnalisarImagemAsync(caminho);
                 try { System.IO.File.Delete(caminho); } catch { }
 
-                return Json(new
+                // Marcar como originário da IA
+                var response = new
                 {
                     sucesso = true,
                     especie = result.Especie,
@@ -130,8 +141,12 @@ namespace PBL.Controllers
                     luminosidadeMin = result.LuminosidadeMin,
                     luminosidadeMax = result.LuminosidadeMax,
                     phMin = result.PhMin,
-                    phMax = result.PhMax
-                });
+                    phMax = result.PhMax,
+                    originFromAI = true,
+                    updatedAt = System.DateTime.Now
+                };
+
+                return Json(response);
             }
             catch (Exception erro)
             {
@@ -160,7 +175,9 @@ namespace PBL.Controllers
                     luminosidadeMin = result.LuminosidadeMin,
                     luminosidadeMax = result.LuminosidadeMax,
                     phMin = result.PhMin,
-                    phMax = result.PhMax
+                    phMax = result.PhMax,
+                    originFromAI = true,
+                    updatedAt = System.DateTime.Now
                 });
             }
             catch (Exception erro)
