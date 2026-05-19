@@ -33,3 +33,5 @@ dotnet run --project PBL/PBL.csproj
 ### 4) Acessar
 - Aplicação: `http://localhost:5000`
 - Swagger: `http://localhost:5000/swagger`
+
+> Observação: essas URLs consideram a porta definida no `launchSettings.json` (`http://localhost:5000`).
