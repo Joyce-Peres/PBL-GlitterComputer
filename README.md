@@ -12,8 +12,8 @@
    - `PBL/PBL/Scripts_BD.sql`
 3. Verifique a string de conexão em:
    - `PBL/PBL/DAO/ConexaoBD.cs`
-   - Padrão atual:
-     - `Data Source=LOCALHOST;Initial Catalog=PBL;user id=sa; password=123456`
+   - Ajuste para o seu ambiente (servidor, usuário e senha), por exemplo:
+     - `Data Source=LOCALHOST;Initial Catalog=PBL;user id=sa; password=SUA_SENHA_AQUI`
 
 ### 2) Restaurar e executar a aplicação
 No terminal:
