@@ -14,6 +14,7 @@
    - `PBL/PBL/DAO/ConexaoBD.cs`
    - Ajuste para o seu ambiente (servidor, usuário e senha), por exemplo:
      - `Data Source=LOCALHOST;Initial Catalog=PBL;user id=sa; password=SUA_SENHA_AQUI`
+   - Recomendação: não versionar credenciais reais. Use variável de ambiente ou mecanismo seguro de configuração no seu ambiente local/produção.
 
 ### 2) Restaurar e executar a aplicação
 No terminal:
