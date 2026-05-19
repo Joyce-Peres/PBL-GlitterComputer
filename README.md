@@ -27,5 +27,6 @@ dotnet run --project PBL/PBL.csproj
 ```
 
 ### 3) Acessar no navegador
-- Aplicação: `http://localhost:5000`
+- URL padrão (launchSettings): `http://localhost:5000`
 - Swagger: `http://localhost:5000/swagger`
+- Se a porta mudar no seu ambiente, use a URL exibida no console ao executar o `dotnet run`.
