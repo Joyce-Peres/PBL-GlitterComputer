@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using System.Security.Cryptography;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -76,11 +78,13 @@ namespace PBL.Services
     {
         private readonly IConfiguration _config;
         private readonly IWebHostEnvironment _env;
+        private readonly ILogger<FishAiService> _logger;
 
-        public FishAiService(IConfiguration config, IWebHostEnvironment env)
+        public FishAiService(IConfiguration config, IWebHostEnvironment env, ILogger<FishAiService> logger)
         {
             _config = config;
             _env = env;
+            _logger = logger;
         }
 
         public async Task<FishAiResult> AnalisarImagemAsync(string caminhoImagem)
@@ -118,21 +122,52 @@ namespace PBL.Services
             if (!string.IsNullOrWhiteSpace(apiKey))
                 psi.Environment["GEMINI_API_KEY"] = apiKey;
 
-            using var proc = new Process { StartInfo = psi };
-            proc.Start();
+            try
+            {
+                // Calcular hash do arquivo para rastreabilidade
+                string fileHash = null;
+                try
+                {
+                    using var sha = SHA256.Create();
+                    using var fs = File.OpenRead(caminhoImagem);
+                    var hash = sha.ComputeHash(fs);
+                    fileHash = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+                    _logger?.LogInformation("Iniciando análise de imagem {Path} hash={Hash}", caminhoImagem, fileHash);
+                }
+                catch (Exception exHash)
+                {
+                    _logger?.LogWarning(exHash, "Falha ao calcular hash da imagem para rastreabilidade");
+                }
 
-            var stdout = await proc.StandardOutput.ReadToEndAsync();
-            var stderr = await proc.StandardError.ReadToEndAsync();
+                using var proc = new Process { StartInfo = psi };
+                proc.Start();
 
-            await Task.Run(() => proc.WaitForExit());
-            if (proc.ExitCode != 0)
-                throw new Exception(string.IsNullOrWhiteSpace(stderr) ? "Falha ao executar a IA." : stderr);
+                var stdout = await proc.StandardOutput.ReadToEndAsync();
+                var stderr = await proc.StandardError.ReadToEndAsync();
 
-            var json = stdout?.Trim();
-            if (string.IsNullOrWhiteSpace(json))
-                throw new Exception("A IA não retornou JSON.");
+                await Task.Run(() => proc.WaitForExit());
+                if (proc.ExitCode != 0)
+                {
+                    _logger?.LogError("IA retornou código {Code}. Stderr: {Err}", proc.ExitCode, stderr);
+                    throw new Exception(string.IsNullOrWhiteSpace(stderr) ? "Falha ao executar a IA." : stderr);
+                }
 
-            return FishAiResult.FromJson(json);
+                var json = stdout?.Trim();
+                if (string.IsNullOrWhiteSpace(json))
+                {
+                    _logger?.LogError("IA não retornou JSON (stdout empty). Stderr: {Err}", stderr);
+                    throw new Exception("A IA não retornou JSON.");
+                }
+
+                _logger?.LogInformation("IA retornou JSON com {Length} bytes", json.Length);
+                var result = FishAiResult.FromJson(json);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Erro ao executar análise de imagem");
+                throw;
+            }
         }
 
         public async Task<FishAiResult> AnalisarEspecieAsync(string especie)
@@ -168,21 +203,37 @@ namespace PBL.Services
             if (!string.IsNullOrWhiteSpace(apiKey))
                 psi.Environment["GEMINI_API_KEY"] = apiKey;
 
-            using var proc = new Process { StartInfo = psi };
-            proc.Start();
+            try
+            {
+                _logger?.LogInformation("Analisando espécie pela IA: {Especie}", especie);
+                using var proc = new Process { StartInfo = psi };
+                proc.Start();
 
-            var stdout = await proc.StandardOutput.ReadToEndAsync();
-            var stderr = await proc.StandardError.ReadToEndAsync();
+                var stdout = await proc.StandardOutput.ReadToEndAsync();
+                var stderr = await proc.StandardError.ReadToEndAsync();
 
-            await Task.Run(() => proc.WaitForExit());
-            if (proc.ExitCode != 0)
-                throw new Exception(string.IsNullOrWhiteSpace(stderr) ? "Falha ao executar a IA." : stderr);
+                await Task.Run(() => proc.WaitForExit());
+                if (proc.ExitCode != 0)
+                {
+                    _logger?.LogError("IA retornou código {Code} para espécie. Stderr: {Err}", proc.ExitCode, stderr);
+                    throw new Exception(string.IsNullOrWhiteSpace(stderr) ? "Falha ao executar a IA." : stderr);
+                }
 
-            var json = stdout?.Trim();
-            if (string.IsNullOrWhiteSpace(json))
-                throw new Exception("A IA não retornou JSON.");
+                var json = stdout?.Trim();
+                if (string.IsNullOrWhiteSpace(json))
+                {
+                    _logger?.LogError("IA não retornou JSON para espécie. Stderr: {Err}", stderr);
+                    throw new Exception("A IA não retornou JSON.");
+                }
 
-            return FishAiResult.FromJson(json);
+                _logger?.LogInformation("IA retornou JSON para espécie com {Length} bytes", json.Length);
+                return FishAiResult.FromJson(json);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Erro ao analisar espécie");
+                throw;
+            }
         }
     }
 }

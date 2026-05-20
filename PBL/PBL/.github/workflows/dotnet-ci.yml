@@ -1,0 +1,24 @@
+name: .NET CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '6.0.x'
+    - name: Restore
+      run: dotnet restore PBL/PBL.csproj
+    - name: Build
+      run: dotnet build PBL/PBL.csproj --configuration Release --no-restore
+    - name: Run tests
+      run: echo "No tests configured"

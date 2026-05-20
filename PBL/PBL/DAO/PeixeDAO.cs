@@ -18,9 +18,9 @@ namespace PBL.DAO
             return new SqlParameter[]
             {
                 new SqlParameter("id", model.Id),
-                new SqlParameter("nome", model.Nome ?? ""),
-                new SqlParameter("especie", model.Especie ?? ""),
-                new SqlParameter("nomeCientifico", (object)model.NomeCientifico ?? DBNull.Value),
+                new SqlParameter("nome", (object)(model.Nome?.Trim() ?? string.Empty)),
+                new SqlParameter("especie", (object)(model.Especie?.Trim() ?? string.Empty)),
+                new SqlParameter("nomeCientifico", (object)(model.NomeCientifico?.Trim()) ?? DBNull.Value),
                 new SqlParameter("temperaturaIdeal", (object)model.TemperaturaIdeal ?? DBNull.Value),
                 new SqlParameter("luminosidadeIdeal", (object)model.LuminosidadeIdeal ?? DBNull.Value),
                 new SqlParameter("temperaturaMin", (object)model.TemperaturaMin ?? DBNull.Value),

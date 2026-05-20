@@ -1,0 +1,5 @@
+google-generative-ai
+Pillow
+python-dotenv
+requests
+# Ajuste as versões conforme necessário (ex.: google-generative-ai==0.1.0)

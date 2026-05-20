@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using PBL.DAO;
 using PBL.Models;
 using PBL.Services;
+using Microsoft.Extensions.Logging;
+using System.Net;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -16,12 +18,14 @@ namespace PBL.Controllers
         private readonly FishAiService _fishAi;
         private readonly SmartLampMqttService _mqtt;
         private readonly SmartLampConfigDAO _lampDao = new SmartLampConfigDAO();
+        private readonly ILogger<PeixeController> _logger;
 
-        public PeixeController(IWebHostEnvironment env, FishAiService fishAi, SmartLampMqttService mqtt)
+        public PeixeController(IWebHostEnvironment env, FishAiService fishAi, SmartLampMqttService mqtt, ILogger<PeixeController> logger)
         {
             _env = env;
             _fishAi = fishAi;
             _mqtt = mqtt;
+            _logger = logger;
             DAO = new PeixeDAO();
             GeraProximoId = true;
         }
@@ -36,6 +40,11 @@ namespace PBL.Controllers
         protected override void ValidaDados(PeixeViewModel model, string operacao)
         {
             base.ValidaDados(model, operacao);
+            // Sanitizar e normalizar entradas simples
+            model.Nome = WebUtility.HtmlEncode(model.Nome?.Trim());
+            model.Especie = WebUtility.HtmlEncode(model.Especie?.Trim());
+            model.NomeCientifico = WebUtility.HtmlEncode(model.NomeCientifico?.Trim());
+
             if (string.IsNullOrWhiteSpace(model.Nome))
                 ModelState.AddModelError("Nome", "Informe o nome do peixe.");
             if (string.IsNullOrWhiteSpace(model.Especie))
@@ -54,6 +63,7 @@ namespace PBL.Controllers
         {
             try
             {
+                _logger?.LogInformation("Salvando peixe Id={Id} Operacao={Operacao}", model?.Id, Operacao);
                 var arquivoFoto = Request.Form.Files["arquivoFoto"];
                 if (arquivoFoto != null && arquivoFoto.Length > 0)
                     model.Foto = SalvarFoto(arquivoFoto, model.Id);
@@ -73,16 +83,15 @@ namespace PBL.Controllers
                     return View(NomeViewForm, model);
                 }
 
-                // Marcar origem: IA ou manual
-                if (Operacao == "I")
-                    model.Parameters.UpdatedAt = System.DateTime.Now;
-                else if (Operacao == "A")
-                    model.Parameters.UpdatedAt = System.DateTime.Now;
+                // Marcar origem e timestamp
+                model.Parameters.UpdatedAt = System.DateTime.Now;
 
                 if (Operacao == "I")
                     DAO.Insert(model);
                 else
                     DAO.Update(model);
+
+                _logger?.LogInformation("Peixe salvo com sucesso Id={Id}", model.Id);
 
                 // Automação: aplica parâmetros ideais (se existirem) à configuração da lâmpada.
                 if (model.LuminosidadeIdeal.HasValue || model.TemperaturaIdeal.HasValue)
@@ -99,6 +108,7 @@ namespace PBL.Controllers
             }
             catch (Exception erro)
             {
+                _logger?.LogError(erro, "Erro ao salvar peixe");
                 return View("Error", new ErrorViewModel(erro.ToString()));
             }
         }
@@ -150,6 +160,7 @@ namespace PBL.Controllers
             }
             catch (Exception erro)
             {
+                _logger?.LogError(erro, "Erro DetectarParametros");
                 return Json(new { sucesso = false, mensagem = erro.Message });
             }
         }
@@ -161,7 +172,7 @@ namespace PBL.Controllers
             {
                 if (string.IsNullOrWhiteSpace(especie))
                     return Json(new { sucesso = false, mensagem = "Informe a espécie." });
-
+                especie = WebUtility.HtmlEncode(especie.Trim());
                 var result = await _fishAi.AnalisarEspecieAsync(especie);
                 return Json(new
                 {
@@ -182,6 +193,7 @@ namespace PBL.Controllers
             }
             catch (Exception erro)
             {
+                _logger?.LogError(erro, "Erro DetectarParametrosPorEspecie");
                 return Json(new { sucesso = false, mensagem = erro.Message });
             }
         }

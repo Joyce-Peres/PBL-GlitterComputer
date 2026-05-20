@@ -37,7 +37,15 @@
             </div>
             <div class="form-group">
                 <label asp-for="NomeCientifico">Nome científico (gerado pela IA)</label>
-                <input asp-for="NomeCientifico" class="form-control" readonly />
+                <div class="input-group">
+                    <input asp-for="NomeCientifico" class="form-control" readonly />
+                    @if (Model?.OriginFromAI == true)
+                    {
+                        <div class="input-group-append">
+                            <span class="input-group-text bg-light text-success" title="Detectado pela IA">🧠 Gerado pela IA</span>
+                        </div>
+                    }
+                </div>
             </div>
             <div class="form-group">
                 <label asp-for="TamanhoCm">Tamanho (cm)</label>
