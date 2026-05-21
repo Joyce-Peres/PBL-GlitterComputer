@@ -2,10 +2,13 @@
 <html lang="pt-br">
 <head>
     <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Aquário Inteligente</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -72,6 +75,20 @@
             </div>
         </nav>
     </header>
+    <!-- Hero / banner -->
+    <section class="site-hero pb-5">
+        <div class="container text-center text-white">
+            <h1 class="hero-title">Aquário Inteligente</h1>
+            <p class="hero-sub">Monitore, proteja e personalize seu aquário com recomendações geradas por IA.</p>
+            <p class="mt-4">
+                <a class="btn btn-primary btn-lg hero-cta" asp-controller="Peixe" asp-action="Index">Ver catálogo de peixes</a>
+            </p>
+        </div>
+        <svg class="hero-wave" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0,0 C300,100 900,0 1200,80 L1200,120 L0,120 Z" fill="rgba(255,255,255,0.8)"></path>
+        </svg>
+    </section>
+    @await Html.PartialAsync("_ProductAlerts")
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

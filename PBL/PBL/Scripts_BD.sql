@@ -459,3 +459,66 @@ BEGIN
     VALUES (@aquarioId, @temperatura, @ph, @nivelAgua, GETDATE())
 END
 GO
+
+-- ==========================================
+-- STORED PROCEDURES - SmartLamp Config
+-- ==========================================
+
+CREATE OR ALTER PROCEDURE spConsultaLampConfig
+    @aquarioId INT
+AS
+BEGIN
+    SELECT lc.aquarioId, aq.nome AS nomeAquario,
+           lc.modo, lc.brilho, lc.r, lc.g, lc.b,
+           lc.luzAlvo, lc.tempAlvo, lc.atualizadoEm
+    FROM LampConfigs lc
+    INNER JOIN Aquarios aq ON aq.id = lc.aquarioId
+    WHERE lc.aquarioId = @aquarioId
+END
+GO
+
+CREATE OR ALTER PROCEDURE spSalvarLampConfig
+    @aquarioId INT,
+    @modo INT,
+    @brilho INT,
+    @r INT,
+    @g INT,
+    @b INT,
+    @luzAlvo INT = NULL,
+    @tempAlvo DECIMAL(5,2) = NULL
+AS
+BEGIN
+    IF EXISTS (SELECT 1 FROM LampConfigs WHERE aquarioId = @aquarioId)
+    BEGIN
+        UPDATE LampConfigs
+        SET modo = @modo, brilho = @brilho, r = @r, g = @g, b = @b,
+            luzAlvo = @luzAlvo, tempAlvo = @tempAlvo, atualizadoEm = GETDATE()
+        WHERE aquarioId = @aquarioId
+    END
+    ELSE
+    BEGIN
+        INSERT INTO LampConfigs (aquarioId, modo, brilho, r, g, b, luzAlvo, tempAlvo)
+        VALUES (@aquarioId, @modo, @brilho, @r, @g, @b, @luzAlvo, @tempAlvo)
+    END
+END
+GO
+
+CREATE OR ALTER PROCEDURE spAplicarAlvosLamp
+    @aquarioId INT,
+    @luzAlvo INT = NULL,
+    @tempAlvo DECIMAL(5,2) = NULL
+AS
+BEGIN
+    IF EXISTS (SELECT 1 FROM LampConfigs WHERE aquarioId = @aquarioId)
+    BEGIN
+        UPDATE LampConfigs 
+        SET luzAlvo = @luzAlvo, tempAlvo = @tempAlvo, atualizadoEm = GETDATE() 
+        WHERE aquarioId = @aquarioId
+    END
+    ELSE
+    BEGIN
+        INSERT INTO LampConfigs (aquarioId, luzAlvo, tempAlvo) 
+        VALUES (@aquarioId, @luzAlvo, @tempAlvo)
+    END
+END
+GO
