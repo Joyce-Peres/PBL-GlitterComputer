@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "C:\\Temp\\PBL-GlitterComputer\\PBL\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|c:\\temp\\pbl-glittercomputer\\pbl\\pbl\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|solutionrelative:pbl\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|c:\\temp\\pbl-glittercomputer\\pbl\\pbl\\models\\aquarioviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|solutionrelative:pbl\\models\\aquarioviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|c:\\temp\\pbl-glittercomputer\\pbl\\pbl\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{6FC6C122-5674-435C-8979-7CAA1ED251D1}|PBL\\PBL.csproj|solutionrelative:pbl\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -86,8 +94,12 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 3,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{56df62a4-05a3-4e5b-aa1a-99371ccfb997}"
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
@@ -95,19 +107,32 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\Views\\Login\\Index.cshtml",
-              "RelativeDocumentMoniker": "PBL\\Views\\Login\\Index.cshtml",
-              "ToolTip": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\Views\\Login\\Index.cshtml",
-              "RelativeToolTip": "PBL\\Views\\Login\\Index.cshtml",
-              "ViewState": "AgIAABUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-15T00:58:22.723Z",
+              "Title": "AquarioViewModel.cs",
+              "DocumentMoniker": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\Models\\AquarioViewModel.cs",
+              "RelativeDocumentMoniker": "PBL\\Models\\AquarioViewModel.cs",
+              "ToolTip": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\Models\\AquarioViewModel.cs",
+              "RelativeToolTip": "PBL\\Models\\AquarioViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-21T11:10:46.866Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 0,
+              "Title": "site.css",
+              "DocumentMoniker": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "PBL\\wwwroot\\css\\site.css",
+              "ToolTip": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\wwwroot\\css\\site.css*",
+              "RelativeToolTip": "PBL\\wwwroot\\css\\site.css*",
+              "ViewState": "AgIAACIAAAAAAAAAAAAmwEcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2026-05-21T11:10:33.713Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
               "Title": "_ViewImports.cshtml",
               "DocumentMoniker": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\Views\\_ViewImports.cshtml",
               "RelativeDocumentMoniker": "PBL\\Views\\_ViewImports.cshtml",
@@ -119,7 +144,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "_ViewStart.cshtml",
               "DocumentMoniker": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\Views\\_ViewStart.cshtml",
               "RelativeDocumentMoniker": "PBL\\Views\\_ViewStart.cshtml",
@@ -131,7 +156,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "appsettings.Development.json",
               "DocumentMoniker": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\appsettings.Development.json",
               "RelativeDocumentMoniker": "PBL\\appsettings.Development.json",
@@ -143,7 +168,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 12,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\appsettings.json",
               "RelativeDocumentMoniker": "PBL\\appsettings.json",
@@ -155,7 +180,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "Cadastrar.cshtml",
               "DocumentMoniker": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\Views\\Login\\Cadastrar.cshtml",
               "RelativeDocumentMoniker": "PBL\\Views\\Login\\Cadastrar.cshtml",
@@ -167,7 +192,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "HelperDAO.cs",
               "DocumentMoniker": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\DAO\\HelperDAO.cs",
               "RelativeDocumentMoniker": "PBL\\DAO\\HelperDAO.cs",
@@ -175,18 +200,17 @@
               "RelativeToolTip": "PBL\\DAO\\HelperDAO.cs",
               "ViewState": "AgIAACwAAAAAAAAAAAAiwEIAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-15T00:55:24.964Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-15T00:55:24.964Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\Program.cs",
               "RelativeDocumentMoniker": "PBL\\Program.cs",
               "ToolTip": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\Program.cs",
               "RelativeToolTip": "PBL\\Program.cs",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAswA8AAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAswBMAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-15T00:55:12.443Z",
               "EditorCaption": ""
@@ -194,6 +218,18 @@
             {
               "$type": "Document",
               "DocumentIndex": 3,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\Views\\Login\\Index.cshtml",
+              "RelativeDocumentMoniker": "PBL\\Views\\Login\\Index.cshtml",
+              "ToolTip": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\Views\\Login\\Index.cshtml",
+              "RelativeToolTip": "PBL\\Views\\Login\\Index.cshtml",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-15T00:58:22.723Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "ConexaoBD.cs",
               "DocumentMoniker": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\DAO\\ConexaoBD.cs",
               "RelativeDocumentMoniker": "PBL\\DAO\\ConexaoBD.cs",
@@ -205,7 +241,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "UsuarioViewModel.cs",
               "DocumentMoniker": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\Models\\UsuarioViewModel.cs",
               "RelativeDocumentMoniker": "PBL\\Models\\UsuarioViewModel.cs",
@@ -217,7 +253,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "HelperControllers.cs",
               "DocumentMoniker": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\Controllers\\HelperControllers.cs",
               "RelativeDocumentMoniker": "PBL\\Controllers\\HelperControllers.cs",
@@ -229,7 +265,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 18,
               "Title": "PadraoController.cs",
               "DocumentMoniker": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\Controllers\\PadraoController.cs",
               "RelativeDocumentMoniker": "PBL\\Controllers\\PadraoController.cs",
@@ -241,7 +277,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 19,
               "Title": "LoginController.cs",
               "DocumentMoniker": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\Controllers\\LoginController.cs",
               "RelativeDocumentMoniker": "PBL\\Controllers\\LoginController.cs",
@@ -253,7 +289,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 17,
               "Title": "PadraoDAO.cs",
               "DocumentMoniker": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\DAO\\PadraoDAO.cs",
               "RelativeDocumentMoniker": "PBL\\DAO\\PadraoDAO.cs",
@@ -265,7 +301,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 16,
               "Title": "UsuarioDAO.cs",
               "DocumentMoniker": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\DAO\\UsuarioDAO.cs",
               "RelativeDocumentMoniker": "PBL\\DAO\\UsuarioDAO.cs",
@@ -277,7 +313,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 15,
               "Title": "ErrorViewModel.cs",
               "DocumentMoniker": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\Models\\ErrorViewModel.cs",
               "RelativeDocumentMoniker": "PBL\\Models\\ErrorViewModel.cs",
@@ -289,7 +325,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 14,
               "Title": "PadraoViewModel.cs",
               "DocumentMoniker": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\Models\\PadraoViewModel.cs",
               "RelativeDocumentMoniker": "PBL\\Models\\PadraoViewModel.cs",
@@ -301,7 +337,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 13,
               "Title": "Startup.cs",
               "DocumentMoniker": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\Startup.cs",
               "RelativeDocumentMoniker": "PBL\\Startup.cs",
@@ -313,7 +349,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 20,
               "Title": "HomeController.cs",
               "DocumentMoniker": "C:\\Temp\\PBL-GlitterComputer\\PBL\\PBL\\Controllers\\HomeController.cs",
               "RelativeDocumentMoniker": "PBL\\Controllers\\HomeController.cs",
