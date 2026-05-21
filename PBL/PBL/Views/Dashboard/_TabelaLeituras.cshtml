@@ -5,9 +5,13 @@
         <tr>
             <th>Id</th>
             <th>Aquário</th>
-            <th>Temperatura (°C)</th>
-            <th>pH</th>
-            <th>Nível Água (%)</th>
+            <th>Temp. Água (°C)</th>
+            <th>Temp. Ar (°C)</th>
+            <th>Umidade (%)</th>
+            <th>TDS (ppm)</th>
+            <th>LDR</th>
+            <th>Nível (%)</th>
+            <th>Volume (L)</th>
             <th>Data/Hora</th>
         </tr>
     </thead>
@@ -19,9 +23,13 @@
                 <tr>
                     <td>@item.Id</td>
                     <td>@item.NomeAquario</td>
-                    <td>@item.Temperatura</td>
-                    <td>@item.Ph</td>
-                    <td>@item.NivelAgua</td>
+                    <td>@(item.TemperaturaAgua.HasValue ? item.TemperaturaAgua.Value.ToString("0.0") : item.Temperatura.ToString("0.0"))</td>
+                    <td>@(item.TemperaturaAr.HasValue ? item.TemperaturaAr.Value.ToString("0.0") : "-")</td>
+                    <td>@(item.UmidadeAr.HasValue ? item.UmidadeAr.Value.ToString("0") + "%" : "-")</td>
+                    <td>@(item.TdsPpm.HasValue ? item.TdsPpm.Value.ToString("0") : "-")</td>
+                    <td>@(item.LdrRaw.HasValue ? item.LdrRaw.Value.ToString() : "-")</td>
+                    <td>@(item.NivelPct.HasValue ? item.NivelPct.Value.ToString("0.0") + "%" : item.NivelAgua.ToString("0.0") + "%")</td>
+                    <td>@(item.VolumeLitros.HasValue ? item.VolumeLitros.Value.ToString("0.00") + " L" : "-")</td>
                     <td>@item.DataLeitura.ToString("dd/MM/yyyy HH:mm")</td>
                 </tr>
             }
@@ -29,7 +37,7 @@
         else
         {
             <tr>
-                <td colspan="6" class="text-center text-muted">Nenhuma leitura encontrada.</td>
+                <td colspan="9" class="text-center text-muted">Nenhuma leitura encontrada.</td>
             </tr>
         }
     </tbody>

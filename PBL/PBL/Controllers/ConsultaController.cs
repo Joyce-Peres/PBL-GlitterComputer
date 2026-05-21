@@ -4,12 +4,22 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PBL.DAO;
 using PBL.Models;
+using PBL.Services;
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PBL.Controllers
 {
     public class ConsultaController : Controller
     {
+        private readonly FiwareSthCometService _historicoService;
+
+        public ConsultaController(FiwareSthCometService historicoService)
+        {
+            _historicoService = historicoService;
+        }
+
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             if (!HelperControllers.VerificaUserLogado(HttpContext.Session))
@@ -52,7 +62,7 @@ namespace PBL.Controllers
             }
         }
 
-        public IActionResult Leituras(int? aquarioId, DateTime? dataInicio, DateTime? dataFim,
+        public async Task<IActionResult> Leituras(int? aquarioId, DateTime? dataInicio, DateTime? dataFim,
             decimal? temperaturaMin, decimal? temperaturaMax)
         {
             try
@@ -63,7 +73,27 @@ namespace PBL.Controllers
                 ViewBag.DataFim = dataFim?.ToString("yyyy-MM-dd");
                 ViewBag.TemperaturaMin = temperaturaMin;
                 ViewBag.TemperaturaMax = temperaturaMax;
-                var lista = new LeituraSensorDAO().ConsultaComFiltro(aquarioId, dataInicio, dataFim, temperaturaMin, temperaturaMax);
+                ViewBag.OrigemDados = _historicoService.EstaConfigurado
+                    ? "MongoDB via STH-Comet"
+                    : "SQL legado";
+
+                var lista = await _historicoService.ConsultarHistoricoAsync(aquarioId, dataInicio, dataFim);
+                if (!lista.Any() && !_historicoService.EstaConfigurado)
+                    lista = new LeituraSensorDAO().ConsultaComFiltro(aquarioId, dataInicio, dataFim, temperaturaMin, temperaturaMax);
+
+                if (temperaturaMin.HasValue || temperaturaMax.HasValue)
+                {
+                    lista = lista.FindAll(item =>
+                    {
+                        var temperatura = item.TemperaturaAgua.HasValue ? item.TemperaturaAgua.Value : item.Temperatura;
+                        if (temperaturaMin.HasValue && temperatura < temperaturaMin.Value)
+                            return false;
+                        if (temperaturaMax.HasValue && temperatura > temperaturaMax.Value)
+                            return false;
+                        return true;
+                    });
+                }
+
                 return View(lista);
             }
             catch (Exception erro)

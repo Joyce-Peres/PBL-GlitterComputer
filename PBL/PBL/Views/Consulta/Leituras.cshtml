@@ -6,10 +6,12 @@
 
 <h2>Consulta Gerencial — Leituras dos Sensores</h2>
 <hr />
+<p class="text-muted">Consulta histórica do aquário IoT armazenada no MongoDB via STH-Comet.</p>
+<p class="text-muted">Fonte ativa: <strong>@ViewBag.OrigemDados</strong></p>
 
 <form method="get" asp-action="Leituras" class="card mb-4">
     <div class="card-body">
-        <h5 class="card-title">Filtros (mínimo 2)</h5>
+        <h5 class="card-title">Filtros do histórico</h5>
         <div class="form-row">
             <div class="form-group col-md-3">
                 <label for="aquarioId">Aquário</label>
@@ -26,11 +28,11 @@
                 <input type="date" name="dataFim" class="form-control" value="@ViewBag.DataFim" />
             </div>
             <div class="form-group col-md-2">
-                <label for="temperaturaMin">Temp. Mín (°C)</label>
+                <label for="temperaturaMin">Temp. Água mín (°C)</label>
                 <input type="number" step="0.1" name="temperaturaMin" class="form-control" value="@ViewBag.TemperaturaMin" />
             </div>
             <div class="form-group col-md-2">
-                <label for="temperaturaMax">Temp. Máx (°C)</label>
+                <label for="temperaturaMax">Temp. Água máx (°C)</label>
                 <input type="number" step="0.1" name="temperaturaMax" class="form-control" value="@ViewBag.TemperaturaMax" />
             </div>
             <div class="form-group col-md-1 d-flex align-items-end">

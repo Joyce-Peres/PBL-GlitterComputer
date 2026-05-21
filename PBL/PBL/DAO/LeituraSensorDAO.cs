@@ -37,6 +37,9 @@ namespace PBL.DAO
                 NivelAgua = Convert.ToDecimal(registro["nivelAgua"]),
                 DataLeitura = Convert.ToDateTime(registro["dataLeitura"])
             };
+            model.TemperaturaAgua = model.Temperatura;
+            model.NivelPct = model.NivelAgua;
+            model.FonteDados = "SQL/Legado";
             if (registro.Table.Columns.Contains("nomeAquario") && registro["nomeAquario"] != DBNull.Value)
                 model.NomeAquario = registro["nomeAquario"].ToString();
             return model;

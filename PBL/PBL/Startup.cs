@@ -28,6 +28,7 @@ namespace PBL
 
             services.AddSingleton<PBL.Services.FishAiService>();
             services.AddSingleton<PBL.Services.SmartLampMqttService>();
+            services.AddSingleton<PBL.Services.FiwareSthCometService>();
 
             services.AddSwaggerGen(c =>
             {

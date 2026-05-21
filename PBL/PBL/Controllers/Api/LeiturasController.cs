@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using PBL.DAO;
 using PBL.Models;
+using PBL.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PBL.Controllers.Api
 {
@@ -10,15 +13,24 @@ namespace PBL.Controllers.Api
     [ApiController]
     public class LeiturasController : ControllerBase
     {
+        private readonly FiwareSthCometService _historicoService;
+
+        public LeiturasController(FiwareSthCometService historicoService)
+        {
+            _historicoService = historicoService;
+        }
+
         /// <summary>
-        /// Retorna todas as leituras dos sensores IoT do aquário inteligente.
+        /// Retorna o histórico das leituras IoT consultado no STH-Comet.
         /// </summary>
         [HttpGet]
-        public ActionResult<IEnumerable<LeituraSensorViewModel>> Get()
+        public async Task<ActionResult<IEnumerable<LeituraSensorViewModel>>> Get([FromQuery] int? aquarioId, [FromQuery] DateTime? dataInicio, [FromQuery] DateTime? dataFim)
         {
             try
             {
-                var lista = new LeituraSensorDAO().Listagem();
+                var lista = await _historicoService.ConsultarHistoricoAsync(aquarioId, dataInicio, dataFim);
+                if (!lista.Any() && !_historicoService.EstaConfigurado)
+                    lista = new LeituraSensorDAO().Listagem();
                 return Ok(lista);
             }
             catch (Exception erro)
@@ -31,11 +43,13 @@ namespace PBL.Controllers.Api
         /// Retorna leituras filtradas por aquário.
         /// </summary>
         [HttpGet("aquario/{aquarioId}")]
-        public ActionResult<IEnumerable<LeituraSensorViewModel>> GetPorAquario(int aquarioId)
+        public async Task<ActionResult<IEnumerable<LeituraSensorViewModel>>> GetPorAquario(int aquarioId, [FromQuery] DateTime? dataInicio, [FromQuery] DateTime? dataFim)
         {
             try
             {
-                var lista = new LeituraSensorDAO().ConsultaComFiltro(aquarioId, null, null, null, null);
+                var lista = await _historicoService.ConsultarHistoricoAsync(aquarioId, dataInicio, dataFim);
+                if (!lista.Any() && !_historicoService.EstaConfigurado)
+                    lista = new LeituraSensorDAO().ConsultaComFiltro(aquarioId, null, null, null, null);
                 return Ok(lista);
             }
             catch (Exception erro)
