@@ -50,5 +50,8 @@ dotnet run --project PBL.csproj
 - Este `README.md` consolida informações que estavam em `PBL/PBL/README_DEV.md` e `PBL/PBL/wwwroot/smartlamp-app/README.md`.
 - Foram removidos os READMEs secundários para manter a documentação centralizada.
 
+**Documentação adicional**
+- Documentos otimizados disponíveis em `PBL/PBL/docs/` (checklist, security, api_demo).
+
 ---
 Se quiser, posso rodar os testes ou commitar as mudanças para você.
