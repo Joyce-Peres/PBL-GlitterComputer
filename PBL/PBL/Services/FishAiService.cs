@@ -1,11 +1,11 @@
-using Microsoft.AspNetCore.Hosting;
+using Google.GenAI;
+using Google.GenAI.Types;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System;
-using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -77,50 +77,29 @@ namespace PBL.Services
     public class FishAiService
     {
         private readonly IConfiguration _config;
-        private readonly IWebHostEnvironment _env;
         private readonly ILogger<FishAiService> _logger;
+        private readonly Client _client;
+        private readonly string _model;
 
-        public FishAiService(IConfiguration config, IWebHostEnvironment env, ILogger<FishAiService> logger)
+        public FishAiService(IConfiguration config, ILogger<FishAiService> logger)
         {
             _config = config;
-            _env = env;
             _logger = logger;
+
+            _model = string.IsNullOrWhiteSpace(_config["FishAi:Model"]) ? "gemini-2.5-flash" : _config["FishAi:Model"];
+            var apiKey = _config["FishAi:ApiKey"];
+            if (string.IsNullOrWhiteSpace(apiKey))
+                apiKey = System.Environment.GetEnvironmentVariable("GEMINI_API_KEY");
+            if (string.IsNullOrWhiteSpace(apiKey))
+                apiKey = System.Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
+
+            _client = string.IsNullOrWhiteSpace(apiKey) ? new Client() : new Client(apiKey: apiKey);
         }
 
         public async Task<FishAiResult> AnalisarImagemAsync(string caminhoImagem)
         {
-            if (string.IsNullOrWhiteSpace(caminhoImagem) || !File.Exists(caminhoImagem))
+            if (string.IsNullOrWhiteSpace(caminhoImagem) || !System.IO.File.Exists(caminhoImagem))
                 throw new FileNotFoundException("Imagem não encontrada para análise.", caminhoImagem);
-
-            var pythonExe = _config["FishAi:PythonExe"];
-            if (string.IsNullOrWhiteSpace(pythonExe))
-                pythonExe = "python";
-
-            var scriptRel = _config["FishAi:ScriptPath"];
-            if (string.IsNullOrWhiteSpace(scriptRel))
-                scriptRel = Path.Combine("cadastro-peixe", "reconhecer_peixe.py");
-
-            var scriptAbs = Path.GetFullPath(Path.Combine(_env.ContentRootPath, scriptRel));
-            if (!File.Exists(scriptAbs))
-                throw new FileNotFoundException("Script de IA não encontrado.", scriptAbs);
-
-            var psi = new ProcessStartInfo
-            {
-                FileName = pythonExe,
-                Arguments = $"\"{scriptAbs}\" \"{caminhoImagem}\"",
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                StandardOutputEncoding = Encoding.UTF8,
-                StandardErrorEncoding = Encoding.UTF8
-            };
-
-            // Permite configurar a chave da IA via variável de ambiente.
-            // Ex.: GEMINI_API_KEY=... (não deve ficar hardcoded em código/fonte)
-            var apiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY");
-            if (!string.IsNullOrWhiteSpace(apiKey))
-                psi.Environment["GEMINI_API_KEY"] = apiKey;
 
             try
             {
@@ -129,7 +108,7 @@ namespace PBL.Services
                 try
                 {
                     using var sha = SHA256.Create();
-                    using var fs = File.OpenRead(caminhoImagem);
+                    using var fs = System.IO.File.OpenRead(caminhoImagem);
                     var hash = sha.ComputeHash(fs);
                     fileHash = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
                     _logger?.LogInformation("Iniciando análise de imagem {Path} hash={Hash}", caminhoImagem, fileHash);
@@ -139,23 +118,35 @@ namespace PBL.Services
                     _logger?.LogWarning(exHash, "Falha ao calcular hash da imagem para rastreabilidade");
                 }
 
-                using var proc = new Process { StartInfo = psi };
-                proc.Start();
+                var promptComando =
+                    "Analise a imagem deste aquário doméstico. Identifique a espécie principal de peixe. " +
+                    "Com base na literatura científica de aquarismo para essa espécie, defina os parâmetros ideais " +
+                    "para o sensor DHT22 (temperatura alvo e faixa min/max), para o sensor LDR (luminosidade alvo e faixa min/max em escala de 0 a 100), " +
+                    "e, quando disponível, o intervalo de pH adequado (min/max). " +
+                    "Retorne estritamente um objeto JSON válido seguindo exatamente o modelo: " +
+                    "{\"especie\": \"Nome\", \"nome_cientifico\": \"Nome\", \"dht22_temp_alvo\": 25.0, \"dht22_temp_min\": 24.0, \"dht22_temp_max\": 27.0, \"ldr_luz_alvo\": 40, \"ldr_luz_min\": 20, \"ldr_luz_max\": 60, \"ph_min\": 6.5, \"ph_max\": 7.5}";
 
-                var stdout = await proc.StandardOutput.ReadToEndAsync();
-                var stderr = await proc.StandardError.ReadToEndAsync();
-
-                await Task.Run(() => proc.WaitForExit());
-                if (proc.ExitCode != 0)
+                var imageBytes = await System.IO.File.ReadAllBytesAsync(caminhoImagem);
+                var content = new Content
                 {
-                    _logger?.LogError("IA retornou código {Code}. Stderr: {Err}", proc.ExitCode, stderr);
-                    throw new Exception(string.IsNullOrWhiteSpace(stderr) ? "Falha ao executar a IA." : stderr);
-                }
+                    Role = "user",
+                    Parts = new List<Part>
+                    {
+                        Part.FromText(promptComando),
+                        Part.FromBytes(imageBytes, GetMimeType(caminhoImagem))
+                    }
+                };
 
-                var json = stdout?.Trim();
+                var response = await _client.Models.GenerateContentAsync(
+                    model: _model,
+                    contents: content,
+                    config: new GenerateContentConfig { ResponseMimeType = "application/json" }
+                );
+
+                var json = ExtrairTextoResposta(response)?.Trim();
                 if (string.IsNullOrWhiteSpace(json))
                 {
-                    _logger?.LogError("IA não retornou JSON (stdout empty). Stderr: {Err}", stderr);
+                    _logger?.LogError("IA não retornou JSON para análise de imagem.");
                     throw new Exception("A IA não retornou JSON.");
                 }
 
@@ -175,54 +166,28 @@ namespace PBL.Services
             if (string.IsNullOrWhiteSpace(especie))
                 throw new Exception("Informe a espécie para análise.");
 
-            var pythonExe = _config["FishAi:PythonExe"];
-            if (string.IsNullOrWhiteSpace(pythonExe))
-                pythonExe = "python";
-
-            var scriptRel = _config["FishAi:ScriptPath"];
-            if (string.IsNullOrWhiteSpace(scriptRel))
-                scriptRel = Path.Combine("cadastro-peixe", "reconhecer_peixe.py");
-
-            var scriptAbs = Path.GetFullPath(Path.Combine(_env.ContentRootPath, scriptRel));
-            if (!File.Exists(scriptAbs))
-                throw new FileNotFoundException("Script de IA não encontrado.", scriptAbs);
-
-            var psi = new ProcessStartInfo
-            {
-                FileName = pythonExe,
-                Arguments = $"\"{scriptAbs}\" --species \"{especie.Trim()}\"",
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                StandardOutputEncoding = Encoding.UTF8,
-                StandardErrorEncoding = Encoding.UTF8
-            };
-
-            var apiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY");
-            if (!string.IsNullOrWhiteSpace(apiKey))
-                psi.Environment["GEMINI_API_KEY"] = apiKey;
-
             try
             {
                 _logger?.LogInformation("Analisando espécie pela IA: {Especie}", especie);
-                using var proc = new Process { StartInfo = psi };
-                proc.Start();
 
-                var stdout = await proc.StandardOutput.ReadToEndAsync();
-                var stderr = await proc.StandardError.ReadToEndAsync();
+                var promptComando =
+                    "Você é um assistente especialista em aquarismo. " +
+                    "Com base na literatura científica e boas práticas de aquarismo, " +
+                    "dada a espécie informada, defina parâmetros ideais para um aquário doméstico. " +
+                    "Retorne estritamente um objeto JSON válido seguindo exatamente o modelo: " +
+                    "{\"especie\": \"Nome\", \"nome_cientifico\": \"Nome\", \"dht22_temp_alvo\": 25.0, \"dht22_temp_min\": 24.0, \"dht22_temp_max\": 27.0, \"ldr_luz_alvo\": 40, \"ldr_luz_min\": 20, \"ldr_luz_max\": 60, \"ph_min\": 6.5, \"ph_max\": 7.5}" +
+                    "\n\nEspécie informada: " + especie.Trim();
 
-                await Task.Run(() => proc.WaitForExit());
-                if (proc.ExitCode != 0)
-                {
-                    _logger?.LogError("IA retornou código {Code} para espécie. Stderr: {Err}", proc.ExitCode, stderr);
-                    throw new Exception(string.IsNullOrWhiteSpace(stderr) ? "Falha ao executar a IA." : stderr);
-                }
+                var response = await _client.Models.GenerateContentAsync(
+                    model: _model,
+                    contents: promptComando,
+                    config: new GenerateContentConfig { ResponseMimeType = "application/json" }
+                );
 
-                var json = stdout?.Trim();
+                var json = ExtrairTextoResposta(response)?.Trim();
                 if (string.IsNullOrWhiteSpace(json))
                 {
-                    _logger?.LogError("IA não retornou JSON para espécie. Stderr: {Err}", stderr);
+                    _logger?.LogError("IA não retornou JSON para espécie.");
                     throw new Exception("A IA não retornou JSON.");
                 }
 
@@ -233,6 +198,52 @@ namespace PBL.Services
             {
                 _logger?.LogError(ex, "Erro ao analisar espécie");
                 throw;
+            }
+        }
+
+        private static string ExtrairTextoResposta(GenerateContentResponse response)
+        {
+            if (response == null)
+                return null;
+
+            if (!string.IsNullOrWhiteSpace(response.Text))
+                return response.Text;
+
+            if (response.Candidates == null)
+                return null;
+
+            foreach (var candidate in response.Candidates)
+            {
+                if (candidate?.Content?.Parts == null)
+                    continue;
+
+                foreach (var part in candidate.Content.Parts)
+                {
+                    if (!string.IsNullOrWhiteSpace(part?.Text))
+                        return part.Text;
+                }
+            }
+
+            return null;
+        }
+
+        private static string GetMimeType(string filePath)
+        {
+            var ext = Path.GetExtension(filePath)?.ToLowerInvariant();
+            switch (ext)
+            {
+                case ".png":
+                    return "image/png";
+                case ".webp":
+                    return "image/webp";
+                case ".gif":
+                    return "image/gif";
+                case ".bmp":
+                    return "image/bmp";
+                case ".jpg":
+                case ".jpeg":
+                default:
+                    return "image/jpeg";
             }
         }
     }

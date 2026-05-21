@@ -13,11 +13,4 @@
     <PackageReference Include="MQTTnet" Version="3.1.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Include="cadastro-peixe\reconhecer_peixe.py">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
 </Project>

@@ -3,7 +3,7 @@ README - Desenvolvimento
 Requisitos locais:
 - .NET SDK (versão compatível com o projeto, alvo: netcoreapp3.1)
 - SQL Server (ou instância compatível)
-- Python 3.8+ para o script `cadastro-peixe/reconhecer_peixe.py`
+- Chave da API Gemini configurada no ambiente (`GEMINI_API_KEY` ou `GOOGLE_API_KEY`)
 
 Comandos úteis:
 
@@ -23,16 +23,13 @@ dotnet run --project PBL.csproj
 3) Aplicar script SQL (faça backup antes)
 - Use o `sqlcmd` ou o SSMS para executar `PBL/Scripts_BD.sql` no banco alvo.
 
-4) Ambiente Python para IA
-```bash
-cd cadastro-peixe
-python -m venv .venv
-.venv\Scripts\activate   # Windows
-pip install -r requirements.txt
-# Exportar variável GEMINI_API_KEY no ambiente (ou usar dotenv)
-set GEMINI_API_KEY=seu_token_aqui
-python reconhecer_peixe.py --image path/to/image.jpg
+4) Configurar IA (Google Gemini via C#)
+```powershell
+# Exemplo no Windows (sessão atual)
+$env:GEMINI_API_KEY="seu_token_aqui"
 ```
+
+Opcionalmente, defina `FishAi:Model` e `FishAi:ApiKey` no `appsettings.json`.
 
 5) Testar API (ex.: com curl/Postman)
 - Veja `postman_collection_min.json` e `API_DEMO.md` para exemplos.

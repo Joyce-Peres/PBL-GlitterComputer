@@ -21,7 +21,10 @@ Observações:
 - Ajuste `localhost:5000` para a porta exibida ao executar `dotnet run`.
 - `jq` é útil para formatar JSON; não é obrigatório.
 
-Como testar integração IA (reconhecer_peixe.py):
-- Configure `GEMINI_API_KEY` no ambiente e execute o script Python:
-  python reconhecer_peixe.py --image "path/to/image.jpg"
-- O script retorna JSON com `temperaturaMin`, `temperaturaMax`, `luminosidadeMin`, `luminosidadeMax`, `phMin`, `phMax`, `originFromAI` e `parametersUpdatedAt`.
+Como testar integração IA (Google Gemini via C#):
+- Configure `GEMINI_API_KEY` (ou `GOOGLE_API_KEY`) no ambiente da aplicação.
+- Use o endpoint de detecção por espécie:
+  curl -X POST "http://localhost:5000/Peixe/DetectarParametrosPorEspecie" \
+    -H "Content-Type: application/x-www-form-urlencoded" \
+    -d "especie=Betta splendens"
+- Ou use o endpoint de upload de imagem no formulário de Peixe (action `DetectarParametros`).
