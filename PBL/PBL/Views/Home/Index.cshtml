@@ -1,13 +1,13 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Menu";
+    ViewData["Title"] = "Home";
     var nome = ViewBag.UsuarioNome as string;
     var logado = ViewBag.Logado == true;
 }
 
 <div class="menu-page">
     <header class="menu-page-header">
-        <h1 class="menu-page-title">Menu</h1>
+        <h1 class="menu-page-title">Home</h1>
         <p class="menu-page-intro">
             Central do <strong>Aquamarine</strong> — gerencie aquários, acompanhe sensores IoT e use recomendações por IA.
         </p>
@@ -98,7 +98,7 @@
                 Ao cadastrar um peixe, use a detecção por imagem ou por espécie para preencher temperatura,
                 pH e luminosidade automaticamente com o Google Gemini.
             </p>
-            <a class="btn btn-palette-yellow" asp-controller="Peixe" asp-action="Create">Cadastrar peixe com IA</a>
+            <a class="btn btn-palette-pink" asp-controller="Peixe" asp-action="Create">Cadastrar peixe com IA</a>
         </aside>
     }
     else

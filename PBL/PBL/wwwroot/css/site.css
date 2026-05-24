@@ -533,7 +533,7 @@ body.login-page {
 
 .menu-info-yellow {
   border-color: var(--yellow-dark);
-  background-color: var(--yellow-light);
+  background-color: var(--bg);
 }
 
 .menu-info-yellow h3 {
