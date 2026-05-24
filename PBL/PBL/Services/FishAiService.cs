@@ -118,7 +118,7 @@ namespace PBL.Services
                 }
 
                 var promptComando =
-                    "Analise a imagem deste aquário doméstico. Identifique a espécie principal de peixe. " +
+                    "Você é um especialista em peixes e aquários. Analise a imagem deste aquário doméstico. Identifique a espécie principal de peixe. " +
                     "Com base na literatura científica de aquarismo para essa espécie, defina os parâmetros ideais " +
                     "para o sensor DHT22 (temperatura alvo e faixa min/max), para o sensor LDR (luminosidade alvo e faixa min/max em escala de 0 a 100), " +
                     "e, quando disponível, o intervalo de pH adequado (min/max). " +

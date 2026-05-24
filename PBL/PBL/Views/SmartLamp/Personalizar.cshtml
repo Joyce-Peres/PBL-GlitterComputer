@@ -1,10 +1,10 @@
 @model PBL.Models.SmartLampConfigViewModel
 @{
-    ViewData["Title"] = "Personalização da Smart Lamp";
+    ViewData["Title"] = "Personalização";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Personalização — Smart Lamp</h2>
+<h2>Personalização</h2>
 <hr />
 
 @if (ViewBag.Mensagem != null)
@@ -13,30 +13,26 @@
 }
 
 <form asp-action="Salvar" method="post" class="card mb-4">
+    <div class="card-header card-header-palette-aqua">
+        <h5 class="mb-0">Configuração da luz</h5>
+    </div>
     <div class="card-body">
-        <h5 class="card-title">Configuração</h5>
+        <input type="hidden" asp-for="AquarioId" />
 
         <div class="form-row">
             <div class="form-group col-md-4">
-                <label for="AquarioId">Aquário</label>
-                <select class="form-control" id="AquarioId" name="AquarioId" asp-items="ViewBag.Aquarios" required>
-                    <option value="">Selecione...</option>
-                </select>
-                <small class="text-muted">Dica: após trocar, clique em Carregar.</small>
-            </div>
-
-            <div class="form-group col-md-2 d-flex align-items-end">
-                <a class="btn btn-outline-secondary btn-block" id="btnCarregar" href="#">Carregar</a>
-            </div>
-
-            <div class="form-group col-md-3">
                 <label for="Modo">Modo</label>
                 <select class="form-control" asp-for="Modo" asp-items="ViewBag.Modos"></select>
             </div>
 
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-4">
                 <label for="Brilho">Brilho (0-100)</label>
                 <input class="form-control" type="number" min="0" max="100" id="Brilho" name="Brilho" value="@Model.Brilho" />
+            </div>
+
+            <div class="form-group col-md-4">
+                <label>Última atualização</label>
+                <input class="form-control" readonly value="@(Model.AtualizadoEm.HasValue ? Model.AtualizadoEm.Value.ToString("dd/MM/yyyy HH:mm") : "-")" />
             </div>
         </div>
 
@@ -62,37 +58,51 @@
         </div>
 
         <div class="form-row">
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-6">
                 <label for="LuzAlvo">Luz alvo (0-100) — automático (opcional)</label>
                 <input class="form-control" type="number" min="0" max="100" id="LuzAlvo" name="LuzAlvo" value="@(Model.LuzAlvo.HasValue ? Model.LuzAlvo.Value.ToString() : "")" />
-                <small class="text-muted">Quando o peixe for detectado, este alvo pode ser atualizado automaticamente.</small>
+                <small class="text-muted">Quando o peixe for detectado pela IA, este alvo pode ser atualizado automaticamente.</small>
             </div>
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-6">
                 <label for="TempAlvo">Temperatura alvo (°C) — automático (opcional)</label>
                 <input class="form-control" type="number" step="0.1" id="TempAlvo" name="TempAlvo" value="@(Model.TempAlvo.HasValue ? Model.TempAlvo.Value.ToString() : "")" />
             </div>
-            <div class="form-group col-md-4">
-                <label>Última atualização</label>
-                <input class="form-control" readonly value="@(Model.AtualizadoEm.HasValue ? Model.AtualizadoEm.Value.ToString("dd/MM/yyyy HH:mm") : "-")" />
-            </div>
         </div>
 
-        <button type="submit" class="btn btn-primary">Salvar e enviar para a lâmpada</button>
-        <a asp-action="Dashboard" class="btn btn-outline-primary">Dashboard de luminosidade</a>
+        <button type="submit" class="btn btn-palette-pink">Salvar e enviar para a lâmpada</button>
     </div>
 </form>
 
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Leitura atual (MQTT)</h5>
-        <p class="text-muted mb-2">Mostra a luminosidade atual do sensor (tópico configurado).</p>
-        <div class="h3" id="lampLum">--</div>
-        <div class="text-muted" id="lampStatus">desconectado</div>
+<section class="lamp-dashboard" aria-labelledby="lamp-dashboard-title">
+    <h3 id="lamp-dashboard-title" class="menu-section-title">Dashboard de luminosidade</h3>
+    <p class="menu-section-desc mb-3">Leitura em tempo real via MQTT e histórico da sessão atual.</p>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="card-title mb-0">Leitura atual</h5>
+                    <div class="display-4" id="valorAtual">--</div>
+                    <div class="text-muted" id="statusMqtt">desconectado</div>
+                </div>
+                <div class="col-md-6">
+                    <h5 class="card-title">Histórico (sessão)</h5>
+                    <p class="text-muted mb-0">Os valores recebidos pelo sensor são exibidos no gráfico abaixo.</p>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+
+    <div class="card">
+        <div class="card-body">
+            <canvas id="chartLum" height="90"></canvas>
+        </div>
+    </div>
+</section>
 
 @section Scripts {
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
         (function () {
             var brokerUrl = '@(ViewBag.BrokerUrl ?? "")';
@@ -107,9 +117,9 @@
                 $('#corPicker').val('#' + toHex(r) + toHex(g) + toHex(b));
             }
             function syncRgbFromPicker(hex) {
-                var r = parseInt(hex.substr(1,2), 16);
-                var g = parseInt(hex.substr(3,2), 16);
-                var b = parseInt(hex.substr(5,2), 16);
+                var r = parseInt(hex.substr(1, 2), 16);
+                var g = parseInt(hex.substr(3, 2), 16);
+                var b = parseInt(hex.substr(5, 2), 16);
                 $('#R').val(r);
                 $('#G').val(g);
                 $('#B').val(b);
@@ -119,25 +129,47 @@
             $('#R,#G,#B').on('input', syncPickerFromRgb);
             syncPickerFromRgb();
 
-            // botão Carregar: troca o aquário via querystring
-            $('#btnCarregar').click(function (e) {
-                e.preventDefault();
-                var id = $('#AquarioId').val();
-                if (!id) return;
-                window.location = '/SmartLamp/Personalizar?aquarioId=' + encodeURIComponent(id);
+            if (!brokerUrl || !topicSensor) {
+                $('#statusMqtt').text('MQTT não configurado no appsettings.json');
+                return;
+            }
+
+            var labels = [];
+            var data = [];
+            var maxPoints = 60;
+
+            var ctx = document.getElementById('chartLum').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Luminosidade (%)',
+                        data: data,
+                        borderColor: '#5a9e9a',
+                        backgroundColor: 'rgba(184, 235, 233, 0.25)',
+                        borderWidth: 2,
+                        tension: 0.2,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    animation: false,
+                    scales: {
+                        y: { min: 0, max: 100 }
+                    }
+                }
             });
 
-            // MQTT leitura atual
-            if (!brokerUrl || !topicSensor) return;
+            function setStatus(text) { $('#statusMqtt').text(text); }
 
             var client = mqtt.connect(brokerUrl, {
                 connectTimeout: 5000,
                 keepalive: 60,
-                clientId: 'pbl_web_' + Math.random().toString(36).substr(2, 8),
+                clientId: 'pbl_lamp_' + Math.random().toString(36).substr(2, 8),
                 reconnectPeriod: 3000
             });
-
-            function setStatus(text) { $('#lampStatus').text(text); }
 
             client.on('connect', function () {
                 setStatus('conectado');
@@ -145,11 +177,20 @@
             });
             client.on('offline', function () { setStatus('offline'); });
             client.on('error', function () { setStatus('erro'); });
+
             client.on('message', function (topic, msg) {
                 if (topic !== topicSensor) return;
                 var v = parseInt(msg.toString()) || 0;
                 v = Math.max(0, Math.min(100, v));
-                $('#lampLum').text(v + ' %');
+
+                $('#valorAtual').text(v + ' %');
+
+                var now = new Date();
+                var t = now.toLocaleTimeString();
+                labels.push(t);
+                data.push(v);
+                if (labels.length > maxPoints) { labels.shift(); data.shift(); }
+                chart.update('none');
             });
         })();
     </script>

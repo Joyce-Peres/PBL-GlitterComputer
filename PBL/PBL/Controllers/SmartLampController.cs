@@ -7,6 +7,7 @@ using PBL.DAO;
 using PBL.Models;
 using PBL.Services;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PBL.Controllers
@@ -34,35 +35,40 @@ namespace PBL.Controllers
             }
         }
 
+        private int ResolverAquarioId()
+        {
+            if (int.TryParse(_config["FiwareSthComet:DefaultAquarioId"], out var idConfig) && idConfig > 0)
+                return idConfig;
+
+            var aquarios = new AquarioDAO().Listagem();
+            if (aquarios != null && aquarios.Any())
+                return aquarios.First().Id;
+
+            return 1;
+        }
+
+        private void PreencherViewBagsComuns()
+        {
+            ViewBag.Modos = new SelectList(new[]
+            {
+                new { Value = 0, Text = "0 - Desligada" },
+                new { Value = 1, Text = "1 - Fraca" },
+                new { Value = 2, Text = "2 - Média" },
+                new { Value = 3, Text = "3 - Forte" },
+                new { Value = 4, Text = "4 - Personalizada" }
+            }, "Value", "Text");
+            ViewBag.BrokerUrl = _config["SmartLampMqtt:BrokerUrl"];
+            ViewBag.TopicSensor = _config["SmartLampMqtt:TopicSensor"];
+        }
+
         [HttpGet]
-        public IActionResult Personalizar(int? aquarioId)
+        public IActionResult Personalizar()
         {
             try
             {
-                var aquarios = new AquarioDAO().Listagem();
-                ViewBag.Aquarios = new SelectList(aquarios, "Id", "Nome", aquarioId);
-                ViewBag.Modos = new SelectList(new[]
-                {
-                    new { Value = 0, Text = "0 - Desligada" },
-                    new { Value = 1, Text = "1 - Fraca" },
-                    new { Value = 2, Text = "2 - Média" },
-                    new { Value = 3, Text = "3 - Forte" },
-                    new { Value = 4, Text = "4 - Personalizada" }
-                }, "Value", "Text");
-
-                if (!aquarioId.HasValue)
-                {
-                    if (aquarios.Count > 0)
-                        aquarioId = aquarios[0].Id;
-                }
-
-                if (!aquarioId.HasValue)
-                    return View(new SmartLampConfigViewModel());
-
-                var model = _dao.ConsultaOuCriaPadrao(aquarioId.Value);
-                ViewBag.BrokerUrl = _config["SmartLampMqtt:BrokerUrl"];
-                ViewBag.TopicSensor = _config["SmartLampMqtt:TopicSensor"];
-
+                PreencherViewBagsComuns();
+                var aquarioId = ResolverAquarioId();
+                var model = _dao.ConsultaOuCriaPadrao(aquarioId);
                 ViewBag.Mensagem = TempData["Mensagem"];
                 return View(model);
             }
@@ -78,7 +84,8 @@ namespace PBL.Controllers
             try
             {
                 if (model.AquarioId <= 0)
-                    ModelState.AddModelError("AquarioId", "Selecione um aquário.");
+                    model.AquarioId = ResolverAquarioId();
+
                 model.Brilho = Math.Max(0, Math.Min(100, model.Brilho));
                 model.R = Math.Max(0, Math.Min(255, model.R));
                 model.G = Math.Max(0, Math.Min(255, model.G));
@@ -88,8 +95,7 @@ namespace PBL.Controllers
 
                 if (!ModelState.IsValid)
                 {
-                    var aquarios = new AquarioDAO().Listagem();
-                    ViewBag.Aquarios = new SelectList(aquarios, "Id", "Nome", model.AquarioId);
+                    PreencherViewBagsComuns();
                     ViewBag.Modos = new SelectList(new[]
                     {
                         new { Value = 0, Text = "0 - Desligada" },
@@ -98,21 +104,18 @@ namespace PBL.Controllers
                         new { Value = 3, Text = "3 - Forte" },
                         new { Value = 4, Text = "4 - Personalizada" }
                     }, "Value", "Text", model.Modo);
-                    ViewBag.BrokerUrl = _config["SmartLampMqtt:BrokerUrl"];
-                    ViewBag.TopicSensor = _config["SmartLampMqtt:TopicSensor"];
                     return View("Personalizar", model);
                 }
 
                 _dao.Salvar(model);
 
-                // Envia comandos básicos para a lâmpada (se MQTT estiver configurado).
                 await _mqtt.PublicarAsync(
                     $"setMode|{model.Modo}",
                     $"setRGB|{model.R},{model.G},{model.B}",
                     $"setBrightness|{model.Brilho}");
 
                 TempData["Mensagem"] = "Configuração salva e enviada para a lâmpada (MQTT).";
-                return RedirectToAction("Personalizar", new { aquarioId = model.AquarioId });
+                return RedirectToAction("Personalizar");
             }
             catch (Exception erro)
             {
@@ -123,9 +126,7 @@ namespace PBL.Controllers
         [HttpGet]
         public IActionResult Dashboard()
         {
-            ViewBag.BrokerUrl = _config["SmartLampMqtt:BrokerUrl"];
-            ViewBag.TopicSensor = _config["SmartLampMqtt:TopicSensor"];
-            return View();
+            return RedirectToAction("Personalizar");
         }
     }
 }

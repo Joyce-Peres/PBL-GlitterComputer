@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PBL.DAO;
 using PBL.Models;
+using PBL.Models.Api;
 using PBL.Services;
 using System;
 using System.Collections.Generic;
@@ -9,8 +11,24 @@ using System.Threading.Tasks;
 
 namespace PBL.Controllers.Api
 {
+    /// <summary>
+    /// Endpoints REST para consulta e registro de leituras dos sensores do aquário inteligente.
+    /// </summary>
+    /// <remarks>
+    /// **Fluxo típico**
+    /// 1. O dispositivo IoT envia leituras via `POST /api/leituras`.
+    /// 2. O dashboard web e integrações consultam o histórico via `GET`.
+    ///
+    /// **Fonte dos dados (GET)**
+    /// - Se o STH-Comet (FIWARE) estiver configurado em `appsettings.json`, o histórico vem do serviço externo.
+    /// - Caso contrário, retorna dados do banco SQL Server local.
+    ///
+    /// **Autenticação:** esta API IoT é pública (sem token). Proteja o ambiente em produção conforme necessário.
+    /// </remarks>
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
+    [ApiExplorerSettings(GroupName = "iot")]
     public class LeiturasController : ControllerBase
     {
         private readonly FiwareSthCometService _historicoService;
@@ -21,10 +39,20 @@ namespace PBL.Controllers.Api
         }
 
         /// <summary>
-        /// Retorna o histórico das leituras IoT consultado no STH-Comet.
+        /// Lista leituras de sensores com filtros opcionais.
         /// </summary>
+        /// <param name="aquarioId">Filtra por aquário. Omita para trazer todos.</param>
+        /// <param name="dataInicio">Data/hora inicial do período (opcional).</param>
+        /// <param name="dataFim">Data/hora final do período (opcional).</param>
+        /// <response code="200">Lista de leituras retornada com sucesso (pode ser vazia).</response>
+        /// <response code="500">Erro ao consultar histórico.</response>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<LeituraSensorViewModel>>> Get([FromQuery] int? aquarioId, [FromQuery] DateTime? dataInicio, [FromQuery] DateTime? dataFim)
+        [ProducesResponseType(typeof(IEnumerable<LeituraSensorViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IEnumerable<LeituraSensorViewModel>>> Get(
+            [FromQuery] int? aquarioId,
+            [FromQuery] DateTime? dataInicio,
+            [FromQuery] DateTime? dataFim)
         {
             try
             {
@@ -35,15 +63,25 @@ namespace PBL.Controllers.Api
             }
             catch (Exception erro)
             {
-                return StatusCode(500, new { erro = erro.Message });
+                return StatusCode(500, new ApiErrorResponse { Erro = erro.Message });
             }
         }
 
         /// <summary>
-        /// Retorna leituras filtradas por aquário.
+        /// Lista leituras de um aquário específico.
         /// </summary>
+        /// <param name="aquarioId">Código do aquário.</param>
+        /// <param name="dataInicio">Data/hora inicial do período (opcional).</param>
+        /// <param name="dataFim">Data/hora final do período (opcional).</param>
+        /// <response code="200">Leituras do aquário.</response>
+        /// <response code="500">Erro ao consultar histórico.</response>
         [HttpGet("aquario/{aquarioId}")]
-        public async Task<ActionResult<IEnumerable<LeituraSensorViewModel>>> GetPorAquario(int aquarioId, [FromQuery] DateTime? dataInicio, [FromQuery] DateTime? dataFim)
+        [ProducesResponseType(typeof(IEnumerable<LeituraSensorViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IEnumerable<LeituraSensorViewModel>>> GetPorAquario(
+            int aquarioId,
+            [FromQuery] DateTime? dataInicio,
+            [FromQuery] DateTime? dataFim)
         {
             try
             {
@@ -54,43 +92,67 @@ namespace PBL.Controllers.Api
             }
             catch (Exception erro)
             {
-                return StatusCode(500, new { erro = erro.Message });
+                return StatusCode(500, new ApiErrorResponse { Erro = erro.Message });
             }
         }
 
         /// <summary>
         /// Registra uma nova leitura enviada pelo dispositivo IoT.
         /// </summary>
+        /// <remarks>
+        /// Exemplo de corpo JSON:
+        ///
+        ///     {
+        ///       "aquarioId": 1,
+        ///       "temperatura": 25.5,
+        ///       "ph": 7.2,
+        ///       "nivelAgua": 85
+        ///     }
+        ///
+        /// Campos gravados no banco: temperatura, pH, nível de água e data/hora do servidor.
+        /// </remarks>
+        /// <param name="request">Dados dos sensores.</param>
+        /// <response code="200">Leitura registrada.</response>
+        /// <response code="400">Payload inválido ou aquarioId ausente.</response>
+        /// <response code="500">Erro ao persistir no banco.</response>
         [HttpPost]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(LeituraRegistroResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status500InternalServerError)]
         public IActionResult Post([FromBody] LeituraIoTRequest request)
         {
             try
             {
                 if (request == null || request.AquarioId <= 0)
-                    return BadRequest(new { erro = "Dados inválidos. Informe aquarioId, temperatura, ph e nivelAgua." });
+                    return BadRequest(new ApiErrorResponse
+                    {
+                        Erro = "Dados inválidos. Informe aquarioId, temperatura, ph e nivelAgua."
+                    });
+
+                if (!ModelState.IsValid)
+                {
+                    var primeiroErro = ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage)
+                        .FirstOrDefault() ?? "Dados inválidos.";
+                    return BadRequest(new ApiErrorResponse { Erro = primeiroErro });
+                }
 
                 new LeituraSensorDAO().InserirLeituraIoT(
                     request.AquarioId, request.Temperatura, request.Ph, request.NivelAgua);
 
-                return Ok(new
+                return Ok(new LeituraRegistroResponse
                 {
-                    mensagem = "Leitura registrada com sucesso.",
-                    aquarioId = request.AquarioId,
-                    dataLeitura = DateTime.Now
+                    Mensagem = "Leitura registrada com sucesso.",
+                    AquarioId = request.AquarioId,
+                    DataLeitura = DateTime.Now
                 });
             }
             catch (Exception erro)
             {
-                return StatusCode(500, new { erro = erro.Message });
+                return StatusCode(500, new ApiErrorResponse { Erro = erro.Message });
             }
         }
-    }
-
-    public class LeituraIoTRequest
-    {
-        public int AquarioId { get; set; }
-        public decimal Temperatura { get; set; }
-        public decimal Ph { get; set; }
-        public decimal NivelAgua { get; set; }
     }
 }

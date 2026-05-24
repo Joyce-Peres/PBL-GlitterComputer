@@ -1,46 +1,57 @@
-# API Demo — Exemplos para testes
+# API Demo — Aquamarine (IoT)
+
+## Documentação interativa
+
+Abra no navegador (com a aplicação rodando):
+
+```
+http://localhost:5000/swagger
+```
+
+A UI Swagger inclui descrição dos endpoints, parâmetros, schemas e códigos de resposta (200, 400, 500).
 
 ## Variáveis
-- `BASE_URL` — URL base da aplicação em desenvolvimento (ex.: `http://localhost:5000`).
 
-## Swagger
-- Abra: `BASE_URL/swagger` para explorar endpoints via UI.
+- `BASE_URL` — URL base (ex.: `http://localhost:5000`).
+
+## Endpoints
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/api/leituras` | Lista leituras (filtros opcionais: `aquarioId`, `dataInicio`, `dataFim`) |
+| GET | `/api/leituras/aquario/{aquarioId}` | Leituras de um aquário |
+| POST | `/api/leituras` | Registra leitura do dispositivo IoT |
 
 ## Exemplos curl
 
-Listar leituras (GET):
+Listar leituras:
 
 ```bash
-curl -sS "${BASE_URL}/api/leituras" | jq
+curl -sS "%BASE_URL%/api/leituras" 
 ```
 
-Listar leituras por aquário (GET):
+Listar por aquário:
 
 ```bash
-curl -sS "${BASE_URL}/api/leituras/aquario/1" | jq
+curl -sS "%BASE_URL%/api/leituras/aquario/1"
 ```
 
-Inserir leitura (POST):
+Registrar leitura (POST):
 
 ```bash
-curl -X POST "${BASE_URL}/api/leituras" \
-  -H "Content-Type: application/json" \
-  -d '{"AquarioId":1,"Temperatura":25.5,"Ph":7.2,"NivelAgua":85.0}'
+curl -X POST "%BASE_URL%/api/leituras" ^
+  -H "Content-Type: application/json" ^
+  -d "{\"aquarioId\":1,\"temperatura\":25.5,\"ph\":7.2,\"nivelAgua\":85}"
 ```
 
-> Nota: ajuste `BASE_URL` conforme a porta mostrada ao executar `dotnet run`.
+Resposta esperada (200):
 
-## Testes IA (Google Gemini)
-
-Configurar `GEMINI_API_KEY` no ambiente da aplicação. Exemplo de endpoint para detecção por espécie:
-
-```bash
-curl -X POST "${BASE_URL}/Peixe/DetectarParametrosPorEspecie" \
-  -H "Content-Type: application/x-www-form-urlencoded" \
-  -d "especie=Betta splendens"
+```json
+{
+  "mensagem": "Leitura registrada com sucesso.",
+  "aquarioId": 1,
+  "dataLeitura": "2026-05-24T20:00:00"
+}
 ```
 
-Ou utilizar o formulário de upload em `Views/Peixe/form.cshtml` (action `DetectarParametros`).
-
----
-Arquivo otimizado de `API_DEMO.md` com placeholders e instruções diretas.
+> Substitua `%BASE_URL%` pela porta exibida no `dotnet run`.
