@@ -7,12 +7,12 @@
 <h2>@ViewData["Title"]</h2>
 <hr />
 
-<form asp-action="Salvar" method="post" enctype="multipart/form-data">
+<form asp-action="Salvar" method="post" enctype="multipart/form-data" class="form-peixe">
     <input type="hidden" name="Operacao" value="@ViewBag.Operacao" />
     
     <!-- INFORMAÇÕES BÁSICAS DO PEIXE -->
     <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header card-header-palette-aqua">
             <h5 class="mb-0">Informações do Peixe</h5>
         </div>
         <div class="card-body">
@@ -30,8 +30,8 @@
                 <input asp-for="Especie" class="form-control" required />
                 <span asp-validation-for="Especie" class="text-danger"></span>
                 <div class="mt-2">
-                    <button type="button" id="btnDetectarEspecieIA" class="btn btn-outline-primary btn-sm">
-                        🧠 Detectar pela espécie (IA)
+                    <button type="button" id="btnDetectarEspecieIA" class="btn btn-palette-aqua btn-sm">
+                         Detectar pela espécie (IA)
                     </button>
                 </div>
             </div>
@@ -42,7 +42,7 @@
                     @if (Model?.OriginFromAI == true)
                     {
                         <div class="input-group-append">
-                            <span class="input-group-text bg-light text-success" title="Detectado pela IA">🧠 Gerado pela IA</span>
+                            <span class="input-group-text badge-palette-pink" title="Detectado pela IA">🧠 Gerado pela IA</span>
                         </div>
                     }
                 </div>
@@ -59,13 +59,13 @@
                 </select>
                 <span asp-validation-for="AquarioId" class="text-danger"></span>
             </div>
-            <div id="infoAquario" class="alert alert-info" style="display:none;"></div>
+            <div id="infoAquario" class="alert alert-palette-aqua" style="display:none;"></div>
         </div>
     </div>
 
     <!-- FOTO -->
     <div class="card mb-4">
-        <div class="card-header bg-info text-white">
+        <div class="card-header card-header-palette-pink">
             <h5 class="mb-0">Foto e Análise por IA</h5>
         </div>
         <div class="card-body">
@@ -73,8 +73,8 @@
                 <label for="arquivoFoto">Foto do Peixe</label>
                 <input type="file" name="arquivoFoto" id="arquivoFoto" class="form-control-file" accept="image/*" />
                 <div class="mt-2">
-                    <button type="button" id="btnDetectarIA" class="btn btn-outline-success btn-sm">
-                        📷 Detectar parâmetros pela imagem (IA)
+                    <button type="button" id="btnDetectarIA" class="btn btn-palette-yellow btn-sm">
+                         Detectar parâmetros pela imagem (IA)
                     </button>
                     <span id="iaStatus" class="text-muted ml-2"></span>
                 </div>
@@ -90,15 +90,15 @@
 
     <!-- PARÂMETROS AMBIENTAIS - SEÇÃO COLAPSÁVEL -->
     <div class="card mb-4">
-        <div class="card-header bg-success text-white" style="cursor: pointer;" data-toggle="collapse" data-target="#advancedParams" aria-expanded="false">
+        <div class="card-header card-header-palette-yellow" style="cursor: pointer;" data-toggle="collapse" data-target="#advancedParams" aria-expanded="false">
             <h5 class="mb-0">
-                ⚙️ Parâmetros Ambientais (Avançado)
+                 Parâmetros Ambientais (Avançado)
             </h5>
         </div>
         <div class="collapse" id="advancedParams">
             <div class="card-body">
-                <div class="alert alert-info">
-                    <strong>💡 Dica:</strong> Estes campos podem ser preenchidos automaticamente pela IA ao analisar uma imagem ou espécie.
+                <div class="alert alert-palette-aqua">
+                    <strong> Dica:</strong> Estes campos podem ser preenchidos automaticamente pela IA ao analisar uma imagem ou espécie.
                 </div>
 
                 <!-- Temperatura -->
@@ -157,9 +157,9 @@
                 <!-- Rastreabilidade (somente leitura na UI) -->
                 @if (Model?.OriginFromAI == true && ViewBag.Operacao == "A")
                 {
-                    <div class="alert alert-light mt-3">
+                    <div class="alert alert-palette-aqua mt-3">
                         <small class="text-muted">
-                            ℹ️ <strong>Parâmetros originários da IA</strong> — Estes valores foram detectados automaticamente.
+                             <strong>Parâmetros originários da IA</strong> — Estes valores foram detectados automaticamente.
                             Você pode editá-los manualmente se necessário.
                         </small>
                     </div>
@@ -173,11 +173,11 @@
 
     <!-- BOTÕES DE AÇÃO -->
     <div class="form-group">
-        <button type="submit" class="btn btn-success btn-lg">
-            💾 Salvar
+        <button type="submit" class="btn btn-palette-aqua btn-lg">
+             Salvar
         </button>
-        <a asp-action="Index" class="btn btn-secondary btn-lg">
-            ❌ Cancelar
+        <a asp-action="Index" class="btn btn-palette-pink btn-lg">
+             Cancelar
         </a>
     </div>
 </form>
@@ -210,14 +210,14 @@
             $('#btnDetectarIA').click(function () {
                 var fileInput = $('#arquivoFoto')[0];
                 if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-                    $('#iaStatus').text('❌ Selecione uma imagem primeiro.').addClass('text-danger');
+                    $('#iaStatus').text(' Selecione uma imagem primeiro.').addClass('text-danger');
                     return;
                 }
 
                 var fd = new FormData();
                 fd.append('arquivoFoto', fileInput.files[0]);
 
-                $('#iaStatus').text('⏳ Analisando imagem...').removeClass('text-danger').addClass('text-warning');
+                $('#iaStatus').text(' Analisando imagem...').removeClass('text-danger').addClass('text-warning');
                 $.ajax({
                     url: '/Peixe/DetectarParametros',
                     method: 'POST',
@@ -255,12 +255,12 @@
                         // Expandir a seção de parâmetros avançados
                         $('#advancedParams').collapse('show');
 
-                        $('#iaStatus').text('✅ Parâmetros preenchidos!').removeClass('text-danger').addClass('text-success');
+                        $('#iaStatus').text(' Parâmetros preenchidos!').removeClass('text-danger').addClass('text-success');
                     } else {
-                        $('#iaStatus').text('❌ ' + (data && data.mensagem ? data.mensagem : 'Falha ao analisar.')).addClass('text-danger').removeClass('text-warning');
+                        $('#iaStatus').text(' ' + (data && data.mensagem ? data.mensagem : 'Falha ao analisar.')).addClass('text-danger').removeClass('text-warning');
                     }
                 }).fail(function () {
-                    $('#iaStatus').text('❌ Erro ao chamar a IA.').addClass('text-danger').removeClass('text-warning');
+                    $('#iaStatus').text('Erro ao chamar a IA.').addClass('text-danger').removeClass('text-warning');
                 });
             });
 
@@ -268,11 +268,11 @@
             $('#btnDetectarEspecieIA').click(function () {
                 var especie = $('#Especie').val();
                 if (!especie || especie.trim() === '') {
-                    $('#iaStatus').text('❌ Informe a espécie primeiro.').addClass('text-danger');
+                    $('#iaStatus').text(' Informe a espécie primeiro.').addClass('text-danger');
                     return;
                 }
 
-                $('#iaStatus').text('⏳ Consultando IA...').removeClass('text-danger').addClass('text-warning');
+                $('#iaStatus').text(' Consultando IA...').removeClass('text-danger').addClass('text-warning');
                 $.post('/Peixe/DetectarParametrosPorEspecie', { especie: especie })
                     .done(function (data) {
                         if (data && data.sucesso) {
@@ -305,13 +305,13 @@
                             // Expandir a seção de parâmetros avançados
                             $('#advancedParams').collapse('show');
 
-                            $('#iaStatus').text('✅ Parâmetros preenchidos!').removeClass('text-danger').addClass('text-success');
+                            $('#iaStatus').text(' Parâmetros preenchidos!').removeClass('text-danger').addClass('text-success');
                         } else {
-                            $('#iaStatus').text('❌ ' + (data && data.mensagem ? data.mensagem : 'Falha ao analisar.')).addClass('text-danger').removeClass('text-warning');
+                            $('#iaStatus').text(' ' + (data && data.mensagem ? data.mensagem : 'Falha ao analisar.')).addClass('text-danger').removeClass('text-warning');
                         }
                     })
                     .fail(function () {
-                        $('#iaStatus').text('❌ Erro ao chamar a IA.').addClass('text-danger').removeClass('text-warning');
+                        $('#iaStatus').text(' Erro ao chamar a IA.').addClass('text-danger').removeClass('text-warning');
                     });
             });
         });

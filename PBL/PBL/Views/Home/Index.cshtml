@@ -1,46 +1,114 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Menu";
+    var nome = ViewBag.UsuarioNome as string;
+    var logado = ViewBag.Logado == true;
 }
 
-<h1>Menu</h1>
-<hr />
+<div class="menu-page">
+    <header class="menu-page-header">
+        <h1 class="menu-page-title">Menu</h1>
+        <p class="menu-page-intro">
+            Central do <strong>Aquamarine</strong> — gerencie aquários, acompanhe sensores IoT e use recomendações por IA.
+        </p>
+    </header>
 
-<div class="menu-card">
-    <h2 class="menu-hello">Olá, @(string.IsNullOrWhiteSpace(ViewBag.UsuarioNome as string) ? "!" : (ViewBag.UsuarioNome + "!"))</h2>
-    <p class="menu-sub">
-        Monitore temperatura, pH e nível de água do seu aquário em tempo real com sensores IoT e gerencie peixes e aquários
-        pelo sistema web.
-    </p>
+    <section class="menu-welcome" aria-label="Boas-vindas">
+        <p class="menu-welcome-label">Bem-vindo de volta</p>
+        <h2 class="menu-hello">Olá, @(string.IsNullOrWhiteSpace(nome) ? "!" : (nome + "!"))</h2>
+        <p class="menu-sub">
+            Monitore temperatura, pH e nível de água em tempo real, cadastre peixes com foto
+            e personalize a iluminação do aquário pelo painel web.
+        </p>
+    </section>
 
-    @if (ViewBag.Logado == true)
+    @if (logado)
     {
-        <div class="menu-actions">
-            <a class="btn btn-primary" asp-controller="Peixe" asp-action="Index">Ver catálogo de peixes</a>
-            <a class="btn btn-success" asp-controller="Aquario" asp-action="Create">Novo aquário</a>
-            <a class="btn btn-info" asp-controller="Dashboard" asp-action="Index">Dashboard IoT</a>
-        </div>
+        <section class="menu-section" aria-labelledby="menu-acesso-rapido">
+            <h2 id="menu-acesso-rapido" class="menu-section-title">Acesso rápido</h2>
+            <p class="menu-section-desc">Atalhos para as tarefas mais usadas no dia a dia.</p>
+
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <a class="menu-tile menu-tile-aqua" asp-controller="Peixe" asp-action="Index">
+                        <span class="menu-tile-title">Catálogo de peixes</span>
+                        <span class="menu-tile-text">Consulte, edite e cadastre espécies com fotos e parâmetros ideais.</span>
+                        <span class="menu-tile-link">Abrir catálogo →</span>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <a class="menu-tile menu-tile-orange" asp-controller="Aquario" asp-action="Create">
+                        <span class="menu-tile-title">Novo aquário</span>
+                        <span class="menu-tile-text">Registre capacidade, tipo de água e responsável pelo aquário.</span>
+                        <span class="menu-tile-link">Cadastrar →</span>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <a class="menu-tile menu-tile-pink" asp-controller="Dashboard" asp-action="Index">
+                        <span class="menu-tile-title">Dashboard IoT</span>
+                        <span class="menu-tile-text">Veja leituras dos sensores com filtros por aquário e período.</span>
+                        <span class="menu-tile-link">Monitorar →</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="menu-section" aria-labelledby="menu-recursos">
+            <h2 id="menu-recursos" class="menu-section-title">O que o sistema oferece</h2>
+            <p class="menu-section-desc">Recursos principais organizados por área.</p>
+
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <article class="menu-info-card menu-info-aqua">
+                        <h3>Gerencie</h3>
+                        <p>Cadastre aquários e peixes com fotos, vinculados ao responsável e ao aquário escolhido.</p>
+                        <div class="menu-info-links">
+                            <a asp-controller="Aquario" asp-action="Index">Aquários</a>
+                            <a asp-controller="Peixe" asp-action="Index">Peixes</a>
+                        </div>
+                    </article>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <article class="menu-info-card menu-info-pink">
+                        <h3>Monitore</h3>
+                        <p>Acompanhe histórico de sensores, consultas filtradas e o painel da Smart Lamp.</p>
+                        <div class="menu-info-links">
+                            <a asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                            <a asp-controller="Consulta" asp-action="Leituras">Leituras</a>
+                            <a asp-controller="SmartLamp" asp-action="Dashboard">Luz</a>
+                        </div>
+                    </article>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <article class="menu-info-card menu-info-yellow">
+                        <h3>Integre</h3>
+                        <p>Envie dados do dispositivo IoT pela API REST e consulte a documentação interativa.</p>
+                        <div class="menu-info-links">
+                            <a href="/swagger" target="_blank" rel="noopener">Swagger</a>
+                            <a asp-controller="Consulta" asp-action="Peixes">Consulta peixes</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <aside class="menu-banner menu-banner-yellow" aria-label="Recurso de IA">
+            <h3 class="menu-banner-title">Saiba mais — Recomendação por IA</h3>
+            <p>
+                Ao cadastrar um peixe, use a detecção por imagem ou por espécie para preencher temperatura,
+                pH e luminosidade automaticamente com o Google Gemini.
+            </p>
+            <a class="btn btn-palette-yellow" asp-controller="Peixe" asp-action="Create">Cadastrar peixe com IA</a>
+        </aside>
     }
     else
     {
-        <div class="menu-actions">
-            <a class="btn btn-login" asp-controller="Login" asp-action="Index">Entrar</a>
-            <a class="btn btn-signup" asp-controller="Login" asp-action="Cadastrar">Cadastrar</a>
-        </div>
+        <section class="menu-section">
+            <p class="menu-section-desc">Faça login para acessar aquários, peixes, dashboards e demais módulos.</p>
+            <div class="menu-actions">
+                <a class="btn btn-login" asp-controller="Login" asp-action="Index">Entrar</a>
+                <a class="btn btn-signup" asp-controller="Login" asp-action="Cadastrar">Cadastrar</a>
+            </div>
+        </section>
     }
-</div>
-
-<div class="row">
-    <div class="col-md-4">
-        <h3>Gerencie</h3>
-        <p>Cadastre aquários e peixes com fotos, vinculados ao responsável e ao aquário.</p>
-    </div>
-    <div class="col-md-4">
-        <h3>Monitore</h3>
-        <p>Acompanhe leituras dos sensores IoT no dashboard com filtros por aquário e período.</p>
-    </div>
-    <div class="col-md-4">
-        <h3>Integre</h3>
-        <p>Utilize a API REST documentada no Swagger para receber dados do dispositivo IoT.</p>
-    </div>
 </div>

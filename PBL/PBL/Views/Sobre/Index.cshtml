@@ -3,51 +3,131 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Sobre o Sistema</h2>
-<hr />
-
-<div class="card mb-4">
-    <div class="card-body">
-        <h4>Aquário Inteligente — GlitterComputer</h4>
-        <p>
-            Sistema web para monitoramento e gestão de aquários inteligentes.
-            Permite cadastrar aquários e peixes, consultar dados gerenciais,
-            acompanhar leituras de sensores IoT (temperatura, pH e nível de água)
-            e integrar dispositivos via API REST documentada com Swagger.
+<section class="sobre-hero">
+    <div class="sobre-hero-content">
+        <p class="sobre-hero-tag">PBL — Linguagem de Programação I</p>
+        <h1 class="sobre-hero-title">Aquamarine</h1>
+        <p class="sobre-hero-lead">
+            Seu aquário inteligente: monitore sensores, gerencie peixes e aquários,
+            controle a iluminação e receba recomendações com inteligência artificial.
         </p>
-        <p><strong>Disciplina:</strong> Linguagem de Programação I — PBL</p>
-        <p><strong>Instituição:</strong> Fundação Salvador Arena — EC5</p>
+        <div class="sobre-hero-meta">
+            <span><strong>GlitterComputer</strong></span>
+            <span>Fundação Salvador Arena — EC5</span>
+        </div>
     </div>
-</div>
+</section>
 
-<h4>Integrantes do Grupo</h4>
-<table class="table table-bordered">
-    <thead class="thead-light">
-        <tr>
-            <th>Nome</th>
-            <th>RA</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Ana Lara Dellacorte Simões</td>
-            <td>08124006</td>
-        </tr>
-        <tr>
-            <td>Eláine Gomes Moreira</td>
-            <td>081240037</td>
-        </tr>
-        <tr>
-            <td>Gabrielle Alves</td>
-            <td>0000000</td>
-        </tr>
-        <tr>
-            <td>Joyce da Costa Peres</td>
-            <td>081240045</td>
-        </tr>
-        <tr>
-            <td>Rayssa Alves André</td>
-            <td>0000000</td>
-        </tr>
-    </tbody>
-</table>
+<section class="sobre-section">
+    <h2 class="sobre-section-title">O projeto</h2>
+    <p class="sobre-text">
+        O <strong>Aquamarine</strong> é uma aplicação web desenvolvida como Projeto Baseado em Aprendizagem (PBL)
+        para demonstrar conceitos de programação, persistência de dados, interfaces web e integração com
+        dispositivos IoT em um cenário real de aquicultura doméstica.
+    </p>
+    <p class="sobre-text">
+        O sistema centraliza o cadastro de usuários, aquários e peixes; exibe consultas gerenciais com filtros;
+        recebe leituras de temperatura, pH e nível de água via API REST; integra a <strong>Smart Lamp</strong> por MQTT;
+        e utiliza o <strong>Google Gemini</strong> para sugerir parâmetros ideais a partir de fotos dos peixes.
+    </p>
+</section>
+
+<section class="sobre-section">
+    <h2 class="sobre-section-title">Principais recursos</h2>
+    <div class="row sobre-features">
+        <div class="col-md-4 mb-3">
+            <article class="sobre-feature-card">
+                <h3>Gestão completa</h3>
+                <p>CRUD de aquários e peixes com fotos, vínculos por responsável e herança de controllers/DAOs.</p>
+            </article>
+        </div>
+        <div class="col-md-4 mb-3">
+            <article class="sobre-feature-card">
+                <h3>Monitoramento IoT</h3>
+                <p>Dashboard de sensores, histórico de leituras e API documentada no Swagger para dispositivos.</p>
+            </article>
+        </div>
+        <div class="col-md-4 mb-3">
+            <article class="sobre-feature-card">
+                <h3>Smart Lamp</h3>
+                <p>Personalização e controle da luminosidade via MQTT, com PWA dedicada para operação rápida.</p>
+            </article>
+        </div>
+        <div class="col-md-4 mb-3">
+            <article class="sobre-feature-card">
+                <h3>IA para peixes</h3>
+                <p>Detecção de espécie e sugestão de temperatura, pH e luminosidade a partir de imagens.</p>
+            </article>
+        </div>
+        <div class="col-md-4 mb-3">
+            <article class="sobre-feature-card">
+                <h3>Consultas</h3>
+                <p>Relatórios de peixes e leituras com filtros por aquário, período e parâmetros.</p>
+            </article>
+        </div>
+        <div class="col-md-4 mb-3">
+            <article class="sobre-feature-card">
+                <h3>Acesso seguro</h3>
+                <p>Login e cadastro na entrada; áreas internas protegidas por sessão do usuário.</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="sobre-section">
+    <h2 class="sobre-section-title">Tecnologias</h2>
+    <div class="sobre-tech-list">
+        <span class="sobre-tech-badge">ASP.NET Core 3.1</span>
+        <span class="sobre-tech-badge">C# / MVC</span>
+        <span class="sobre-tech-badge">SQL Server</span>
+        <span class="sobre-tech-badge">Bootstrap 4</span>
+        <span class="sobre-tech-badge">MQTT</span>
+        <span class="sobre-tech-badge">Google Gemini</span>
+        <span class="sobre-tech-badge">Swagger</span>
+        <span class="sobre-tech-badge">FIWARE / STH Comet</span>
+    </div>
+</section>
+
+<section class="sobre-section">
+    <h2 class="sobre-section-title">Integrantes do grupo</h2>
+    <div class="sobre-team-wrap">
+        <table class="table sobre-team-table mb-0">
+            <thead>
+                <tr>
+                    <th scope="col">Nome</th>
+                    <th scope="col">RA</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Ana Lara Dellacorte Simões</td>
+                    <td>08124006</td>
+                </tr>
+                <tr>
+                    <td>Eláine Gomes Moreira</td>
+                    <td>081240037</td>
+                </tr>
+                <tr>
+                    <td>Gabrielle Alves</td>
+                    <td>0000000</td>
+                </tr>
+                <tr>
+                    <td>Joyce da Costa Peres</td>
+                    <td>081240045</td>
+                </tr>
+                <tr>
+                    <td>Rayssa Alves André</td>
+                    <td>0000000</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="sobre-section sobre-cta">
+    <p class="sobre-text mb-3">Explore a documentação da API ou volte ao menu para começar a usar o sistema.</p>
+    <div class="sobre-cta-actions">
+        <a class="btn btn-primary" asp-controller="Home" asp-action="Index">Ir ao menu</a>
+        <a class="btn btn-outline-sobre" href="/swagger" target="_blank" rel="noopener">Abrir Swagger</a>
+    </div>
+</section>

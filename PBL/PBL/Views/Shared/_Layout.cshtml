@@ -12,62 +12,62 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light app-navbar border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand text-white" asp-controller="Home" asp-action="Index">Aquamarine</a>
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">Aquamarine</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMain">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarMain">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         @if (ViewBag.Logado == true)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="Aquario" asp-action="Index">Aquários</a>
+                                <a class="nav-link" asp-controller="Aquario" asp-action="Index">Aquários</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="Peixe" asp-action="Index">Peixes</a>
+                                <a class="nav-link" asp-controller="Peixe" asp-action="Index">Peixes</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                                <a class="nav-link" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-white" href="#" data-toggle="dropdown">Smart Lamp</a>
+                                <a class="nav-link dropdown-toggle " href="#" data-toggle="dropdown">Smart Lamp</a>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" asp-controller="SmartLamp" asp-action="Personalizar">Personalização</a>
                                     <a class="dropdown-item" asp-controller="SmartLamp" asp-action="Dashboard">Dashboard (Luz)</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-white" href="#" data-toggle="dropdown">Consultas</a>
+                                <a class="nav-link dropdown-toggle " href="#" data-toggle="dropdown">Consultas</a>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" asp-controller="Consulta" asp-action="Peixes">Peixes</a>
                                     <a class="dropdown-item" asp-controller="Consulta" asp-action="Leituras">Leituras IoT</a>
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="Sobre" asp-action="Index">Sobre</a>
+                                <a class="nav-link" asp-controller="Sobre" asp-action="Index">Sobre</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" href="/swagger" target="_blank">API Swagger</a>
+                                <a class="nav-link" href="/swagger" target="_blank">API Swagger</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="Login" asp-action="LogOff">Logoff</a>
+                                <a class="nav-link" asp-controller="Login" asp-action="LogOff">Logoff</a>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="Login" asp-action="Index">Login</a>
+                                <a class="nav-link" asp-controller="Login" asp-action="Index">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="Login" asp-action="Cadastrar">Cadastrar</a>
+                                <a class="nav-link" asp-controller="Login" asp-action="Cadastrar">Cadastrar</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="Sobre" asp-action="Index">Sobre</a>
+                                <a class="nav-link" asp-controller="Sobre" asp-action="Index">Sobre</a>
                             </li>
                         }
                     </ul>
