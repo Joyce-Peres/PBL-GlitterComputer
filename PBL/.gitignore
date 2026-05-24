@@ -13,3 +13,4 @@
 *.pdb
 *.dll
 *.exe
+appsettings.json

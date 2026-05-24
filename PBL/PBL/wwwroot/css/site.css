@@ -69,11 +69,10 @@ body {
 }
 
 /* Login */
-.login-page {
-  margin-bottom: 0;
+html.login-html,
+body.login-page {
+  margin: 0;
   min-height: 100vh;
-  background: url("/img/login-bg.png") center / cover no-repeat;
-  background-color: #fff;
 }
 
 .login-main {
@@ -82,6 +81,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 24px 12px;
+  background: transparent;
 }
 
 .login-shell {

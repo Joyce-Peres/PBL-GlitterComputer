@@ -87,11 +87,10 @@ namespace PBL.Services
             _logger = logger;
 
             _model = string.IsNullOrWhiteSpace(_config["FishAi:Model"]) ? "gemini-2.5-flash" : _config["FishAi:Model"];
-            var apiKey = _config["FishAi:ApiKey"];
-            if (string.IsNullOrWhiteSpace(apiKey))
-                apiKey = System.Environment.GetEnvironmentVariable("GEMINI_API_KEY");
-            if (string.IsNullOrWhiteSpace(apiKey))
-                apiKey = System.Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
+            var apiKey = System.Environment.GetEnvironmentVariable("GEMINI_API_KEY")
+                ?? System.Environment.GetEnvironmentVariable("GOOGLE_API_KEY")
+                ?? System.Environment.GetEnvironmentVariable("FishAi__ApiKey")
+                ?? _config["FishAi:ApiKey"];
 
             _client = string.IsNullOrWhiteSpace(apiKey) ? new Client() : new Client(apiKey: apiKey);
         }
