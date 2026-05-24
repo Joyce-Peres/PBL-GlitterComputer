@@ -62,6 +62,153 @@ body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
 }
+
+/* Tipografia global */
+body {
+  font-family: "Lora", serif;
+}
+
+/* Login */
+.login-page {
+  margin-bottom: 0;
+  min-height: 100vh;
+  background: url("/img/login-bg.png") center / cover no-repeat;
+  background-color: #fff;
+}
+
+.login-main {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 12px;
+}
+
+.login-shell {
+  width: 100%;
+  max-width: 420px;
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .08);
+}
+
+.login-head {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.login-tabs {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0 16px;
+}
+
+.login-tab {
+  flex: 1;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.login-tab.is-active {
+  border-color: #f094b4;
+  box-shadow: 0 .15rem .45rem rgba(0, 0, 0, .06);
+}
+
+.login-pane {
+  display: none;
+}
+
+.login-pane.is-active {
+  display: block;
+}
+
+.login-title {
+  font-size: 1.6rem;
+  margin: 0;
+}
+
+.login-subtitle {
+  margin: 6px 0 0;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.login-accent {
+  color: #f094b4;
+}
+
+.login-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.btn-login,
+.btn-signup {
+  flex: 1;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+
+.btn-login {
+  background-color: #ef6a6a;
+}
+
+.btn-signup {
+  background-color: #ef6a6a;
+}
+
+.btn-login:hover,
+.btn-signup:hover {
+  filter: brightness(0.95);
+  color: #fff;
+}
+
+/* Topo/menu: trocar azul por laranja */
+.bg-primary {
+  background-color: #ef6a6a !important;
+}
+
+.btn-primary {
+  background-color: #ef6a6a;
+  border-color: #ef6a6a;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  background-color: #ef6a6a;
+  border-color: #ef6a6a;
+}
+
+/* Home/Menu */
+.menu-card {
+  background: #f8f9fa;
+  padding: 28px;
+  border-radius: 6px;
+}
+
+.menu-hello {
+  margin: 0 0 8px;
+}
+
+.menu-sub {
+  max-width: 900px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.menu-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
 .footer {
   position: absolute;
   bottom: 0;

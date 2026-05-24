@@ -3,30 +3,30 @@
     ViewData["Title"] = "Home";
 }
 
-<h1>Aquário Inteligente</h1>
+<h1>Menu</h1>
 <hr />
 
-<div class="jumbotron bg-light">
-    <h2>Bem-vindo!</h2>
-    <p class="lead">
-        Monitore temperatura, pH e nível de água do seu aquário em tempo real
-        com sensores IoT e gerencie peixes e aquários pelo sistema web.
+<div class="menu-card">
+    <h2 class="menu-hello">Olá, @(string.IsNullOrWhiteSpace(ViewBag.UsuarioNome as string) ? "!" : (ViewBag.UsuarioNome + "!"))</h2>
+    <p class="menu-sub">
+        Monitore temperatura, pH e nível de água do seu aquário em tempo real com sensores IoT e gerencie peixes e aquários
+        pelo sistema web.
     </p>
 
     @if (ViewBag.Logado == true)
     {
-        <p>
-            <a class="btn btn-primary btn-lg" asp-controller="Aquario" asp-action="Create">Novo Aquário &raquo;</a>
-            <a class="btn btn-success btn-lg" asp-controller="Peixe" asp-action="Create">Cadastrar Peixe &raquo;</a>
-            <a class="btn btn-info btn-lg" asp-controller="Dashboard" asp-action="Index">Dashboard IoT &raquo;</a>
-        </p>
+        <div class="menu-actions">
+            <a class="btn btn-primary" asp-controller="Peixe" asp-action="Index">Ver catálogo de peixes</a>
+            <a class="btn btn-success" asp-controller="Aquario" asp-action="Create">Novo aquário</a>
+            <a class="btn btn-info" asp-controller="Dashboard" asp-action="Index">Dashboard IoT</a>
+        </div>
     }
     else
     {
-        <p>
-            <a class="btn btn-success btn-lg" asp-controller="Login" asp-action="Index">Faça Login &raquo;</a>
-            <a class="btn btn-primary btn-lg" asp-controller="Login" asp-action="Cadastrar">Cadastre-se &raquo;</a>
-        </p>
+        <div class="menu-actions">
+            <a class="btn btn-login" asp-controller="Login" asp-action="Index">Entrar</a>
+            <a class="btn btn-signup" asp-controller="Login" asp-action="Cadastrar">Cadastrar</a>
+        </div>
     }
 </div>
 

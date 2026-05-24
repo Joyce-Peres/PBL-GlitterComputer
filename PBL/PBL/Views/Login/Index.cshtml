@@ -1,10 +1,29 @@
 ﻿@{
     ViewData["Title"] = "Login";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+
+    var activePane = (string)ViewBag.ActivePane;
+    if (string.IsNullOrWhiteSpace(activePane))
+    {
+        activePane = Context?.Request?.Query["tab"].ToString();
+    }
+    if (string.IsNullOrWhiteSpace(activePane))
+    {
+        activePane = "login";
+    }
 }
-<h2>Login</h2>
-<div class="row">
-    <div class="col-lg-4">
+<div class="login-shell">
+    <div class="login-card">
+        <div class="login-head">
+            <h1 class="login-title">Bem-vindo ao <span class="login-accent">Aquamarine</span></h1>
+            <p class="login-subtitle">seu aquário inteligente</p>
+        </div>
+
+        <div class="login-tabs" role="tablist" aria-label="Entrar ou cadastrar">
+            <button type="button" class="login-tab" data-pane="login">Entrar</button>
+            <button type="button" class="login-tab" data-pane="signup">Cadastrar</button>
+        </div>
+
         @if (!string.IsNullOrEmpty(ViewBag.Sucesso))
         {
             <div class="alert alert-success">
@@ -12,27 +31,105 @@
             </div>
         }
 
-        <form action="/login/Fazlogin" method="post">
-            <div class="form-group">
-                <label for="usuario" class="control-label">E-mail</label>
-                <input type="email" name="usuario" class="form-control" required placeholder='seu@email.com' />
-            </div>
-
-            <div class="form-group">
-                <label for="senha" class="control-label">Senha</label>
-                <input type="password" name="senha" class="form-control" required placeholder='Senha...' />
-            </div>
-
-            <button type="submit" class="btn btn-success">Login</button>
-            <a href="/login/Cadastrar" class="btn btn-info">Cadastre-se</a>
-
-            @if (!string.IsNullOrEmpty(ViewBag.Erro))
-            {
-                <div class="alert alert-danger mt-2">
-                    @ViewBag.Erro
+        <div class="login-pane" data-pane="login">
+            <form asp-controller="Login" asp-action="FazLogin" method="post">
+                <div class="form-group">
+                    <label for="usuario" class="control-label">E-mail</label>
+                    <input type="email" name="usuario" class="form-control" required placeholder="seu@email.com" />
                 </div>
-            }
-        </form>
+
+                <div class="form-group">
+                    <label for="senha" class="control-label">Senha</label>
+                    <input type="password" name="senha" class="form-control" required placeholder="Senha..." />
+                </div>
+
+                <div class="login-actions">
+                    <button type="submit" class="btn btn-login">Entrar</button>
+                </div>
+
+                @if (!string.IsNullOrEmpty(ViewBag.Erro))
+                {
+                    <div class="alert alert-danger mt-2">
+                        @ViewBag.Erro
+                    </div>
+                }
+            </form>
+        </div>
+
+        <div class="login-pane" data-pane="signup">
+            <form asp-controller="Login" asp-action="FazCadastro" method="post">
+                <div class="form-group">
+                    <label for="nome" class="control-label">Nome Completo</label>
+                    <input type="text" name="nome" class="form-control" required placeholder="Seu nome" />
+                </div>
+
+                <div class="form-group">
+                    <label for="login" class="control-label">E-mail</label>
+                    <input type="email" name="login" id="login" class="form-control" required placeholder="seu@email.com" />
+                    <small id="msgLogin" class="form-text"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="senha" class="control-label">Senha</label>
+                    <input type="password" name="senha" class="form-control" required placeholder="Senha..." />
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmarSenha" class="control-label">Confirmar Senha</label>
+                    <input type="password" name="confirmarSenha" class="form-control" required placeholder="Confirme a senha..." />
+                </div>
+
+                <div class="login-actions">
+                    <button type="submit" class="btn btn-signup">Cadastrar</button>
+                </div>
+
+                @if (!string.IsNullOrEmpty(ViewBag.CadastroErro))
+                {
+                    <div class="alert alert-danger mt-2">
+                        @ViewBag.CadastroErro
+                    </div>
+                }
+            </form>
+        </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        (function () {
+            var active = '@activePane';
+            if (!active) active = 'login';
+
+            function setActive(pane) {
+                document.querySelectorAll('.login-pane').forEach(function (el) {
+                    el.classList.toggle('is-active', el.getAttribute('data-pane') === pane);
+                });
+                document.querySelectorAll('.login-tab').forEach(function (btn) {
+                    btn.classList.toggle('is-active', btn.getAttribute('data-pane') === pane);
+                });
+            }
+
+            document.querySelectorAll('.login-tab').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    setActive(btn.getAttribute('data-pane'));
+                });
+            });
+
+            setActive(active);
+
+            var emailInput = document.getElementById('login');
+            if (emailInput && window.jQuery) {
+                $('#login').blur(function () {
+                    var email = $(this).val();
+                    if (!email) return;
+                    $.get('/Login/VerificarLogin', { login: email }, function (data) {
+                        $('#msgLogin').text(data.mensagem)
+                            .removeClass('text-success text-danger')
+                            .addClass(data.disponivel ? 'text-success' : 'text-danger');
+                    });
+                });
+            }
+        })();
+    </script>
+}
 

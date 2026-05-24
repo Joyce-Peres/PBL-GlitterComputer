@@ -22,6 +22,7 @@ namespace PBL.Controllers
         public IActionResult Index()
         {
             ViewBag.Logado = HelperControllers.VerificaUserLogado(HttpContext.Session);
+            ViewBag.UsuarioNome = HttpContext.Session.GetString("UsuarioNome");
             return View();
         }
 

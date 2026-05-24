@@ -41,8 +41,7 @@ namespace PBL.Controllers
 
         public IActionResult Cadastrar()
         {
-            ViewBag.Logado = HelperControllers.VerificaUserLogado(HttpContext.Session);
-            return View();
+            return RedirectToAction("Index", new { tab = "signup" });
         }
 
         [HttpGet]
@@ -64,14 +63,16 @@ namespace PBL.Controllers
         {
             if (string.IsNullOrWhiteSpace(nome) || string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(senha))
             {
-                ViewBag.Erro = "Todos os campos são obrigatórios!";
-                return View("Cadastrar");
+                ViewBag.ActivePane = "signup";
+                ViewBag.CadastroErro = "Todos os campos são obrigatórios!";
+                return View("Index");
             }
 
             if (senha != confirmarSenha)
             {
-                ViewBag.Erro = "As senhas não conferem!";
-                return View("Cadastrar");
+                ViewBag.ActivePane = "signup";
+                ViewBag.CadastroErro = "As senhas não conferem!";
+                return View("Index");
             }
 
             UsuarioDAO usuarioDAO = new UsuarioDAO();
@@ -79,8 +80,9 @@ namespace PBL.Controllers
 
             if (usuarioExistente != null)
             {
-                ViewBag.Erro = "Este e-mail já está cadastrado!";
-                return View("Cadastrar");
+                ViewBag.ActivePane = "signup";
+                ViewBag.CadastroErro = "Este e-mail já está cadastrado!";
+                return View("Index");
             }
 
             UsuarioViewModel novoUsuario = new UsuarioViewModel
@@ -94,12 +96,14 @@ namespace PBL.Controllers
             {
                 usuarioDAO.Inserir(novoUsuario);
                 ViewBag.Sucesso = "Cadastro realizado com sucesso! Faça login para continuar.";
+                ViewBag.ActivePane = "login";
                 return View("Index");
             }
             catch
             {
-                ViewBag.Erro = "Erro ao realizar cadastro. Tente novamente.";
-                return View("Cadastrar");
+                ViewBag.ActivePane = "signup";
+                ViewBag.CadastroErro = "Erro ao realizar cadastro. Tente novamente.";
+                return View("Index");
             }
         }
     }
