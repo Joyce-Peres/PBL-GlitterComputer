@@ -271,6 +271,11 @@ body.login-page {
   margin-bottom: 18px;
 }
 
+.login-card button:focus,
+.login-card button:focus-visible {
+  outline: none !important;
+}
+
 .login-tabs {
   display: flex;
   gap: 10px;
@@ -284,12 +289,32 @@ body.login-page {
   border-radius: 10px;
   padding: 10px 12px;
   color: var(--text);
+  outline: none;
+  box-shadow: none;
 }
 
-.login-tab.is-active {
+.login-tab:focus,
+.login-tab:focus-visible,
+.login-tab:active {
+  outline: none !important;
+}
+
+.login-tab[data-pane="login"].is-active,
+.login-tab[data-pane="login"]:focus,
+.login-tab[data-pane="login"]:focus-visible {
   border-color: var(--aqua-mid);
   background-color: var(--aqua);
   box-shadow: var(--shadow);
+}
+
+.login-tab[data-pane="signup"].is-active,
+.login-tab[data-pane="signup"]:focus,
+.login-tab[data-pane="signup"]:focus-visible,
+.login-tab[data-pane="signup"]:active {
+  border-color: var(--pink-mid);
+  background-color: var(--pink);
+  box-shadow: var(--shadow);
+  color: var(--text);
 }
 
 .login-pane {
@@ -321,20 +346,48 @@ body.login-page {
   margin-top: 12px;
 }
 
-.btn-login,
+.btn-login {
+  flex: 1;
+  color: var(--text);
+  border: 1px solid var(--aqua-mid);
+  border-radius: 10px;
+  padding: 10px 14px;
+  background-color: var(--aqua);
+  outline: none;
+}
+
+.btn.btn-login:hover,
+.btn.btn-login:focus,
+.btn.btn-login.focus,
+.btn.btn-login:focus-visible,
+.btn.btn-login:active {
+  background-color: var(--aqua-mid);
+  border-color: var(--aqua-mid);
+  color: var(--text);
+  outline: none !important;
+  box-shadow: var(--shadow) !important;
+}
+
 .btn-signup {
   flex: 1;
   color: var(--text);
-  border: 1px solid var(--orange-mid);
+  border: 1px solid var(--pink-mid);
   border-radius: 10px;
   padding: 10px 14px;
-  background-color: var(--orange);
+  background-color: var(--pink);
+  outline: none;
 }
 
-.btn-login:hover,
-.btn-signup:hover {
-  background-color: var(--orange-mid);
+.btn.btn-signup:hover,
+.btn.btn-signup:focus,
+.btn.btn-signup.focus,
+.btn.btn-signup:focus-visible,
+.btn.btn-signup:active {
+  background-color: var(--pink-mid);
+  border-color: var(--pink-mid);
   color: var(--text);
+  outline: none !important;
+  box-shadow: var(--shadow) !important;
 }
 
 /* Home / Menu */
@@ -862,4 +915,9 @@ main hr {
   white-space: nowrap;
   line-height: 60px;
   background-color: var(--bg);
+  text-align: center;
+}
+
+.footer .container {
+  text-align: center;
 }

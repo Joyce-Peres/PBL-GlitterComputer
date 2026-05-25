@@ -39,6 +39,11 @@ namespace PBL.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult Sair()
+        {
+            return LogOff();
+        }
+
         public IActionResult Cadastrar()
         {
             return RedirectToAction("Index", new { tab = "signup" });
