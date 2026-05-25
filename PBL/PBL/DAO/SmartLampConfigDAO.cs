@@ -2,13 +2,25 @@ using PBL.Models;
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace PBL.DAO
 {
     public class SmartLampConfigDAO
     {
+        private bool AquarioExiste(int aquarioId)
+        {
+            if (aquarioId <= 0)
+                return false;
+
+            return new AquarioDAO().Listagem().Any(a => a.Id == aquarioId);
+        }
+
         public SmartLampConfigViewModel ConsultaPorAquario(int aquarioId)
         {
+            if (!AquarioExiste(aquarioId))
+                return null;
+
             var parametros = new SqlParameter[] { new SqlParameter("aquarioId", aquarioId) };
             var table = HelperDAO.ExecutaProcSelect("spConsultaLampConfig", parametros);
             
@@ -20,6 +32,9 @@ namespace PBL.DAO
 
         public SmartLampConfigViewModel ConsultaOuCriaPadrao(int aquarioId)
         {
+            if (!AquarioExiste(aquarioId))
+                return new SmartLampConfigViewModel { AquarioId = aquarioId };
+
             var atual = ConsultaPorAquario(aquarioId);
             if (atual != null)
                 return atual;
@@ -31,6 +46,9 @@ namespace PBL.DAO
 
         public void Salvar(SmartLampConfigViewModel model)
         {
+            if (!AquarioExiste(model.AquarioId))
+                throw new InvalidOperationException("Não é possível salvar a configuração da lâmpada porque o aquário informado não existe.");
+
             var parametros = new SqlParameter[]
             {
                 new SqlParameter("aquarioId", model.AquarioId),
@@ -47,6 +65,9 @@ namespace PBL.DAO
 
         public void AplicarAlvos(int aquarioId, int? luzAlvo, decimal? tempAlvo)
         {
+            if (!AquarioExiste(aquarioId))
+                return;
+
             var parametros = new SqlParameter[]
             {
                 new SqlParameter("aquarioId", aquarioId),

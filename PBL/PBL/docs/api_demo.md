@@ -41,7 +41,7 @@ Registrar leitura (POST):
 ```bash
 curl -X POST "%BASE_URL%/api/leituras" ^
   -H "Content-Type: application/json" ^
-  -d "{\"aquarioId\":1,\"temperatura\":25.5,\"ph\":7.2,\"nivelAgua\":85}"
+  -d "{\"aquarioId\":1,\"temperatura\":25.5,\"nivelAgua\":85,\"tdsPpm\":120,\"salinidadePpt\":0.35,\"qualidadeTds\":\"Boa\"}"
 ```
 
 Resposta esperada (200):

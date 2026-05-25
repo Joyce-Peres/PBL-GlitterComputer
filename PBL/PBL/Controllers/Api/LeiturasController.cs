@@ -105,11 +105,10 @@ namespace PBL.Controllers.Api
         ///     {
         ///       "aquarioId": 1,
         ///       "temperatura": 25.5,
-        ///       "ph": 7.2,
         ///       "nivelAgua": 85
         ///     }
         ///
-        /// Campos gravados no banco: temperatura, pH, nível de água e data/hora do servidor.
+        /// Campos gravados no banco: temperatura, nível de água e data/hora do servidor.
         /// </remarks>
         /// <param name="request">Dados dos sensores.</param>
         /// <response code="200">Leitura registrada.</response>
@@ -127,7 +126,7 @@ namespace PBL.Controllers.Api
                 if (request == null || request.AquarioId <= 0)
                     return BadRequest(new ApiErrorResponse
                     {
-                        Erro = "Dados inválidos. Informe aquarioId, temperatura, ph e nivelAgua."
+                        Erro = "Dados inválidos. Informe aquarioId, temperatura e nivelAgua."
                     });
 
                 if (!ModelState.IsValid)
@@ -140,7 +139,8 @@ namespace PBL.Controllers.Api
                 }
 
                 new LeituraSensorDAO().InserirLeituraIoT(
-                    request.AquarioId, request.Temperatura, request.Ph, request.NivelAgua);
+                    request.AquarioId, request.Temperatura, request.NivelAgua,
+                    request.TdsPpm, request.SalinidadePpt, request.QualidadeTds);
 
                 return Ok(new LeituraRegistroResponse
                 {

@@ -20,8 +20,10 @@ namespace PBL.DAO
                 new SqlParameter("id", model.Id),
                 new SqlParameter("aquarioId", model.AquarioId),
                 new SqlParameter("temperatura", model.Temperatura),
-                new SqlParameter("ph", model.Ph),
                 new SqlParameter("nivelAgua", model.NivelAgua),
+                new SqlParameter("tdsPpm", (object)model.TdsPpm ?? DBNull.Value),
+                new SqlParameter("salinidadePpt", (object)model.SalinidadePpt ?? DBNull.Value),
+                new SqlParameter("qualidadeTds", (object)model.QualidadeAgua ?? DBNull.Value),
                 new SqlParameter("dataLeitura", model.DataLeitura)
             };
         }
@@ -33,13 +35,18 @@ namespace PBL.DAO
                 Id = Convert.ToInt32(registro["id"]),
                 AquarioId = Convert.ToInt32(registro["aquarioId"]),
                 Temperatura = Convert.ToDecimal(registro["temperatura"]),
-                Ph = Convert.ToDecimal(registro["ph"]),
                 NivelAgua = Convert.ToDecimal(registro["nivelAgua"]),
                 DataLeitura = Convert.ToDateTime(registro["dataLeitura"])
             };
             model.TemperaturaAgua = model.Temperatura;
             model.NivelPct = model.NivelAgua;
             model.FonteDados = "SQL/Legado";
+            if (registro.Table.Columns.Contains("tdsPpm") && registro["tdsPpm"] != DBNull.Value)
+                model.TdsPpm = Convert.ToDecimal(registro["tdsPpm"]);
+            if (registro.Table.Columns.Contains("salinidadePpt") && registro["salinidadePpt"] != DBNull.Value)
+                model.SalinidadePpt = Convert.ToDecimal(registro["salinidadePpt"]);
+            if (registro.Table.Columns.Contains("qualidadeTds") && registro["qualidadeTds"] != DBNull.Value)
+                model.QualidadeAgua = registro["qualidadeTds"].ToString();
             if (registro.Table.Columns.Contains("nomeAquario") && registro["nomeAquario"] != DBNull.Value)
                 model.NomeAquario = registro["nomeAquario"].ToString();
             return model;
@@ -78,14 +85,17 @@ namespace PBL.DAO
             return lista;
         }
 
-        public void InserirLeituraIoT(int aquarioId, decimal temperatura, decimal ph, decimal nivelAgua)
+        public void InserirLeituraIoT(int aquarioId, decimal temperatura, decimal nivelAgua,
+            decimal? tdsPpm = null, decimal? salinidadePpt = null, string qualidadeTds = null)
         {
             var parametros = new SqlParameter[]
             {
                 new SqlParameter("aquarioId", aquarioId),
                 new SqlParameter("temperatura", temperatura),
-                new SqlParameter("ph", ph),
-                new SqlParameter("nivelAgua", nivelAgua)
+                new SqlParameter("nivelAgua", nivelAgua),
+                new SqlParameter("tdsPpm", (object)tdsPpm ?? DBNull.Value),
+                new SqlParameter("salinidadePpt", (object)salinidadePpt ?? DBNull.Value),
+                new SqlParameter("qualidadeTds", (object)qualidadeTds ?? DBNull.Value)
             };
             HelperDAO.ExecutaProc("spInserirLeituraSensor", parametros);
         }

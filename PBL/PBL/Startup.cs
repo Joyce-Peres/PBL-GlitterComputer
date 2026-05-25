@@ -43,7 +43,7 @@ namespace PBL
                         "**Endpoints principais**\n" +
                         "- `GET /api/leituras` — lista leituras com filtros opcionais\n" +
                         "- `GET /api/leituras/aquario/{id}` — leituras de um aquário\n" +
-                        "- `POST /api/leituras` — dispositivo IoT envia temperatura, pH e nível de água\n\n" +
+                        "- `POST /api/leituras` — dispositivo IoT envia temperatura, nível de água, TDS e salinidade\n\n" +
                         "**Base URL (desenvolvimento):** `http://localhost:5000` ou porta exibida no `dotnet run`.\n\n" +
                         "**Content-Type:** `application/json` nos POST.",
                     Contact = new OpenApiContact

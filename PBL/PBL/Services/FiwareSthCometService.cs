@@ -52,7 +52,12 @@ namespace PBL.Services
                 "temp_agua",
                 "temp_ar",
                 "umidade_ar",
+                "ec_us_cm",
                 "tds_ppm",
+                "qualidade_agua",
+                "qualidade_tds",
+                "alerta",
+                "salinidade_ppt",
                 "ldr_raw",
                 "dist_agua_cm",
                 "nivel_pct",
@@ -170,6 +175,10 @@ namespace PBL.Services
             if (!valor.HasValue)
                 valor = ObterDecimal(elemento, "value");
 
+            var texto = ObterTexto(elemento, "attrValue") ?? ObterTexto(elemento, "value");
+            if (string.IsNullOrWhiteSpace(texto) && elemento.ValueKind == JsonValueKind.String)
+                texto = elemento.GetString();
+
             if (!valor.HasValue && elemento.ValueKind == JsonValueKind.String)
             {
                 decimal textoDecimal;
@@ -185,6 +194,7 @@ namespace PBL.Services
             {
                 Atributo = atributo,
                 Valor = valor,
+                Texto = texto,
                 DataLeituraUtc = DateTime.SpecifyKind(data.Value, DateTimeKind.Utc)
             });
         }
@@ -228,8 +238,25 @@ namespace PBL.Services
                     case "umidade_ar":
                         leitura.UmidadeAr = ponto.Valor;
                         break;
+                    case "ec_us_cm":
                     case "tds_ppm":
                         leitura.TdsPpm = ponto.Valor;
+                        break;
+                    case "qualidade_agua":
+                    case "qualidade_tds":
+                        leitura.QualidadeAgua = ponto.Texto;
+                        break;
+                    case "alerta":
+                        leitura.Alerta = ponto.Texto;
+                        break;
+                    case "salinidade_ppt":
+                        leitura.SalinidadePpt = ponto.Valor;
+                        if (!leitura.SalinidadePpt.HasValue && !string.IsNullOrWhiteSpace(ponto.Texto))
+                        {
+                            decimal salinidade;
+                            if (decimal.TryParse(ponto.Texto, NumberStyles.Any, CultureInfo.InvariantCulture, out salinidade))
+                                leitura.SalinidadePpt = salinidade;
+                        }
                         break;
                     case "ldr_raw":
                         leitura.LdrRaw = ponto.Valor.HasValue ? (int?)Convert.ToInt32(ponto.Valor.Value) : null;
@@ -348,6 +375,7 @@ namespace PBL.Services
         {
             public string Atributo { get; set; }
             public decimal? Valor { get; set; }
+            public string Texto { get; set; }
             public DateTime DataLeituraUtc { get; set; }
         }
     }

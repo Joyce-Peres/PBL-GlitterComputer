@@ -33,14 +33,29 @@ namespace PBL.Models
         public int? LuminosidadeMax { get; set; }
 
         /// <summary>
-        /// pH mínimo
+        /// TDS mínimo recomendado em ppm.
         /// </summary>
-        public decimal? PhMin { get; set; }
+        public decimal? TdsPpmMin { get; set; }
 
         /// <summary>
-        /// pH máximo
+        /// TDS máximo recomendado em ppm.
         /// </summary>
-        public decimal? PhMax { get; set; }
+        public decimal? TdsPpmMax { get; set; }
+
+        /// <summary>
+        /// Salinidade mínima recomendada em ppt.
+        /// </summary>
+        public decimal? SalinidadePptMin { get; set; }
+
+        /// <summary>
+        /// Salinidade máxima recomendada em ppt.
+        /// </summary>
+        public decimal? SalinidadePptMax { get; set; }
+
+        /// <summary>
+        /// Volume mínimo recomendado do aquário em litros.
+        /// </summary>
+        public decimal? VolumeMinLitros { get; set; }
 
         /// <summary>
         /// Indica se os parâmetros foram gerados pela IA (true) ou digitados manualmente (false)
@@ -53,7 +68,7 @@ namespace PBL.Models
         public System.DateTime? UpdatedAt { get; set; }
 
         /// <summary>
-        /// Valida se os parâmetros têm coerência (min <= ideal <= max, ph_min <= ph_max, etc)
+        /// Valida se os parâmetros têm coerência entre mínimo, ideal e máximo.
         /// </summary>
         public bool IsValid(out string mensagemErro)
         {
@@ -93,10 +108,21 @@ namespace PBL.Models
                 return false;
             }
 
-            // Validar pH
-            if (PhMin.HasValue && PhMax.HasValue && PhMin > PhMax)
+            if (TdsPpmMin.HasValue && TdsPpmMax.HasValue && TdsPpmMin > TdsPpmMax)
             {
-                mensagemErro = "pH mínimo não pode ser maior que o máximo.";
+                mensagemErro = "TDS mínimo não pode ser maior que o máximo.";
+                return false;
+            }
+
+            if (SalinidadePptMin.HasValue && SalinidadePptMax.HasValue && SalinidadePptMin > SalinidadePptMax)
+            {
+                mensagemErro = "Salinidade mínima não pode ser maior que a máxima.";
+                return false;
+            }
+
+            if (VolumeMinLitros.HasValue && VolumeMinLitros <= 0)
+            {
+                mensagemErro = "O volume mínimo deve ser maior que zero.";
                 return false;
             }
 

@@ -44,7 +44,7 @@ namespace PBL.Controllers
             if (aquarios != null && aquarios.Any())
                 return aquarios.First().Id;
 
-            return 1;
+            return 0;
         }
 
         private void PreencherViewBagsComuns()
@@ -68,6 +68,12 @@ namespace PBL.Controllers
             {
                 PreencherViewBagsComuns();
                 var aquarioId = ResolverAquarioId();
+                if (aquarioId <= 0)
+                {
+                    ViewBag.Mensagem = "Cadastre pelo menos um aquário antes de configurar a lâmpada.";
+                    return View(new SmartLampConfigViewModel());
+                }
+
                 var model = _dao.ConsultaOuCriaPadrao(aquarioId);
                 ViewBag.Mensagem = TempData["Mensagem"];
                 return View(model);
@@ -85,6 +91,21 @@ namespace PBL.Controllers
             {
                 if (model.AquarioId <= 0)
                     model.AquarioId = ResolverAquarioId();
+
+                if (model.AquarioId <= 0)
+                {
+                    PreencherViewBagsComuns();
+                    ViewBag.Modos = new SelectList(new[]
+                    {
+                        new { Value = 0, Text = "0 - Desligada" },
+                        new { Value = 1, Text = "1 - Fraca" },
+                        new { Value = 2, Text = "2 - Média" },
+                        new { Value = 3, Text = "3 - Forte" },
+                        new { Value = 4, Text = "4 - Personalizada" }
+                    }, "Value", "Text", model.Modo);
+                    ViewBag.Mensagem = "Cadastre pelo menos um aquário antes de salvar a configuração da lâmpada.";
+                    return View("Personalizar", model);
+                }
 
                 model.Brilho = Math.Max(0, Math.Min(100, model.Brilho));
                 model.R = Math.Max(0, Math.Min(255, model.R));

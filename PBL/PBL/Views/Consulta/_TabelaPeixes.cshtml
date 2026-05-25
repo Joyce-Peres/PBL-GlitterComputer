@@ -8,6 +8,9 @@
             <th>Espécie</th>
             <th>Temp. ideal</th>
             <th>Luz ideal</th>
+            <th>TDS ideal</th>
+            <th>Salinidade ideal</th>
+            <th>Volume mín.</th>
             <th>Tamanho (cm)</th>
             <th>Aquário</th>
             <th>Foto</th>
@@ -24,6 +27,9 @@
                     <td>@item.Especie</td>
                     <td>@(item.TemperaturaIdeal.HasValue ? item.TemperaturaIdeal.Value.ToString("0.0") + " °C" : "-")</td>
                     <td>@(item.LuminosidadeIdeal.HasValue ? item.LuminosidadeIdeal.Value.ToString() + " %" : "-")</td>
+                    <td>@(item.TdsPpmMin.HasValue || item.TdsPpmMax.HasValue ? string.Format("{0} - {1} ppm", item.TdsPpmMin.HasValue ? item.TdsPpmMin.Value.ToString("0") : "-", item.TdsPpmMax.HasValue ? item.TdsPpmMax.Value.ToString("0") : "-") : "-")</td>
+                    <td>@(item.SalinidadePptMin.HasValue || item.SalinidadePptMax.HasValue ? string.Format("{0} - {1} ppt", item.SalinidadePptMin.HasValue ? item.SalinidadePptMin.Value.ToString("0.00") : "-", item.SalinidadePptMax.HasValue ? item.SalinidadePptMax.Value.ToString("0.00") : "-") : "-")</td>
+                    <td>@(item.VolumeMinLitros.HasValue ? item.VolumeMinLitros.Value.ToString("0.0") + " L" : "-")</td>
                     <td>@item.TamanhoCm</td>
                     <td>@item.NomeAquario</td>
                     <td>
@@ -38,7 +44,7 @@
         else
         {
             <tr>
-                <td colspan="8" class="text-center text-muted">Nenhum registro encontrado.</td>
+                <td colspan="11" class="text-center text-muted">Nenhum registro encontrado.</td>
             </tr>
         }
     </tbody>

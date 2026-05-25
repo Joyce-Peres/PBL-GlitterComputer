@@ -17,7 +17,7 @@
         <p class="menu-welcome-label">Bem-vindo de volta</p>
         <h2 class="menu-hello">Olá, @(string.IsNullOrWhiteSpace(nome) ? "!" : (nome + "!"))</h2>
         <p class="menu-sub">
-            Monitore temperatura, pH e nível de água em tempo real, cadastre peixes com foto
+            Monitore temperatura, TDS, salinidade e nível de água em tempo real, cadastre peixes com foto
             e personalize a iluminação do aquário pelo painel web.
         </p>
     </section>
@@ -96,7 +96,7 @@
             <h3 class="menu-banner-title">Saiba mais — Recomendação por IA</h3>
             <p>
                 Ao cadastrar um peixe, use a detecção por imagem ou por espécie para preencher temperatura,
-                pH e luminosidade automaticamente com o Google Gemini.
+                TDS, salinidade e luminosidade automaticamente com o Google Gemini.
             </p>
             <a class="btn btn-palette-pink" asp-controller="Peixe" asp-action="Create">Cadastrar peixe com IA</a>
         </aside>

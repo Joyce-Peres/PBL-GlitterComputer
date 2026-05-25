@@ -52,8 +52,11 @@ BEGIN
         temperaturaMax DECIMAL(5,2) NULL,
         luminosidadeMin INT NULL,
         luminosidadeMax INT NULL,
-        ph_min DECIMAL(3,1) NULL,
-        ph_max DECIMAL(3,1) NULL,
+        tdsPpmMin DECIMAL(10,2) NULL,
+        tdsPpmMax DECIMAL(10,2) NULL,
+        salinidadePptMin DECIMAL(10,3) NULL,
+        salinidadePptMax DECIMAL(10,3) NULL,
+        volumeMinLitros DECIMAL(10,2) NULL,
         originFromAI BIT NULL DEFAULT 0,
         parametersUpdatedAt DATETIME NULL,
         CONSTRAINT FK_Peixes_Aquarios FOREIGN KEY (aquarioId) REFERENCES Aquarios(id)
@@ -83,11 +86,20 @@ GO
 IF COL_LENGTH('Peixes', 'luminosidadeMax') IS NULL
     ALTER TABLE Peixes ADD luminosidadeMax INT NULL
 GO
-IF COL_LENGTH('Peixes', 'ph_min') IS NULL
-    ALTER TABLE Peixes ADD ph_min DECIMAL(3,1) NULL
+IF COL_LENGTH('Peixes', 'tdsPpmMin') IS NULL
+    ALTER TABLE Peixes ADD tdsPpmMin DECIMAL(10,2) NULL
 GO
-IF COL_LENGTH('Peixes', 'ph_max') IS NULL
-    ALTER TABLE Peixes ADD ph_max DECIMAL(3,1) NULL
+IF COL_LENGTH('Peixes', 'tdsPpmMax') IS NULL
+    ALTER TABLE Peixes ADD tdsPpmMax DECIMAL(10,2) NULL
+GO
+IF COL_LENGTH('Peixes', 'salinidadePptMin') IS NULL
+    ALTER TABLE Peixes ADD salinidadePptMin DECIMAL(10,3) NULL
+GO
+IF COL_LENGTH('Peixes', 'salinidadePptMax') IS NULL
+    ALTER TABLE Peixes ADD salinidadePptMax DECIMAL(10,3) NULL
+GO
+IF COL_LENGTH('Peixes', 'volumeMinLitros') IS NULL
+    ALTER TABLE Peixes ADD volumeMinLitros DECIMAL(10,2) NULL
 GO
 IF COL_LENGTH('Peixes', 'originFromAI') IS NULL
     ALTER TABLE Peixes ADD originFromAI BIT NULL DEFAULT 0
@@ -125,8 +137,10 @@ BEGIN
         id INT PRIMARY KEY IDENTITY(1,1),
         aquarioId INT NOT NULL,
         temperatura DECIMAL(5,2) NOT NULL,
-        ph DECIMAL(4,2) NOT NULL,
         nivelAgua DECIMAL(5,2) NOT NULL,
+        tdsPpm DECIMAL(10,2) NULL,
+        salinidadePpt DECIMAL(10,3) NULL,
+        qualidadeTds VARCHAR(100) NULL,
         dataLeitura DATETIME NOT NULL DEFAULT GETDATE(),
         CONSTRAINT FK_Leituras_Aquarios FOREIGN KEY (aquarioId) REFERENCES Aquarios(id)
     )
@@ -138,8 +152,8 @@ IF NOT EXISTS (SELECT 1 FROM LeiturasSensor)
 BEGIN
     IF EXISTS (SELECT 1 FROM Aquarios)
     BEGIN
-        INSERT INTO LeiturasSensor (aquarioId, temperatura, ph, nivelAgua, dataLeitura)
-        SELECT TOP 1 id, 25.5, 7.2, 85.0, GETDATE() FROM Aquarios
+        INSERT INTO LeiturasSensor (aquarioId, temperatura, nivelAgua, tdsPpm, salinidadePpt, qualidadeTds, dataLeitura)
+        SELECT TOP 1 id, 25.5, 85.0, 120.0, 0.350, 'Boa', GETDATE() FROM Aquarios
     END
 END
 GO
@@ -167,16 +181,18 @@ BEGIN
     END
     ELSE IF @tabela = 'Peixes'
     BEGIN
-                 SELECT p.id, p.nome, p.especie, p.nomeCientifico, p.temperaturaIdeal, p.temperaturaMin, p.temperaturaMax, p.luminosidadeIdeal, p.luminosidadeMin, p.luminosidadeMax, p.ph_min, p.ph_max,
-                         p.tamanhoCm, p.aquarioId, p.foto,
-                             aq.nome AS nomeAquario
-                FROM Peixes p
-                INNER JOIN Aquarios aq ON p.aquarioId = aq.id
-                ORDER BY p.id
+        SELECT p.id, p.nome, p.especie, p.nomeCientifico, p.temperaturaIdeal, p.temperaturaMin, p.temperaturaMax,
+               p.luminosidadeIdeal, p.luminosidadeMin, p.luminosidadeMax,
+               p.tdsPpmMin, p.tdsPpmMax, p.salinidadePptMin, p.salinidadePptMax, p.volumeMinLitros,
+               p.tamanhoCm, p.aquarioId, p.foto,
+               aq.nome AS nomeAquario
+        FROM Peixes p
+        INNER JOIN Aquarios aq ON p.aquarioId = aq.id
+        ORDER BY p.id
     END
     ELSE IF @tabela = 'LeiturasSensor'
     BEGIN
-        SELECT l.id, l.aquarioId, l.temperatura, l.ph, l.nivelAgua, l.dataLeitura,
+        SELECT l.id, l.aquarioId, l.temperatura, l.nivelAgua, l.dataLeitura,
                aq.nome AS nomeAquario
         FROM LeiturasSensor l
         INNER JOIN Aquarios aq ON l.aquarioId = aq.id
@@ -214,14 +230,16 @@ BEGIN
         INNER JOIN Usuarios u ON a.usuarioId = u.id
         WHERE a.id = @id
     ELSE IF @tabela = 'Peixes'
-         SELECT p.id, p.nome, p.especie, p.nomeCientifico, p.temperaturaIdeal, p.temperaturaMin, p.temperaturaMax, p.luminosidadeIdeal, p.luminosidadeMin, p.luminosidadeMax, p.ph_min, p.ph_max,
-             p.tamanhoCm, p.aquarioId, p.foto,
-             aq.nome AS nomeAquario
+           SELECT p.id, p.nome, p.especie, p.nomeCientifico, p.temperaturaIdeal, p.temperaturaMin, p.temperaturaMax,
+                p.luminosidadeIdeal, p.luminosidadeMin, p.luminosidadeMax,
+                p.tdsPpmMin, p.tdsPpmMax, p.salinidadePptMin, p.salinidadePptMax, p.volumeMinLitros,
+                p.tamanhoCm, p.aquarioId, p.foto,
+                aq.nome AS nomeAquario
         FROM Peixes p
         INNER JOIN Aquarios aq ON p.aquarioId = aq.id
         WHERE p.id = @id
     ELSE IF @tabela = 'LeiturasSensor'
-        SELECT l.id, l.aquarioId, l.temperatura, l.ph, l.nivelAgua, l.dataLeitura,
+        SELECT l.id, l.aquarioId, l.temperatura, l.nivelAgua, l.dataLeitura,
                aq.nome AS nomeAquario
         FROM LeiturasSensor l
         INNER JOIN Aquarios aq ON l.aquarioId = aq.id
@@ -301,8 +319,11 @@ CREATE OR ALTER PROCEDURE spInsert_Peixes
     @luminosidadeIdeal INT = NULL,
     @luminosidadeMin INT = NULL,
     @luminosidadeMax INT = NULL,
-    @ph_min DECIMAL(3,1) = NULL,
-    @ph_max DECIMAL(3,1) = NULL,
+    @tdsPpmMin DECIMAL(10,2) = NULL,
+    @tdsPpmMax DECIMAL(10,2) = NULL,
+    @salinidadePptMin DECIMAL(10,3) = NULL,
+    @salinidadePptMax DECIMAL(10,3) = NULL,
+    @volumeMinLitros DECIMAL(10,2) = NULL,
     @originFromAI BIT = NULL,
     @parametersUpdatedAt DATETIME = NULL,
     @tamanhoCm DECIMAL(6,2),
@@ -311,8 +332,14 @@ CREATE OR ALTER PROCEDURE spInsert_Peixes
 AS
 BEGIN
     SET IDENTITY_INSERT Peixes ON
-    INSERT INTO Peixes (id, nome, especie, nomeCientifico, temperaturaIdeal, temperaturaMin, temperaturaMax, luminosidadeIdeal, luminosidadeMin, luminosidadeMax, ph_min, ph_max, originFromAI, parametersUpdatedAt, tamanhoCm, aquarioId, foto)
-    VALUES (@id, @nome, @especie, @nomeCientifico, @temperaturaIdeal, @temperaturaMin, @temperaturaMax, @luminosidadeIdeal, @luminosidadeMin, @luminosidadeMax, @ph_min, @ph_max, @originFromAI, @parametersUpdatedAt, @tamanhoCm, @aquarioId, @foto)
+    INSERT INTO Peixes (id, nome, especie, nomeCientifico, temperaturaIdeal, temperaturaMin, temperaturaMax,
+                        luminosidadeIdeal, luminosidadeMin, luminosidadeMax,
+                        tdsPpmMin, tdsPpmMax, salinidadePptMin, salinidadePptMax, volumeMinLitros,
+                        originFromAI, parametersUpdatedAt, tamanhoCm, aquarioId, foto)
+    VALUES (@id, @nome, @especie, @nomeCientifico, @temperaturaIdeal, @temperaturaMin, @temperaturaMax,
+            @luminosidadeIdeal, @luminosidadeMin, @luminosidadeMax,
+            @tdsPpmMin, @tdsPpmMax, @salinidadePptMin, @salinidadePptMax, @volumeMinLitros,
+            @originFromAI, @parametersUpdatedAt, @tamanhoCm, @aquarioId, @foto)
     SET IDENTITY_INSERT Peixes OFF
 END
 GO
@@ -328,8 +355,11 @@ CREATE OR ALTER PROCEDURE spUpdate_Peixes
     @luminosidadeIdeal INT = NULL,
     @luminosidadeMin INT = NULL,
     @luminosidadeMax INT = NULL,
-    @ph_min DECIMAL(3,1) = NULL,
-    @ph_max DECIMAL(3,1) = NULL,
+    @tdsPpmMin DECIMAL(10,2) = NULL,
+    @tdsPpmMax DECIMAL(10,2) = NULL,
+    @salinidadePptMin DECIMAL(10,3) = NULL,
+    @salinidadePptMax DECIMAL(10,3) = NULL,
+    @volumeMinLitros DECIMAL(10,2) = NULL,
     @originFromAI BIT = NULL,
     @parametersUpdatedAt DATETIME = NULL,
     @tamanhoCm DECIMAL(6,2),
@@ -347,8 +377,11 @@ BEGIN
         luminosidadeIdeal = @luminosidadeIdeal,
         luminosidadeMin = @luminosidadeMin,
         luminosidadeMax = @luminosidadeMax,
-        ph_min = @ph_min,
-        ph_max = @ph_max,
+        tdsPpmMin = @tdsPpmMin,
+        tdsPpmMax = @tdsPpmMax,
+        salinidadePptMin = @salinidadePptMin,
+        salinidadePptMax = @salinidadePptMax,
+        volumeMinLitros = @volumeMinLitros,
         originFromAI = @originFromAI,
         parametersUpdatedAt = @parametersUpdatedAt,
         tamanhoCm = @tamanhoCm,
@@ -398,7 +431,7 @@ CREATE OR ALTER PROCEDURE spConsultaPeixesFiltro
     @aquarioId INT = NULL
 AS
 BEGIN
-        SELECT p.id, p.nome, p.especie, p.nomeCientifico, p.temperaturaIdeal, p.temperaturaMin, p.temperaturaMax, p.luminosidadeIdeal, p.luminosidadeMin, p.luminosidadeMax, p.ph_min, p.ph_max,
+    SELECT p.id, p.nome, p.especie, p.nomeCientifico, p.temperaturaIdeal, p.temperaturaMin, p.temperaturaMax, p.luminosidadeIdeal, p.luminosidadeMin, p.luminosidadeMax, p.tdsPpmMin, p.tdsPpmMax, p.salinidadePptMin, p.salinidadePptMax, p.volumeMinLitros,
             p.tamanhoCm, p.aquarioId, p.foto,
             aq.nome AS nomeAquario
     FROM Peixes p
@@ -418,7 +451,7 @@ CREATE OR ALTER PROCEDURE spConsultaLeiturasFiltro
     @temperaturaMax DECIMAL(5,2) = NULL
 AS
 BEGIN
-    SELECT l.id, l.aquarioId, l.temperatura, l.ph, l.nivelAgua, l.dataLeitura,
+        SELECT l.id, l.aquarioId, l.temperatura, l.nivelAgua, l.tdsPpm, l.salinidadePpt, l.qualidadeTds, l.dataLeitura,
            aq.nome AS nomeAquario
     FROM LeiturasSensor l
     INNER JOIN Aquarios aq ON l.aquarioId = aq.id
@@ -437,7 +470,7 @@ CREATE OR ALTER PROCEDURE spDashboardLeituras
     @dataFim DATETIME = NULL
 AS
 BEGIN
-    SELECT l.id, l.aquarioId, l.temperatura, l.ph, l.nivelAgua, l.dataLeitura,
+        SELECT l.id, l.aquarioId, l.temperatura, l.nivelAgua, l.tdsPpm, l.salinidadePpt, l.qualidadeTds, l.dataLeitura,
            aq.nome AS nomeAquario
     FROM LeiturasSensor l
     INNER JOIN Aquarios aq ON l.aquarioId = aq.id
@@ -451,12 +484,14 @@ GO
 CREATE OR ALTER PROCEDURE spInserirLeituraSensor
     @aquarioId INT,
     @temperatura DECIMAL(5,2),
-    @ph DECIMAL(4,2),
-    @nivelAgua DECIMAL(5,2)
+    @nivelAgua DECIMAL(5,2),
+    @tdsPpm DECIMAL(10,2) = NULL,
+    @salinidadePpt DECIMAL(10,3) = NULL,
+    @qualidadeTds VARCHAR(100) = NULL
 AS
 BEGIN
-    INSERT INTO LeiturasSensor (aquarioId, temperatura, ph, nivelAgua, dataLeitura)
-    VALUES (@aquarioId, @temperatura, @ph, @nivelAgua, GETDATE())
+    INSERT INTO LeiturasSensor (aquarioId, temperatura, nivelAgua, tdsPpm, salinidadePpt, qualidadeTds, dataLeitura)
+    VALUES (@aquarioId, @temperatura, @nivelAgua, @tdsPpm, @salinidadePpt, @qualidadeTds, GETDATE())
 END
 GO
 

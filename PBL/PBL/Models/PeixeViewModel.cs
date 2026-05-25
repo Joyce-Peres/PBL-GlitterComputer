@@ -52,16 +52,34 @@ namespace PBL.Models
             set => Parameters.LuminosidadeMax = value;
         }
 
-        public decimal? PhMin
+        public decimal? TdsPpmMin
         {
-            get => Parameters?.PhMin;
-            set => Parameters.PhMin = value;
+            get => Parameters?.TdsPpmMin;
+            set => Parameters.TdsPpmMin = value;
         }
 
-        public decimal? PhMax
+        public decimal? TdsPpmMax
         {
-            get => Parameters?.PhMax;
-            set => Parameters.PhMax = value;
+            get => Parameters?.TdsPpmMax;
+            set => Parameters.TdsPpmMax = value;
+        }
+
+        public decimal? SalinidadePptMin
+        {
+            get => Parameters?.SalinidadePptMin;
+            set => Parameters.SalinidadePptMin = value;
+        }
+
+        public decimal? SalinidadePptMax
+        {
+            get => Parameters?.SalinidadePptMax;
+            set => Parameters.SalinidadePptMax = value;
+        }
+
+        public decimal? VolumeMinLitros
+        {
+            get => Parameters?.VolumeMinLitros;
+            set => Parameters.VolumeMinLitros = value;
         }
 
         public bool? OriginFromAI

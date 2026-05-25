@@ -6,7 +6,7 @@ namespace PBL.Models.Api
     public class ApiErrorResponse
     {
         /// <summary>Descrição do erro.</summary>
-        /// <example>Dados inválidos. Informe aquarioId, temperatura, ph e nivelAgua.</example>
+        /// <example>Dados inválidos. Informe aquarioId, temperatura e nivelAgua.</example>
         public string Erro { get; set; }
     }
 }

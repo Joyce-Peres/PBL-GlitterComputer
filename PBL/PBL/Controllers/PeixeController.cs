@@ -150,8 +150,11 @@ namespace PBL.Controllers
                     luminosidadeIdeal = result.LuminosidadeIdeal,
                     luminosidadeMin = result.LuminosidadeMin,
                     luminosidadeMax = result.LuminosidadeMax,
-                    phMin = result.PhMin,
-                    phMax = result.PhMax,
+                    tdsPpmMin = result.TdsPpmMin,
+                    tdsPpmMax = result.TdsPpmMax,
+                    salinidadePptMin = result.SalinidadePptMin,
+                    salinidadePptMax = result.SalinidadePptMax,
+                    volumeMinLitros = result.VolumeMinLitros,
                     originFromAI = true,
                     updatedAt = System.DateTime.Now
                 };
@@ -185,8 +188,11 @@ namespace PBL.Controllers
                     luminosidadeIdeal = result.LuminosidadeIdeal,
                     luminosidadeMin = result.LuminosidadeMin,
                     luminosidadeMax = result.LuminosidadeMax,
-                    phMin = result.PhMin,
-                    phMax = result.PhMax,
+                    tdsPpmMin = result.TdsPpmMin,
+                    tdsPpmMax = result.TdsPpmMax,
+                    salinidadePptMin = result.SalinidadePptMin,
+                    salinidadePptMax = result.SalinidadePptMax,
+                    volumeMinLitros = result.VolumeMinLitros,
                     originFromAI = true,
                     updatedAt = System.DateTime.Now
                 });

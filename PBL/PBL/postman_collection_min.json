@@ -41,7 +41,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{ \"AquarioId\": 1, \"Temperatura\": 25.5, \"Ph\": 7.2, \"NivelAgua\": 85.0 }"
+          "raw": "{ \"AquarioId\": 1, \"Temperatura\": 25.5, \"NivelAgua\": 85.0 }"
         },
         "url": {
           "raw": "http://localhost:5000/api/leituras",

@@ -139,17 +139,31 @@
                     </div>
                 </fieldset>
 
-                <!-- pH -->
-                <fieldset class="border p-3">
-                    <legend class="w-auto px-2">Potencial Hidrogênico (pH)</legend>
+                <fieldset class="border p-3 mb-4">
+                    <legend class="w-auto px-2">TDS, Salinidade e Volume</legend>
                     <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label asp-for="PhMin">Mínimo</label>
-                            <input asp-for="PhMin" type="number" step="0.1" class="form-control" placeholder="Ex: 6.5" />
+                        <div class="form-group col-md-3">
+                            <label asp-for="TdsPpmMin">TDS mín. (ppm)</label>
+                            <input asp-for="TdsPpmMin" type="number" step="0.1" class="form-control" placeholder="Ex: 50" />
                         </div>
-                        <div class="form-group col-md-6">
-                            <label asp-for="PhMax">Máximo</label>
-                            <input asp-for="PhMax" type="number" step="0.1" class="form-control" placeholder="Ex: 7.5" />
+                        <div class="form-group col-md-3">
+                            <label asp-for="TdsPpmMax">TDS máx. (ppm)</label>
+                            <input asp-for="TdsPpmMax" type="number" step="0.1" class="form-control" placeholder="Ex: 150" />
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label asp-for="SalinidadePptMin">Salinidade mín. (ppt)</label>
+                            <input asp-for="SalinidadePptMin" type="number" step="0.01" class="form-control" placeholder="Ex: 0.00" />
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label asp-for="SalinidadePptMax">Salinidade máx. (ppt)</label>
+                            <input asp-for="SalinidadePptMax" type="number" step="0.01" class="form-control" placeholder="Ex: 1.00" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label asp-for="VolumeMinLitros">Volume mínimo ideal (L)</label>
+                            <input asp-for="VolumeMinLitros" type="number" step="0.1" class="form-control" placeholder="Ex: 20.0" />
+                            <small class="form-text text-muted">Se esse valor ultrapassar a capacidade do aquário selecionado, o sistema vai avisar antes de salvar.</small>
                         </div>
                     </div>
                 </fieldset>
@@ -185,16 +199,33 @@
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     <script>
+        var capacidadeAquarioAtual = null;
+
+        function avaliarVolumeIdeal() {
+            var volumeMin = parseFloat($('#VolumeMinLitros').val());
+            if (!capacidadeAquarioAtual || isNaN(volumeMin)) {
+                return true;
+            }
+
+            if (volumeMin > capacidadeAquarioAtual) {
+                return confirm('O volume mínimo ideal do peixe (' + volumeMin.toFixed(1) + ' L) é maior que a capacidade do aquário (' + capacidadeAquarioAtual.toFixed(1) + ' L). Deseja continuar mesmo assim?');
+            }
+
+            return true;
+        }
+
         $(function () {
             // Mostrar/ocultar card de informações do aquário
             $('#aquarioId').change(function () {
                 var id = $(this).val();
                 if (!id) {
+                    capacidadeAquarioAtual = null;
                     $('#infoAquario').hide();
                     return;
                 }
                 $.get('/Peixe/InfoAquario', { id: id }, function (data) {
                     if (data.sucesso) {
+                        capacidadeAquarioAtual = parseFloat(data.capacidade);
                         $('#infoAquario').html(
                             '<strong>' + data.nome + '</strong> — ' +
                             data.capacidade + ' L, água ' + data.tipoAgua +
@@ -246,11 +277,18 @@
                         if (data.luminosidadeMax !== null && data.luminosidadeMax !== undefined)
                             $('#LuminosidadeMax').val(data.luminosidadeMax);
 
-                        // Preencher pH
-                        if (data.phMin !== null && data.phMin !== undefined)
-                            $('#PhMin').val(data.phMin);
-                        if (data.phMax !== null && data.phMax !== undefined)
-                            $('#PhMax').val(data.phMax);
+                        if (data.tdsPpmMin !== null && data.tdsPpmMin !== undefined)
+                            $('#TdsPpmMin').val(data.tdsPpmMin);
+                        if (data.tdsPpmMax !== null && data.tdsPpmMax !== undefined)
+                            $('#TdsPpmMax').val(data.tdsPpmMax);
+
+                        if (data.salinidadePptMin !== null && data.salinidadePptMin !== undefined)
+                            $('#SalinidadePptMin').val(data.salinidadePptMin);
+                        if (data.salinidadePptMax !== null && data.salinidadePptMax !== undefined)
+                            $('#SalinidadePptMax').val(data.salinidadePptMax);
+
+                        if (data.volumeMinLitros !== null && data.volumeMinLitros !== undefined)
+                            $('#VolumeMinLitros').val(data.volumeMinLitros);
 
                         // Expandir a seção de parâmetros avançados
                         $('#advancedParams').collapse('show');
@@ -296,11 +334,18 @@
                             if (data.luminosidadeMax !== null && data.luminosidadeMax !== undefined)
                                 $('#LuminosidadeMax').val(data.luminosidadeMax);
 
-                            // Preencher pH
-                            if (data.phMin !== null && data.phMin !== undefined)
-                                $('#PhMin').val(data.phMin);
-                            if (data.phMax !== null && data.phMax !== undefined)
-                                $('#PhMax').val(data.phMax);
+                            if (data.tdsPpmMin !== null && data.tdsPpmMin !== undefined)
+                                $('#TdsPpmMin').val(data.tdsPpmMin);
+                            if (data.tdsPpmMax !== null && data.tdsPpmMax !== undefined)
+                                $('#TdsPpmMax').val(data.tdsPpmMax);
+
+                            if (data.salinidadePptMin !== null && data.salinidadePptMin !== undefined)
+                                $('#SalinidadePptMin').val(data.salinidadePptMin);
+                            if (data.salinidadePptMax !== null && data.salinidadePptMax !== undefined)
+                                $('#SalinidadePptMax').val(data.salinidadePptMax);
+
+                            if (data.volumeMinLitros !== null && data.volumeMinLitros !== undefined)
+                                $('#VolumeMinLitros').val(data.volumeMinLitros);
 
                             // Expandir a seção de parâmetros avançados
                             $('#advancedParams').collapse('show');
@@ -313,6 +358,12 @@
                     .fail(function () {
                         $('#iaStatus').text(' Erro ao chamar a IA.').addClass('text-danger').removeClass('text-warning');
                     });
+            });
+
+            $('form.form-peixe').on('submit', function (e) {
+                if (!avaliarVolumeIdeal()) {
+                    e.preventDefault();
+                }
             });
         });
     </script>

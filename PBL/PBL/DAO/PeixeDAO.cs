@@ -27,8 +27,11 @@ namespace PBL.DAO
                 new SqlParameter("temperaturaMax", (object)model.TemperaturaMax ?? DBNull.Value),
                 new SqlParameter("luminosidadeMin", (object)model.LuminosidadeMin ?? DBNull.Value),
                 new SqlParameter("luminosidadeMax", (object)model.LuminosidadeMax ?? DBNull.Value),
-                new SqlParameter("ph_min", (object)model.PhMin ?? DBNull.Value),
-                new SqlParameter("ph_max", (object)model.PhMax ?? DBNull.Value),
+                new SqlParameter("tdsPpmMin", (object)model.TdsPpmMin ?? DBNull.Value),
+                new SqlParameter("tdsPpmMax", (object)model.TdsPpmMax ?? DBNull.Value),
+                new SqlParameter("salinidadePptMin", (object)model.SalinidadePptMin ?? DBNull.Value),
+                new SqlParameter("salinidadePptMax", (object)model.SalinidadePptMax ?? DBNull.Value),
+                new SqlParameter("volumeMinLitros", (object)model.VolumeMinLitros ?? DBNull.Value),
                 new SqlParameter("originFromAI", (object)model.OriginFromAI ?? DBNull.Value),
                 new SqlParameter("parametersUpdatedAt", (object)model.Parameters?.UpdatedAt ?? DBNull.Value),
                 new SqlParameter("tamanhoCm", model.TamanhoCm),
@@ -65,14 +68,25 @@ namespace PBL.DAO
                 LuminosidadeMax = registro.Table.Columns.Contains("luminosidadeMax") && registro["luminosidadeMax"] != DBNull.Value
                     ? (int?)Convert.ToInt32(registro["luminosidadeMax"]) 
                     : null,
+                TdsPpmMin = registro.Table.Columns.Contains("tdsPpmMin") && registro["tdsPpmMin"] != DBNull.Value
+                    ? (decimal?)Convert.ToDecimal(registro["tdsPpmMin"])
+                    : null,
+                TdsPpmMax = registro.Table.Columns.Contains("tdsPpmMax") && registro["tdsPpmMax"] != DBNull.Value
+                    ? (decimal?)Convert.ToDecimal(registro["tdsPpmMax"])
+                    : null,
+                SalinidadePptMin = registro.Table.Columns.Contains("salinidadePptMin") && registro["salinidadePptMin"] != DBNull.Value
+                    ? (decimal?)Convert.ToDecimal(registro["salinidadePptMin"])
+                    : null,
+                SalinidadePptMax = registro.Table.Columns.Contains("salinidadePptMax") && registro["salinidadePptMax"] != DBNull.Value
+                    ? (decimal?)Convert.ToDecimal(registro["salinidadePptMax"])
+                    : null,
+                VolumeMinLitros = registro.Table.Columns.Contains("volumeMinLitros") && registro["volumeMinLitros"] != DBNull.Value
+                    ? (decimal?)Convert.ToDecimal(registro["volumeMinLitros"])
+                    : null,
                 TamanhoCm = Convert.ToDecimal(registro["tamanhoCm"]),
                 AquarioId = Convert.ToInt32(registro["aquarioId"]),
                 Foto = registro["foto"] != DBNull.Value ? registro["foto"].ToString() : null
             };
-            if (registro.Table.Columns.Contains("ph_min") && registro["ph_min"] != DBNull.Value)
-                model.PhMin = Convert.ToDecimal(registro["ph_min"]);
-            if (registro.Table.Columns.Contains("ph_max") && registro["ph_max"] != DBNull.Value)
-                model.PhMax = Convert.ToDecimal(registro["ph_max"]);
             if (registro.Table.Columns.Contains("originFromAI") && registro["originFromAI"] != DBNull.Value)
                 model.OriginFromAI = Convert.ToBoolean(registro["originFromAI"]);
             if (registro.Table.Columns.Contains("parametersUpdatedAt") && registro["parametersUpdatedAt"] != DBNull.Value)

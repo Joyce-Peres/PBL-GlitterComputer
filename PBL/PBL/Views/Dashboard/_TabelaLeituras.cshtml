@@ -8,7 +8,9 @@
             <th>Temp. Água (°C)</th>
             <th>Temp. Ar (°C)</th>
             <th>Umidade (%)</th>
-            <th>TDS (ppm)</th>
+            <th>TDS / Condutividade (ppm)</th>
+            <th>Qualidade</th>
+            <th>Salinidade (ppt)</th>
             <th>LDR</th>
             <th>Nível (%)</th>
             <th>Volume (L)</th>
@@ -27,6 +29,8 @@
                     <td>@(item.TemperaturaAr.HasValue ? item.TemperaturaAr.Value.ToString("0.0") : "-")</td>
                     <td>@(item.UmidadeAr.HasValue ? item.UmidadeAr.Value.ToString("0") + "%" : "-")</td>
                     <td>@(item.TdsPpm.HasValue ? item.TdsPpm.Value.ToString("0") : "-")</td>
+                    <td>@(!string.IsNullOrWhiteSpace(item.QualidadeTds) ? item.QualidadeTds : "-")</td>
+                    <td>@(item.SalinidadePpt.HasValue ? item.SalinidadePpt.Value.ToString("0.00") + " ppt" : "-")</td>
                     <td>@(item.LdrRaw.HasValue ? item.LdrRaw.Value.ToString() : "-")</td>
                     <td>@(item.NivelPct.HasValue ? item.NivelPct.Value.ToString("0.0") + "%" : item.NivelAgua.ToString("0.0") + "%")</td>
                     <td>@(item.VolumeLitros.HasValue ? item.VolumeLitros.Value.ToString("0.00") + " L" : "-")</td>
@@ -37,7 +41,7 @@
         else
         {
             <tr>
-                <td colspan="9" class="text-center text-muted">Nenhuma leitura encontrada.</td>
+                <td colspan="12" class="text-center text-muted">Nenhuma leitura encontrada.</td>
             </tr>
         }
     </tbody>

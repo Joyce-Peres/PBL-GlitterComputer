@@ -21,8 +21,11 @@ namespace PBL.Services
         public int? LuminosidadeIdeal { get; set; }
         public int? LuminosidadeMin { get; set; }
         public int? LuminosidadeMax { get; set; }
-        public decimal? PhMin { get; set; }
-        public decimal? PhMax { get; set; }
+        public decimal? TdsPpmMin { get; set; }
+        public decimal? TdsPpmMax { get; set; }
+        public decimal? SalinidadePptMin { get; set; }
+        public decimal? SalinidadePptMax { get; set; }
+        public decimal? VolumeMinLitros { get; set; }
 
         public static FishAiResult FromJson(string json)
         {
@@ -51,12 +54,23 @@ namespace PBL.Services
             if (root.TryGetProperty("ldr_luz_max", out var lmaxEl) && lmaxEl.ValueKind == JsonValueKind.Number)
                 luzMax = lmaxEl.GetInt32();
 
-            decimal? phMin = null;
-            if (root.TryGetProperty("ph_min", out var phminEl) && phminEl.ValueKind == JsonValueKind.Number)
-                phMin = phminEl.GetDecimal();
-            decimal? phMax = null;
-            if (root.TryGetProperty("ph_max", out var phmaxEl) && phmaxEl.ValueKind == JsonValueKind.Number)
-                phMax = phmaxEl.GetDecimal();
+            decimal? tdsMin = null;
+            if (root.TryGetProperty("tds_ppm_min", out var tdsMinEl) && tdsMinEl.ValueKind == JsonValueKind.Number)
+                tdsMin = tdsMinEl.GetDecimal();
+            decimal? tdsMax = null;
+            if (root.TryGetProperty("tds_ppm_max", out var tdsMaxEl) && tdsMaxEl.ValueKind == JsonValueKind.Number)
+                tdsMax = tdsMaxEl.GetDecimal();
+
+            decimal? salMin = null;
+            if (root.TryGetProperty("salinidade_ppt_min", out var salMinEl) && salMinEl.ValueKind == JsonValueKind.Number)
+                salMin = salMinEl.GetDecimal();
+            decimal? salMax = null;
+            if (root.TryGetProperty("salinidade_ppt_max", out var salMaxEl) && salMaxEl.ValueKind == JsonValueKind.Number)
+                salMax = salMaxEl.GetDecimal();
+
+            decimal? volumeMin = null;
+            if (root.TryGetProperty("volume_min_l", out var volumeMinEl) && volumeMinEl.ValueKind == JsonValueKind.Number)
+                volumeMin = volumeMinEl.GetDecimal();
 
             return new FishAiResult
             {
@@ -68,8 +82,11 @@ namespace PBL.Services
                 TemperaturaMax = tempMax,
                 LuminosidadeMin = luzMin,
                 LuminosidadeMax = luzMax,
-                PhMin = phMin,
-                PhMax = phMax
+                TdsPpmMin = tdsMin,
+                TdsPpmMax = tdsMax,
+                SalinidadePptMin = salMin,
+                SalinidadePptMax = salMax,
+                VolumeMinLitros = volumeMin
             };
         }
     }
@@ -121,9 +138,9 @@ namespace PBL.Services
                     "Você é um especialista em peixes e aquários. Analise a imagem deste aquário doméstico. Identifique a espécie principal de peixe. " +
                     "Com base na literatura científica de aquarismo para essa espécie, defina os parâmetros ideais " +
                     "para o sensor DHT22 (temperatura alvo e faixa min/max), para o sensor LDR (luminosidade alvo e faixa min/max em escala de 0 a 100), " +
-                    "e, quando disponível, o intervalo de pH adequado (min/max). " +
+                    "para o sensor TDS/condutividade (faixa min/max em ppm), para salinidade em ppt, para o volume mínimo ideal do aquário em litros, " +
                     "Retorne estritamente um objeto JSON válido seguindo exatamente o modelo: " +
-                    "{\"especie\": \"Nome\", \"nome_cientifico\": \"Nome\", \"dht22_temp_alvo\": 25.0, \"dht22_temp_min\": 24.0, \"dht22_temp_max\": 27.0, \"ldr_luz_alvo\": 40, \"ldr_luz_min\": 20, \"ldr_luz_max\": 60, \"ph_min\": 6.5, \"ph_max\": 7.5}";
+                    "{\"especie\": \"Nome\", \"nome_cientifico\": \"Nome\", \"dht22_temp_alvo\": 25.0, \"dht22_temp_min\": 24.0, \"dht22_temp_max\": 27.0, \"ldr_luz_alvo\": 40, \"ldr_luz_min\": 20, \"ldr_luz_max\": 60, \"tds_ppm_min\": 50.0, \"tds_ppm_max\": 150.0, \"salinidade_ppt_min\": 0.0, \"salinidade_ppt_max\": 1.0, \"volume_min_l\": 20.0}";
 
                 var imageBytes = await System.IO.File.ReadAllBytesAsync(caminhoImagem);
                 var content = new Content
@@ -174,7 +191,7 @@ namespace PBL.Services
                     "Com base na literatura científica e boas práticas de aquarismo, " +
                     "dada a espécie informada, defina parâmetros ideais para um aquário doméstico. " +
                     "Retorne estritamente um objeto JSON válido seguindo exatamente o modelo: " +
-                    "{\"especie\": \"Nome\", \"nome_cientifico\": \"Nome\", \"dht22_temp_alvo\": 25.0, \"dht22_temp_min\": 24.0, \"dht22_temp_max\": 27.0, \"ldr_luz_alvo\": 40, \"ldr_luz_min\": 20, \"ldr_luz_max\": 60, \"ph_min\": 6.5, \"ph_max\": 7.5}" +
+                    "{\"especie\": \"Nome\", \"nome_cientifico\": \"Nome\", \"dht22_temp_alvo\": 25.0, \"dht22_temp_min\": 24.0, \"dht22_temp_max\": 27.0, \"ldr_luz_alvo\": 40, \"ldr_luz_min\": 20, \"ldr_luz_max\": 60, \"tds_ppm_min\": 50.0, \"tds_ppm_max\": 150.0, \"salinidade_ppt_min\": 0.0, \"salinidade_ppt_max\": 1.0, \"volume_min_l\": 20.0}" +
                     "\n\nEspécie informada: " + especie.Trim();
 
                 var response = await _client.Models.GenerateContentAsync(
