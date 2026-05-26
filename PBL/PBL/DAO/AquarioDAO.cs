@@ -21,7 +21,8 @@ namespace PBL.DAO
                 new SqlParameter("nome", model.Nome ?? ""),
                 new SqlParameter("capacidadeLitros", model.CapacidadeLitros),
                 new SqlParameter("tipoAgua", model.TipoAgua ?? ""),
-                new SqlParameter("usuarioId", model.UsuarioId)
+                new SqlParameter("usuarioId", model.UsuarioId),
+                new SqlParameter("fiwareEntityId", string.IsNullOrWhiteSpace(model.FiwareEntityId) ? (object)DBNull.Value : model.FiwareEntityId.Trim())
             };
         }
 
@@ -37,7 +38,19 @@ namespace PBL.DAO
             };
             if (registro.Table.Columns.Contains("nomeUsuario") && registro["nomeUsuario"] != DBNull.Value)
                 model.NomeUsuario = registro["nomeUsuario"].ToString();
+            if (registro.Table.Columns.Contains("fiwareEntityId") && registro["fiwareEntityId"] != DBNull.Value)
+                model.FiwareEntityId = registro["fiwareEntityId"].ToString();
             return model;
+        }
+
+        public AquarioViewModel ConsultaPorFiwareEntityId(string fiwareEntityId)
+        {
+            if (string.IsNullOrWhiteSpace(fiwareEntityId))
+                return null;
+
+            var normalizado = fiwareEntityId.Trim();
+            var lista = Listagem();
+            return lista.Find(a => string.Equals(a.FiwareEntityId, normalizado, StringComparison.OrdinalIgnoreCase));
         }
 
         public List<AquarioViewModel> ConsultaPorUsuario(int usuarioId)

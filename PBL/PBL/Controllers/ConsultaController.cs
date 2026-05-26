@@ -77,7 +77,7 @@ namespace PBL.Controllers
                     ? "MongoDB via STH-Comet"
                     : "SQL legado";
 
-                var lista = await _historicoService.ConsultarHistoricoAsync(aquarioId, dataInicio, dataFim);
+                var lista = await _historicoService.ConsultarHistoricoAsync(aquarioId, dataInicio, dataFim, lastN: 20);
                 if (!lista.Any() && !_historicoService.EstaConfigurado)
                     lista = new LeituraSensorDAO().ConsultaComFiltro(aquarioId, dataInicio, dataFim, temperaturaMin, temperaturaMax);
 

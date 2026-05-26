@@ -32,6 +32,12 @@
         </select>
         <span asp-validation-for="TipoAgua" class="text-danger"></span>
     </div>
+    <div class="form-group">
+        <label asp-for="FiwareEntityId">Entidade FIWARE vinculada</label>
+        <input asp-for="FiwareEntityId" class="form-control" placeholder="Ex: Thing:lamp001" />
+        <small class="form-text text-muted">Use o mesmo entity_name cadastrado no IoT Agent/STH-Comet. Exemplo: Thing:lamp001, Thing:lamp002.</small>
+        <span asp-validation-for="FiwareEntityId" class="text-danger"></span>
+    </div>
     @if (Model.UsuarioId > 0)
     {
         <input type="hidden" asp-for="UsuarioId" />

@@ -56,7 +56,7 @@ namespace PBL.Controllers.Api
         {
             try
             {
-                var lista = await _historicoService.ConsultarHistoricoAsync(aquarioId, dataInicio, dataFim);
+                var lista = await _historicoService.ConsultarHistoricoAsync(aquarioId, dataInicio, dataFim, lastN: 20);
                 if (!lista.Any() && !_historicoService.EstaConfigurado)
                     lista = new LeituraSensorDAO().Listagem();
                 return Ok(lista);
@@ -85,7 +85,7 @@ namespace PBL.Controllers.Api
         {
             try
             {
-                var lista = await _historicoService.ConsultarHistoricoAsync(aquarioId, dataInicio, dataFim);
+                var lista = await _historicoService.ConsultarHistoricoAsync(aquarioId, dataInicio, dataFim, lastN: 20);
                 if (!lista.Any() && !_historicoService.EstaConfigurado)
                     lista = new LeituraSensorDAO().ConsultaComFiltro(aquarioId, null, null, null, null);
                 return Ok(lista);

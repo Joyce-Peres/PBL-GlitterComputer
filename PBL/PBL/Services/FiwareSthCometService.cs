@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Configuration;
+using PBL.DAO;
 using PBL.Models;
 using System;
 using System.Collections.Generic;
@@ -47,6 +48,14 @@ namespace PBL.Services
             if (fim <= inicio)
                 fim = inicio.AddHours(1);
 
+            // Resolve qual entidade FIWARE pertence ao aquário selecionado.
+            // Ex.: Aquario.Id = 1 -> FiwareEntityId = Thing:lamp001.
+            // Se nenhum aquário for selecionado, usa o EntityId padrão do appsettings.
+            var contextoAquario = ResolverContextoAquario(aquarioId);
+
+            if (string.IsNullOrWhiteSpace(contextoAquario.EntityId))
+                return new List<LeituraSensorViewModel>();
+
             // Atributos realmente gravados pela subscription do STH-Comet.
             // Consultar apenas estes evita chamadas vazias e deixa o dashboard mais rápido.
             var atributos = new[]
@@ -62,7 +71,7 @@ namespace PBL.Services
             };
 
             var tarefas = atributos
-                .Select(atributo => ConsultarSerieAtributoAsync(atributo, inicio, fim, lastN))
+                .Select(atributo => ConsultarSerieAtributoAsync(atributo, contextoAquario.EntityId, inicio, fim, lastN))
                 .ToArray();
 
             await Task.WhenAll(tarefas);
@@ -71,16 +80,17 @@ namespace PBL.Services
                 .SelectMany(tarefa => tarefa.Result)
                 .ToList();
 
-            return MesclarPontos(pontos, aquarioId);
+            return MesclarPontos(pontos, contextoAquario);
         }
 
         private async Task<List<PontoHistorico>> ConsultarSerieAtributoAsync(
             string atributo,
+            string entityId,
             DateTime inicio,
             DateTime fim,
             int? lastN)
         {
-            var url = MontarUrlConsulta(atributo, inicio, fim, lastN);
+            var url = MontarUrlConsulta(atributo, entityId, inicio, fim, lastN);
 
             using var request = new HttpRequestMessage(HttpMethod.Get, url);
 
@@ -117,18 +127,18 @@ namespace PBL.Services
             }
         }
 
-        private string MontarUrlConsulta(string atributo, DateTime inicio, DateTime fim, int? lastN)
+        private string MontarUrlConsulta(string atributo, string entityId, DateTime inicio, DateTime fim, int? lastN)
         {
             var baseUrl = GetBaseUrl().TrimEnd('/');
             var entityType = Uri.EscapeDataString(GetEntityType().Trim());
-            var entityId = Uri.EscapeDataString(GetEntityId().Trim());
+            var entityIdUrl = Uri.EscapeDataString(entityId.Trim());
             var attr = Uri.EscapeDataString(atributo.Trim());
 
             // O STH-Comet do projeto está retornando corretamente com lastN.
             // fromDate/toDate estava fazendo o dashboard retornar "Nenhuma leitura encontrada".
             var quantidade = lastN.HasValue && lastN.Value > 0 ? lastN.Value : 20;
 
-            return $"{baseUrl}/STH/v1/contextEntities/type/{entityType}/id/{entityId}/attributes/{attr}?lastN={quantidade}";
+            return $"{baseUrl}/STH/v1/contextEntities/type/{entityType}/id/{entityIdUrl}/attributes/{attr}?lastN={quantidade}";
         }
 
         private List<PontoHistorico> ExtrairPontos(JsonElement root, string atributo)
@@ -197,13 +207,11 @@ namespace PBL.Services
             });
         }
 
-        private List<LeituraSensorViewModel> MesclarPontos(List<PontoHistorico> pontos, int? aquarioId)
+        private List<LeituraSensorViewModel> MesclarPontos(List<PontoHistorico> pontos, ContextoAquario contextoAquario)
         {
             var linhas = new Dictionary<long, LeituraSensorViewModel>();
-            var nomeAquario = GetNomeEntidade();
-            var aquarioFinal = aquarioId.HasValue && aquarioId.Value > 0
-                ? aquarioId.Value
-                : GetInt("FiwareSthComet:DefaultAquarioId", 1);
+            var nomeAquario = contextoAquario.NomeAquario;
+            var aquarioFinal = contextoAquario.AquarioId;
 
             foreach (var ponto in pontos.OrderBy(p => p.DataLeituraUtc))
             {
@@ -276,6 +284,71 @@ namespace PBL.Services
             return linhas.Values
                 .OrderByDescending(item => item.DataLeitura)
                 .ToList();
+        }
+
+        private ContextoAquario ResolverContextoAquario(int? aquarioId)
+        {
+            var entityIdPadrao = GetEntityId();
+            var nomePadrao = GetNomeEntidade();
+            var aquarioIdPadrao = GetInt("FiwareSthComet:DefaultAquarioId", 1);
+
+            try
+            {
+                var aquarioDao = new AquarioDAO();
+
+                if (aquarioId.HasValue && aquarioId.Value > 0)
+                {
+                    var aquario = aquarioDao.Consulta(aquarioId.Value);
+                    if (aquario != null)
+                    {
+                        var entityIdDoAquario = !string.IsNullOrWhiteSpace(aquario.FiwareEntityId)
+                            ? aquario.FiwareEntityId.Trim()
+                            : (aquario.Id == aquarioIdPadrao ? entityIdPadrao : "");
+
+                        return new ContextoAquario
+                        {
+                            AquarioId = aquario.Id,
+                            NomeAquario = !string.IsNullOrWhiteSpace(aquario.Nome) ? aquario.Nome : nomePadrao,
+                            EntityId = entityIdDoAquario
+                        };
+                    }
+                }
+
+                // Sem filtro: tenta descobrir o nome amigável pelo EntityId padrão.
+                var aquarioPorEntidade = aquarioDao.ConsultaPorFiwareEntityId(entityIdPadrao);
+                if (aquarioPorEntidade != null)
+                {
+                    return new ContextoAquario
+                    {
+                        AquarioId = aquarioPorEntidade.Id,
+                        NomeAquario = !string.IsNullOrWhiteSpace(aquarioPorEntidade.Nome) ? aquarioPorEntidade.Nome : nomePadrao,
+                        EntityId = entityIdPadrao
+                    };
+                }
+
+                // Fallback: usa DefaultAquarioId do appsettings.
+                var aquarioPadrao = aquarioDao.Consulta(aquarioIdPadrao);
+                if (aquarioPadrao != null)
+                {
+                    return new ContextoAquario
+                    {
+                        AquarioId = aquarioPadrao.Id,
+                        NomeAquario = !string.IsNullOrWhiteSpace(aquarioPadrao.Nome) ? aquarioPadrao.Nome : nomePadrao,
+                        EntityId = !string.IsNullOrWhiteSpace(aquarioPadrao.FiwareEntityId) ? aquarioPadrao.FiwareEntityId.Trim() : entityIdPadrao
+                    };
+                }
+            }
+            catch
+            {
+                // Caso o SQL esteja indisponível, mantém o funcionamento via appsettings.
+            }
+
+            return new ContextoAquario
+            {
+                AquarioId = aquarioId.HasValue && aquarioId.Value > 0 ? aquarioId.Value : aquarioIdPadrao,
+                NomeAquario = nomePadrao,
+                EntityId = entityIdPadrao
+            };
         }
 
         private string GetBaseUrl()
@@ -367,6 +440,13 @@ namespace PBL.Services
                 return data;
 
             return null;
+        }
+
+        private class ContextoAquario
+        {
+            public int AquarioId { get; set; }
+            public string NomeAquario { get; set; }
+            public string EntityId { get; set; }
         }
 
         private class PontoHistorico

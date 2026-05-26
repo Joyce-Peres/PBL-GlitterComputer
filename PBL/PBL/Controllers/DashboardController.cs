@@ -60,4 +60,8 @@ namespace PBL.Controllers
             }
             catch (Exception erro)
             {
-                return Content($"<div class='alert alert-danger'>Erro ao consultar o histórico FIWARE/STH-Comet: {erro.Message}</div>", "text/html
+                return Content($"<div class='alert alert-danger'>Erro ao consultar o histórico FIWARE/STH-Comet: {erro.Message}</div>", "text/html");
+            }
+        }
+    }
+}

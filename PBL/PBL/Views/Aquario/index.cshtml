@@ -18,6 +18,7 @@
             <th>Capacidade (L)</th>
             <th>Tipo de Água</th>
             <th>Responsável</th>
+            <th>Entidade FIWARE</th>
             <th>Ações</th>
         </tr>
     </thead>
@@ -30,6 +31,7 @@
                 <td>@item.CapacidadeLitros</td>
                 <td>@item.TipoAgua</td>
                 <td>@item.NomeUsuario</td>
+                <td>@(!string.IsNullOrWhiteSpace(item.FiwareEntityId) ? item.FiwareEntityId : "-")</td>
                 <td>
                     <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@item.Id">Editar</a>
                     <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.Id"

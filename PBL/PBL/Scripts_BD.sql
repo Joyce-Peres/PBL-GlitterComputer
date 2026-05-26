@@ -28,9 +28,15 @@ BEGIN
         capacidadeLitros DECIMAL(10,2) NOT NULL,
         tipoAgua VARCHAR(20) NOT NULL,
         usuarioId INT NOT NULL,
+        fiwareEntityId VARCHAR(100) NULL,
         CONSTRAINT FK_Aquarios_Usuarios FOREIGN KEY (usuarioId) REFERENCES Usuarios(id)
     )
 END
+GO
+
+-- Compatibilidade: adiciona coluna FIWARE se a tabela Aquarios já existir
+IF COL_LENGTH('Aquarios', 'fiwareEntityId') IS NULL
+    ALTER TABLE Aquarios ADD fiwareEntityId VARCHAR(100) NULL
 GO
 
 -- ==========================================
@@ -173,7 +179,7 @@ BEGIN
     END
     ELSE IF @tabela = 'Aquarios'
     BEGIN
-        SELECT a.id, a.nome, a.capacidadeLitros, a.tipoAgua, a.usuarioId,
+        SELECT a.id, a.nome, a.capacidadeLitros, a.tipoAgua, a.usuarioId, a.fiwareEntityId,
                u.nome AS nomeUsuario
         FROM Aquarios a
         INNER JOIN Usuarios u ON a.usuarioId = u.id
@@ -224,7 +230,7 @@ BEGIN
     IF @tabela = 'Usuarios'
         SELECT id, nome, login, senha FROM Usuarios WHERE id = @id
     ELSE IF @tabela = 'Aquarios'
-        SELECT a.id, a.nome, a.capacidadeLitros, a.tipoAgua, a.usuarioId,
+        SELECT a.id, a.nome, a.capacidadeLitros, a.tipoAgua, a.usuarioId, a.fiwareEntityId,
                u.nome AS nomeUsuario
         FROM Aquarios a
         INNER JOIN Usuarios u ON a.usuarioId = u.id
@@ -280,12 +286,13 @@ CREATE OR ALTER PROCEDURE spInsert_Aquarios
     @nome VARCHAR(100),
     @capacidadeLitros DECIMAL(10,2),
     @tipoAgua VARCHAR(20),
-    @usuarioId INT
+    @usuarioId INT,
+    @fiwareEntityId VARCHAR(100) = NULL
 AS
 BEGIN
     SET IDENTITY_INSERT Aquarios ON
-    INSERT INTO Aquarios (id, nome, capacidadeLitros, tipoAgua, usuarioId)
-    VALUES (@id, @nome, @capacidadeLitros, @tipoAgua, @usuarioId)
+    INSERT INTO Aquarios (id, nome, capacidadeLitros, tipoAgua, usuarioId, fiwareEntityId)
+    VALUES (@id, @nome, @capacidadeLitros, @tipoAgua, @usuarioId, @fiwareEntityId)
     SET IDENTITY_INSERT Aquarios OFF
 END
 GO
@@ -295,12 +302,14 @@ CREATE OR ALTER PROCEDURE spUpdate_Aquarios
     @nome VARCHAR(100),
     @capacidadeLitros DECIMAL(10,2),
     @tipoAgua VARCHAR(20),
-    @usuarioId INT
+    @usuarioId INT,
+    @fiwareEntityId VARCHAR(100) = NULL
 AS
 BEGIN
     UPDATE Aquarios
     SET nome = @nome, capacidadeLitros = @capacidadeLitros,
-        tipoAgua = @tipoAgua, usuarioId = @usuarioId
+        tipoAgua = @tipoAgua, usuarioId = @usuarioId,
+        fiwareEntityId = @fiwareEntityId
     WHERE id = @id
 END
 GO
@@ -557,3 +566,10 @@ BEGIN
     END
 END
 GO
+
+-- ==========================================
+-- EXEMPLO: VINCULAR AQUÁRIO EXISTENTE AO FIWARE
+-- ==========================================
+-- Use este UPDATE depois de criar/cadastrar o aquário no sistema, se necessário:
+-- UPDATE Aquarios SET fiwareEntityId = 'Thing:lamp001' WHERE id = 1
+-- GO
