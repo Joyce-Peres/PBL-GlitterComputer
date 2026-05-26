@@ -53,14 +53,63 @@ namespace PBL.Controllers
         {
             try
             {
-                var leituras = await _historicoService.ConsultarHistoricoAsync(aquarioId, dataInicio, dataFim, lastN: 20);
+                var leituras = await _historicoService.ConsultarHistoricoAsync(
+                    aquarioId,
+                    dataInicio,
+                    dataFim,
+                    lastN: 20
+                );
+
                 if (!leituras.Any() && !_historicoService.EstaConfigurado)
                     leituras = new LeituraSensorDAO().ConsultaDashboard(aquarioId, dataInicio, dataFim);
+
                 return PartialView("_TabelaLeituras", leituras);
             }
             catch (Exception erro)
             {
                 return Content($"<div class='alert alert-danger'>Erro ao consultar o histórico FIWARE/STH-Comet: {erro.Message}</div>", "text/html");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DadosGrafico(int? aquarioId)
+        {
+            try
+            {
+                var leituras = await _historicoService.ConsultarHistoricoAsync(
+                    aquarioId,
+                    null,
+                    null,
+                    lastN: 20
+                );
+
+                if (!leituras.Any() && !_historicoService.EstaConfigurado)
+                    leituras = new LeituraSensorDAO().ConsultaDashboard(aquarioId, null, null);
+
+                var dados = leituras
+                    .OrderBy(item => item.DataLeitura)
+                    .Select(item => new
+                    {
+                        dataHora = item.DataLeitura.ToString("HH:mm:ss"),
+                        dataCompleta = item.DataLeitura.ToString("dd/MM/yyyy HH:mm:ss"),
+                        aquario = item.NomeAquario,
+                        tempAgua = item.TemperaturaAgua,
+                        tempAr = item.TemperaturaAr,
+                        umidade = item.UmidadeAr,
+                        ec = item.TdsPpm,
+                        nivel = item.NivelPct,
+                        volume = item.VolumeLitros,
+                        ldr = item.LdrRaw,
+                        qualidade = item.QualidadeAgua
+                    })
+                    .ToList();
+
+                return Json(dados);
+            }
+            catch (Exception erro)
+            {
+                Response.StatusCode = 500;
+                return Json(new { erro = erro.Message });
             }
         }
     }

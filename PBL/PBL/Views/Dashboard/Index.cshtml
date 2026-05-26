@@ -33,26 +33,250 @@
     </div>
 </div>
 
+<div class="row mb-4" id="cardsResumo">
+    <div class="col-md-3 mb-3">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <h6 class="text-muted">Temp. Água</h6>
+                <h3 id="cardTempAgua">-- °C</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <h6 class="text-muted">Umidade</h6>
+                <h3 id="cardUmidade">-- %</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <h6 class="text-muted">Nível</h6>
+                <h3 id="cardNivel">-- %</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <h6 class="text-muted">Condutividade</h6>
+                <h3 id="cardEc">--</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6 mb-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title">Temperatura</h5>
+                <canvas id="graficoTemperatura" height="130"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title">Nível da água</h5>
+                <canvas id="graficoNivel" height="130"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6 mb-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title">Condutividade / TDS</h5>
+                <canvas id="graficoEc" height="130"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title">Luminosidade</h5>
+                <canvas id="graficoLdr" height="130"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="resultadoDashboard">
     <p class="text-muted">Clique em Filtrar para carregar os dados.</p>
 </div>
 
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
+        let graficoTemperatura = null;
+        let graficoNivel = null;
+        let graficoEc = null;
+        let graficoLdr = null;
+
+        function valorNumero(valor, fallback = 0) {
+            if (valor === null || valor === undefined || valor === '') return fallback;
+            const numero = Number(valor);
+            return Number.isNaN(numero) ? fallback : numero;
+        }
+
+        function formatar(valor, casas = 1, sufixo = '') {
+            if (valor === null || valor === undefined || valor === '') return '--' + sufixo;
+            const numero = Number(valor);
+            if (Number.isNaN(numero)) return '--' + sufixo;
+            return numero.toFixed(casas) + sufixo;
+        }
+
+        function criarOuAtualizarGrafico(instancia, canvasId, tipo, labels, datasets) {
+            if (instancia) instancia.destroy();
+
+            return new Chart(document.getElementById(canvasId), {
+                type: tipo,
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
+        }
+
+        function carregarGraficos() {
+            const aquarioId = $('#aquarioId').val() || '';
+
+            $.get('/Dashboard/DadosGrafico', { aquarioId: aquarioId }, function (dados) {
+                if (!dados || dados.length === 0) {
+                    $('#cardTempAgua').text('-- °C');
+                    $('#cardUmidade').text('-- %');
+                    $('#cardNivel').text('-- %');
+                    $('#cardEc').text('--');
+                    return;
+                }
+
+                const ultimo = dados[dados.length - 1];
+
+                $('#cardTempAgua').text(formatar(ultimo.tempAgua, 1, ' °C'));
+                $('#cardUmidade').text(formatar(ultimo.umidade, 0, ' %'));
+                $('#cardNivel').text(formatar(ultimo.nivel, 1, ' %'));
+                $('#cardEc').text(formatar(ultimo.ec, 0, ''));
+
+                const labels = dados.map(x => x.dataHora);
+                const tempAgua = dados.map(x => valorNumero(x.tempAgua, null));
+                const tempAr = dados.map(x => valorNumero(x.tempAr, null));
+                const nivel = dados.map(x => valorNumero(x.nivel, null));
+                const ec = dados.map(x => valorNumero(x.ec, null));
+                const ldr = dados.map(x => valorNumero(x.ldr, null));
+
+                graficoTemperatura = criarOuAtualizarGrafico(
+                    graficoTemperatura,
+                    'graficoTemperatura',
+                    'line',
+                    labels,
+                    [
+                        {
+                            label: 'Temp. Água (°C)',
+                            data: tempAgua,
+                            tension: 0.25
+                        },
+                        {
+                            label: 'Temp. Ar (°C)',
+                            data: tempAr,
+                            tension: 0.25
+                        }
+                    ]
+                );
+
+                graficoNivel = criarOuAtualizarGrafico(
+                    graficoNivel,
+                    'graficoNivel',
+                    'line',
+                    labels,
+                    [
+                        {
+                            label: 'Nível da Água (%)',
+                            data: nivel,
+                            tension: 0.25
+                        }
+                    ]
+                );
+
+                graficoEc = criarOuAtualizarGrafico(
+                    graficoEc,
+                    'graficoEc',
+                    'line',
+                    labels,
+                    [
+                        {
+                            label: 'Condutividade / TDS',
+                            data: ec,
+                            tension: 0.25
+                        }
+                    ]
+                );
+
+                graficoLdr = criarOuAtualizarGrafico(
+                    graficoLdr,
+                    'graficoLdr',
+                    'bar',
+                    labels,
+                    [
+                        {
+                            label: 'LDR',
+                            data: ldr
+                        }
+                    ]
+                );
+            }).fail(function () {
+                console.warn('Não foi possível carregar os gráficos do dashboard.');
+            });
+        }
+
         function carregarDashboard() {
             var params = {
                 aquarioId: $('#aquarioId').val() || null,
                 dataInicio: $('#dataInicio').val() || null,
                 dataFim: $('#dataFim').val() || null
             };
+
             $('#resultadoDashboard').html('<p class="text-info">Carregando...</p>');
+
             $.get('/Dashboard/DadosFiltrados', params, function (html) {
                 $('#resultadoDashboard').html(html);
+                carregarGraficos();
             }).fail(function () {
                 $('#resultadoDashboard').html('<div class="alert alert-danger">Erro ao carregar dados.</div>');
             });
         }
+
         $('#btnFiltrar').click(carregarDashboard);
-        $(document).ready(carregarDashboard);
+
+        $(document).ready(function () {
+            carregarDashboard();
+
+            setInterval(function () {
+                carregarDashboard();
+            }, 10000);
+        });
     </script>
 }
