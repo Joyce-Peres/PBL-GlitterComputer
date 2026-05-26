@@ -49,6 +49,8 @@ namespace PBL.Controllers
 
         private void PreencherViewBagsComuns()
         {
+            var aquarioId = ResolverAquarioId();
+            ViewBag.Aquarios = new SelectList(new AquarioDAO().Listagem(), "Id", "Nome", aquarioId);
             ViewBag.Modos = new SelectList(new[]
             {
                 new { Value = 0, Text = "0 - Desligada" },

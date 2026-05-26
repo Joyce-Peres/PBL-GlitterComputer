@@ -44,10 +44,10 @@
                     </a>
                 </div>
                 <div class="col-lg-4 col-md-6 mb-4">
-                    <a class="menu-tile menu-tile-pink" asp-controller="Dashboard" asp-action="Index">
-                        <span class="menu-tile-title">Dashboard IoT</span>
-                        <span class="menu-tile-text">Veja leituras dos sensores com filtros por aquário e período.</span>
-                        <span class="menu-tile-link">Monitorar →</span>
+                    <a class="menu-tile menu-tile-pink" asp-controller="SmartLamp" asp-action="Personalizar">
+                        <span class="menu-tile-title">Smart Lamp</span>
+                        <span class="menu-tile-text">Configure a iluminação do aquário e envie os ajustes via MQTT.</span>
+                        <span class="menu-tile-link">Configurar →</span>
                     </a>
                 </div>
             </div>
@@ -74,7 +74,6 @@
                         <p>Acompanhe histórico de sensores, consultas filtradas e o painel da Smart Lamp.</p>
                         <div class="menu-info-links">
                             <a asp-controller="Dashboard" asp-action="Index">Dashboard</a>
-                            <a asp-controller="Consulta" asp-action="Leituras">Leituras</a>
                             <a asp-controller="SmartLamp" asp-action="Personalizar">Personalização</a>
                         </div>
                     </article>
