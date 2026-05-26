@@ -1,0 +1,44 @@
+@model PBL.Models.AquarioViewModel
+@{
+    ViewData["Title"] = "Confirmar exclusão";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Confirmar exclusão do aquário</h2>
+<hr />
+
+<div class="alert alert-warning">
+    @ViewBag.MensagemConfirmacao
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Id</dt>
+            <dd class="col-sm-9">@Model.Id</dd>
+
+            <dt class="col-sm-3">Nome</dt>
+            <dd class="col-sm-9">@Model.Nome</dd>
+
+            <dt class="col-sm-3">Capacidade</dt>
+            <dd class="col-sm-9">@Model.CapacidadeLitros L</dd>
+
+            <dt class="col-sm-3">Tipo de água</dt>
+            <dd class="col-sm-9">@Model.TipoAgua</dd>
+
+            <dt class="col-sm-3">Peixes vinculados</dt>
+            <dd class="col-sm-9">@ViewBag.QtdPeixes</dd>
+
+            <dt class="col-sm-3">Smart Lamp</dt>
+            <dd class="col-sm-9">@(ViewBag.TemLampConfig == true ? "Configuração existente" : "Nenhuma configuração")</dd>
+        </dl>
+    </div>
+</div>
+
+<form asp-action="ExcluirConfirmado" method="post" class="d-inline">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button type="submit" class="btn btn-danger">
+        @(ViewBag.QtdPeixes > 0 ? "Excluir aquário e todos os dados vinculados" : "Excluir aquário")
+    </button>
+</form>
+<a asp-action="Index" class="btn btn-secondary">Cancelar</a>

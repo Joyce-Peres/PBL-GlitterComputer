@@ -58,5 +58,45 @@ namespace PBL.DAO
             var lista = Listagem();
             return lista.FindAll(a => a.UsuarioId == usuarioId);
         }
+
+        public int QuantidadePeixes(int aquarioId)
+        {
+            var parametros = new SqlParameter[] { new SqlParameter("aquarioId", aquarioId) };
+            var tabela = HelperDAO.ExecutaSelect("SELECT COUNT(1) AS total FROM Peixes WHERE aquarioId = @aquarioId", parametros);
+            if (tabela.Rows.Count == 0)
+                return 0;
+
+            return Convert.ToInt32(tabela.Rows[0]["total"]);
+        }
+
+        public void ExcluirComDependentes(int aquarioId)
+        {
+            using (var conexao = ConexaoBD.GetConexao())
+            using (var transacao = conexao.BeginTransaction())
+            {
+                try
+                {
+                    ExecutarComando(conexao, transacao, "DELETE FROM LampConfigs WHERE aquarioId = @aquarioId", aquarioId);
+                    ExecutarComando(conexao, transacao, "DELETE FROM LeiturasSensor WHERE aquarioId = @aquarioId", aquarioId);
+                    ExecutarComando(conexao, transacao, "DELETE FROM Peixes WHERE aquarioId = @aquarioId", aquarioId);
+                    ExecutarComando(conexao, transacao, "DELETE FROM Aquarios WHERE id = @aquarioId", aquarioId);
+                    transacao.Commit();
+                }
+                catch
+                {
+                    transacao.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        private static void ExecutarComando(SqlConnection conexao, SqlTransaction transacao, string sql, int aquarioId)
+        {
+            using (var comando = new SqlCommand(sql, conexao, transacao))
+            {
+                comando.Parameters.AddWithValue("@aquarioId", aquarioId);
+                comando.ExecuteNonQuery();
+            }
+        }
     }
 }

@@ -262,6 +262,7 @@ BEGIN
     BEGIN
         DELETE FROM LeiturasSensor WHERE aquarioId IN (SELECT id FROM Aquarios WHERE usuarioId = @id)
         DELETE FROM Peixes WHERE aquarioId IN (SELECT id FROM Aquarios WHERE usuarioId = @id)
+        DELETE FROM LampConfigs WHERE aquarioId IN (SELECT id FROM Aquarios WHERE usuarioId = @id)
         DELETE FROM Aquarios WHERE usuarioId = @id
         DELETE FROM Usuarios WHERE id = @id
     END
@@ -269,6 +270,7 @@ BEGIN
     BEGIN
         DELETE FROM LeiturasSensor WHERE aquarioId = @id
         DELETE FROM Peixes WHERE aquarioId = @id
+        DELETE FROM LampConfigs WHERE aquarioId = @id
         DELETE FROM Aquarios WHERE id = @id
     END
     ELSE IF @tabela = 'Peixes'
