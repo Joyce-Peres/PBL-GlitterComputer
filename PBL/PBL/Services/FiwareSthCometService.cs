@@ -13,7 +13,7 @@ namespace PBL.Services
 {
     public class FiwareSthCometService
     {
-        private static readonly HttpClient HttpClient = new HttpClient();
+        private static readonly HttpClient HttpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(8) };
 
         private readonly IConfiguration _config;
 
@@ -47,17 +47,14 @@ namespace PBL.Services
             if (fim <= inicio)
                 fim = inicio.AddHours(1);
 
+            // Atributos realmente gravados pela subscription do STH-Comet.
+            // Consultar apenas estes evita chamadas vazias e deixa o dashboard mais rápido.
             var atributos = new[]
             {
                 "temp_agua",
                 "temp_ar",
                 "umidade_ar",
                 "ec_us_cm",
-                "tds_ppm",
-                "qualidade_agua",
-                "qualidade_tds",
-                "alerta",
-                "salinidade_ppt",
                 "ldr_raw",
                 "dist_agua_cm",
                 "nivel_pct",
@@ -96,18 +93,27 @@ namespace PBL.Services
             if (!string.IsNullOrWhiteSpace(fiwareServicePath))
                 request.Headers.Add("fiware-servicepath", fiwareServicePath);
 
-            var resposta = await HttpClient.SendAsync(request);
-
-            if (!resposta.IsSuccessStatusCode)
-                return new List<PontoHistorico>();
-
-            var json = await resposta.Content.ReadAsStringAsync();
-            if (string.IsNullOrWhiteSpace(json))
-                return new List<PontoHistorico>();
-
-            using (var doc = JsonDocument.Parse(json))
+            try
             {
-                return ExtrairPontos(doc.RootElement, atributo);
+                var resposta = await HttpClient.SendAsync(request);
+
+                if (!resposta.IsSuccessStatusCode)
+                    return new List<PontoHistorico>();
+
+                var json = await resposta.Content.ReadAsStringAsync();
+                if (string.IsNullOrWhiteSpace(json))
+                    return new List<PontoHistorico>();
+
+                using (var doc = JsonDocument.Parse(json))
+                {
+                    return ExtrairPontos(doc.RootElement, atributo);
+                }
+            }
+            catch
+            {
+                // Ex.: rede da faculdade bloqueando a porta 8666 ou EC2 desligada.
+                // Retorna lista vazia para o dashboard não quebrar a página inteira.
+                return new List<PontoHistorico>();
             }
         }
 
@@ -118,19 +124,11 @@ namespace PBL.Services
             var entityId = Uri.EscapeDataString(GetEntityId().Trim());
             var attr = Uri.EscapeDataString(atributo.Trim());
 
-            var query = new StringBuilder();
-            query.Append("?fromDate=");
-            query.Append(Uri.EscapeDataString(inicio.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture)));
-            query.Append("&toDate=");
-            query.Append(Uri.EscapeDataString(fim.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture)));
+            // O STH-Comet do projeto está retornando corretamente com lastN.
+            // fromDate/toDate estava fazendo o dashboard retornar "Nenhuma leitura encontrada".
+            var quantidade = lastN.HasValue && lastN.Value > 0 ? lastN.Value : 20;
 
-            if (lastN.HasValue && lastN.Value > 0)
-            {
-                query.Append("&lastN=");
-                query.Append(lastN.Value);
-            }
-
-            return $"{baseUrl}/STH/v1/contextEntities/type/{entityType}/id/{entityId}/attributes/{attr}{query}";
+            return $"{baseUrl}/STH/v1/contextEntities/type/{entityType}/id/{entityId}/attributes/{attr}?lastN={quantidade}";
         }
 
         private List<PontoHistorico> ExtrairPontos(JsonElement root, string atributo)

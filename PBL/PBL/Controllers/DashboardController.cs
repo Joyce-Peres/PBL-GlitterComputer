@@ -53,15 +53,11 @@ namespace PBL.Controllers
         {
             try
             {
-                var leituras = await _historicoService.ConsultarHistoricoAsync(aquarioId, dataInicio, dataFim);
+                var leituras = await _historicoService.ConsultarHistoricoAsync(aquarioId, dataInicio, dataFim, lastN: 20);
                 if (!leituras.Any() && !_historicoService.EstaConfigurado)
                     leituras = new LeituraSensorDAO().ConsultaDashboard(aquarioId, dataInicio, dataFim);
                 return PartialView("_TabelaLeituras", leituras);
             }
             catch (Exception erro)
             {
-                return Content($"<div class='alert alert-danger'>Erro: {erro.Message}</div>");
-            }
-        }
-    }
-}
+                return Content($"<div class='alert alert-danger'>Erro ao consultar o histórico FIWARE/STH-Comet: {erro.Message}</div>", "text/html

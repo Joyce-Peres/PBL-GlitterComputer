@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PBL.DAO;
 using PBL.Models;
+using System;
+using System.Linq;
 
 namespace PBL.Controllers
 {
@@ -70,5 +72,32 @@ namespace PBL.Controllers
             if (string.IsNullOrWhiteSpace(model.TipoAgua))
                 ModelState.AddModelError("TipoAgua", "Selecione o tipo de água.");
         }
+
+        public override IActionResult Delete(int id)
+        {
+            try
+            {
+                // Verifica se existem peixes vinculados
+                var peixeDao = new PeixeDAO();
+                var peixes = peixeDao.ConsultaComFiltro(null, null, id);
+                if (peixes != null && peixes.Any())
+                {
+                    return View("Error", new ErrorViewModel($"Não é possível excluir o aquário porque existem {peixes.Count} peixe(s) cadastrado(s). Remova-os primeiro."));
+                }
+
+                // Verifica se existe configuração de lâmpada vinculada
+                var lampConfig = new SmartLampConfigDAO().ConsultaPorAquario(id);
+                if (lampConfig != null)
+                {
+                    return View("Error", new ErrorViewModel("Não é possível excluir o aquário porque existe uma configuração de Smart Lamp associada. Remova-a primeiro."));
+                }
+
+                return base.Delete(id);
+            }
+            catch (Exception erro)
+            {
+                return View("Error", new ErrorViewModel(erro.ToString()));
+            }
+        }
+        }
     }
-}

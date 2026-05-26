@@ -1,4 +1,5 @@
 ﻿using PBL.DAO;
+using System.Data.SqlClient;
 using PBL.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -121,7 +122,7 @@ namespace PBL.Controllers
                 return View("Error", new ErrorViewModel(erro.ToString()));
             }
         }
-        public IActionResult Delete(int id)
+        public virtual IActionResult Delete(int id)
         {
             try
             {
@@ -130,9 +131,16 @@ namespace PBL.Controllers
             }
             catch (Exception erro)
             {
+                // Detect foreign key constraint violations and present a friendly message
+                var sqlEx = erro as SqlException ?? erro.InnerException as SqlException;
+                if (sqlEx != null && sqlEx.Number == 547)
+                {
+                    var msg = "Não é possível excluir este registro porque outros itens dependem dele (restrição de integridade referencial). Remova ou desvincule os itens dependentes antes de tentar novamente.";
+                    return View("Error", new ErrorViewModel(msg));
+                }
+
                 return View("Error", new ErrorViewModel(erro.ToString()));
             }
-            
         }
     }
 }

@@ -207,6 +207,45 @@
                 return true;
             }
 
+                function avaliarTipoAgua() {
+                    try {
+                        var tipo = null;
+                        if ($('#infoAquario').is(':visible')) {
+                            var texto = $('#infoAquario').text();
+                            // infoAquario shows 'Nome — X L, água Tipo'
+                            var m = texto.match(/água\s+(Doce|Salgada|Mista)/i);
+                            if (m && m.length > 1) tipo = m[1];
+                        }
+
+                        // Se não tivermos informação sobre o aquário, nada a fazer
+                        if (!tipo) return true;
+
+                        var salMin = parseFloat($('#SalinidadePptMin').val());
+                        var salMax = parseFloat($('#SalinidadePptMax').val());
+                        if (isNaN(salMin)) salMin = null;
+                        if (isNaN(salMax)) salMax = null;
+
+                        // Se não houver parâmetros de salinidade, não avisar
+                        if (salMin === null && salMax === null) return true;
+
+                        // Regra simples: se aquário é Doce (fresh) e o peixe tem salinidade mínima significativa (>0.5 ppt), avisar
+                        var precisaSalgada = (salMin !== null && salMin > 0.5) || (salMax !== null && salMax > 0.5);
+                        if (tipo.match(/Doce/i) && precisaSalgada) {
+                            return confirm('Aviso: Os parâmetros de salinidade detectados para esta espécie indicam água salgada, enquanto o aquário selecionado é de água doce. Deseja continuar mesmo assim?');
+                        }
+
+                        // Se aquário é Salgada e peixe indica salinidade próxima de zero, avisar
+                        var precisaDoce = (salMax !== null && salMax < 0.5);
+                        if (tipo.match(/Salgada/i) && precisaDoce) {
+                            return confirm('Aviso: Os parâmetros de salinidade detectados para esta espécie indicam água doce, enquanto o aquário selecionado é de água salgada. Deseja continuar mesmo assim?');
+                        }
+
+                        return true;
+                    } catch (e) {
+                        return true;
+                    }
+                }
+
             if (volumeMin > capacidadeAquarioAtual) {
                 return confirm('O volume mínimo ideal do peixe (' + volumeMin.toFixed(1) + ' L) é maior que a capacidade do aquário (' + capacidadeAquarioAtual.toFixed(1) + ' L). Deseja continuar mesmo assim?');
             }
@@ -363,6 +402,11 @@
             $('form.form-peixe').on('submit', function (e) {
                 if (!avaliarVolumeIdeal()) {
                     e.preventDefault();
+                    return;
+                }
+                if (!avaliarTipoAgua()) {
+                    e.preventDefault();
+                    return;
                 }
             });
         });
