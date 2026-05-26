@@ -10,24 +10,86 @@
 
 <div class="card mb-4">
     <div class="card-body">
-        <h5 class="card-title">Filtros</h5>
-        <form id="formFiltroDashboard" class="form-row">
-            <div class="form-group col-md-4">
-                <label for="aquarioId">Aquário</label>
-                <select id="aquarioId" name="aquarioId" class="form-control" asp-items="ViewBag.Aquarios">
-                    <option value="">Todos</option>
-                </select>
+        <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+            <h5 class="card-title mb-0">Filtros do dashboard</h5>
+            <small class="text-muted">Use a combinação de campos para refinar o histórico exibido.</small>
+        </div>
+        <form id="formFiltroDashboard">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="aquarioId">Aquário</label>
+                    <select id="aquarioId" name="aquarioId" class="form-control" asp-items="ViewBag.Aquarios">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="dataInicio">Data Início</label>
+                    <input type="date" id="dataInicio" name="dataInicio" class="form-control" value="@ViewBag.DataInicio" />
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="dataFim">Data Fim</label>
+                    <input type="date" id="dataFim" name="dataFim" class="form-control" value="@ViewBag.DataFim" />
+                </div>
             </div>
-            <div class="form-group col-md-3">
-                <label for="dataInicio">Data Início</label>
-                <input type="date" id="dataInicio" name="dataInicio" class="form-control" />
+
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label for="temperaturaMin">Temp. Água mín (°C)</label>
+                    <input type="number" step="0.1" id="temperaturaMin" name="temperaturaMin" class="form-control" value="@ViewBag.TemperaturaMin" />
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="temperaturaMax">Temp. Água máx (°C)</label>
+                    <input type="number" step="0.1" id="temperaturaMax" name="temperaturaMax" class="form-control" value="@ViewBag.TemperaturaMax" />
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="tempArMin">Temp. Ar mín (°C)</label>
+                    <input type="number" step="0.1" id="tempArMin" name="tempArMin" class="form-control" value="@ViewBag.TempArMin" />
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="tempArMax">Temp. Ar máx (°C)</label>
+                    <input type="number" step="0.1" id="tempArMax" name="tempArMax" class="form-control" value="@ViewBag.TempArMax" />
+                </div>
             </div>
-            <div class="form-group col-md-3">
-                <label for="dataFim">Data Fim</label>
-                <input type="date" id="dataFim" name="dataFim" class="form-control" />
+
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label for="tdsMin">TDS mín (ppm)</label>
+                    <input type="number" step="1" id="tdsMin" name="tdsMin" class="form-control" value="@ViewBag.TdsMin" />
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="tdsMax">TDS máx (ppm)</label>
+                    <input type="number" step="1" id="tdsMax" name="tdsMax" class="form-control" value="@ViewBag.TdsMax" />
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="salinidadeMin">Salinidade mín (ppt)</label>
+                    <input type="number" step="0.01" id="salinidadeMin" name="salinidadeMin" class="form-control" value="@ViewBag.SalinidadeMin" />
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="salinidadeMax">Salinidade máx (ppt)</label>
+                    <input type="number" step="0.01" id="salinidadeMax" name="salinidadeMax" class="form-control" value="@ViewBag.SalinidadeMax" />
+                </div>
             </div>
-            <div class="form-group col-md-2 d-flex align-items-end">
-                <button type="button" id="btnFiltrar" class="btn btn-primary btn-block">Filtrar</button>
+
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label for="nivelMin">Nível mín (%)</label>
+                    <input type="number" step="0.1" id="nivelMin" name="nivelMin" class="form-control" value="@ViewBag.NivelMin" />
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="nivelMax">Nível máx (%)</label>
+                    <input type="number" step="0.1" id="nivelMax" name="nivelMax" class="form-control" value="@ViewBag.NivelMax" />
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="qualidade">Qualidade / alerta contém</label>
+                    <input type="text" id="qualidade" name="qualidade" class="form-control" value="@ViewBag.Qualidade" placeholder="Ex.: Boa, Ruim, Excelente" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-12 d-flex flex-wrap justify-content-end">
+                    <button type="button" id="btnLimparFiltros" class="btn btn-outline-secondary mr-2 mb-2">Limpar</button>
+                    <button type="button" id="btnFiltrar" class="btn btn-primary mb-2">Filtrar</button>
+                </div>
             </div>
         </form>
     </div>
@@ -162,11 +224,28 @@
             });
         }
 
-        function carregarGraficos() {
-            const aquarioId = $('#aquarioId').val() || '';
+        function limparGraficos() {
+            if (graficoTemperatura) graficoTemperatura.destroy();
+            if (graficoNivel) graficoNivel.destroy();
+            if (graficoEc) graficoEc.destroy();
+            if (graficoLdr) graficoLdr.destroy();
 
-            $.get('/Dashboard/DadosGrafico', { aquarioId: aquarioId }, function (dados) {
+            graficoTemperatura = null;
+            graficoNivel = null;
+            graficoEc = null;
+            graficoLdr = null;
+        }
+
+        function parametrosFiltro() {
+            return $('#formFiltroDashboard').serialize();
+        }
+
+        function carregarGraficos() {
+            const parametros = parametrosFiltro();
+
+            $.get('/Dashboard/DadosGrafico', parametros, function (dados) {
                 if (!dados || dados.length === 0) {
+                    limparGraficos();
                     $('#cardTempAgua').text('-- °C');
                     $('#cardUmidade').text('-- %');
                     $('#cardNivel').text('-- %');
@@ -253,11 +332,7 @@
         }
 
         function carregarDashboard() {
-            var params = {
-                aquarioId: $('#aquarioId').val() || null,
-                dataInicio: $('#dataInicio').val() || null,
-                dataFim: $('#dataFim').val() || null
-            };
+            var params = parametrosFiltro();
 
             $('#resultadoDashboard').html('<p class="text-info">Carregando...</p>');
 
@@ -270,6 +345,10 @@
         }
 
         $('#btnFiltrar').click(carregarDashboard);
+        $('#btnLimparFiltros').click(function () {
+            $('#formFiltroDashboard')[0].reset();
+            carregarDashboard();
+        });
 
         $(document).ready(function () {
             carregarDashboard();
