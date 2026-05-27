@@ -77,25 +77,44 @@ namespace PBL.Controllers
         {
             try
             {
+                var aquario = DAO.Consulta(id);
+                if (aquario == null)
+                    return RedirectToAction(NomeViewIndex);
+
                 // Verifica se existem peixes vinculados
                 var peixeDao = new PeixeDAO();
                 var peixes = peixeDao.ConsultaComFiltro(null, null, id);
-                if (peixes != null && peixes.Any())
-                {
-                    return View("Error", new ErrorViewModel($"Não é possível excluir o aquário porque existem {peixes.Count} peixe(s) cadastrado(s). Remova-os primeiro."));
-                }
-
-                // Verifica se existe configuração de lâmpada vinculada
                 var lampConfig = new SmartLampConfigDAO().ConsultaPorAquario(id);
-                if (lampConfig != null)
-                {
-                    return View("Error", new ErrorViewModel("Não é possível excluir o aquário porque existe uma configuração de Smart Lamp associada. Remova-a primeiro."));
-                }
 
-                return base.Delete(id);
+                ViewBag.MensagemConfirmacao = "Confirma a exclusão deste aquário? Os dados vinculados, como peixes, leituras e configuração da Smart Lamp, também serão removidos.";
+                ViewBag.QtdPeixes = peixes?.Count ?? 0;
+                ViewBag.TemLampConfig = lampConfig != null;
+                return View("DeleteConfirm", aquario);
             }
             catch (Exception erro)
             {
+                return View("Error", new ErrorViewModel(erro.ToString()));
+            }
+        }
+
+        [HttpPost]
+        public IActionResult ExcluirConfirmado(int id)
+        {
+            try
+            {
+                ((AquarioDAO)DAO).ExcluirComDependentes(id);
+                TempData["Mensagem"] = "Aquário excluído com sucesso.";
+                return RedirectToAction(NomeViewIndex);
+            }
+            catch (Exception erro)
+            {
+                var sqlEx = erro as System.Data.SqlClient.SqlException ?? erro.InnerException as System.Data.SqlClient.SqlException;
+                if (sqlEx != null && sqlEx.Number == 547)
+                {
+                    var msg = "Não é possível excluir este aquário porque outros itens dependem dele (restrição de integridade referencial). Remova ou desvincule os itens dependentes antes de tentar novamente.";
+                    return View("Error", new ErrorViewModel(msg));
+                }
+
                 return View("Error", new ErrorViewModel(erro.ToString()));
             }
         }
