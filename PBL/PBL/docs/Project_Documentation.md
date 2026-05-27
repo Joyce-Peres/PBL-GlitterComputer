@@ -63,11 +63,11 @@ flowchart LR
 - `PBL/PBL/Controllers/PadraoController.cs` — controller base genérico para CRUDs; contém validações comuns e fluxo de Create/Edit/Delete/Save.
 - `PBL/PBL/Controllers/LoginController.cs` — login, cadastro, verificação AJAX de e-mail e logout. Usa sessão para marcar `Logado`, `UsuarioId`, `UsuarioNome`.
 - `PBL/PBL/Controllers/HomeController.cs` — menu inicial e informações do usuário.
-- `PBL/PBL/Controllers/AquarioController.cs` — CRUD de aquários; vincula aquário ao usuário logado; valida nome, capacidade e tipo.
+- `PBL/PBL/Controllers/AquarioController.cs` — CRUD de aquários; vincula aquário ao usuário logado; valida nome, capacidade e tipo; a exclusão usa confirmação e remove dependentes vinculados.
 - `PBL/PBL/Controllers/PeixeController.cs` — CRUD de peixes; upload de foto; integra `FishAiService` para detectar parâmetros por imagem ou espécie; aplica alvos na Smart Lamp após salvar.
-- `PBL/PBL/Controllers/ConsultaController.cs` — páginas de consulta (peixes e leituras) com endpoints Ajax parciais.
+- `PBL/PBL/Controllers/ConsultaController.cs` — páginas de consulta (peixes e leituras) com endpoints Ajax parciais; a consulta de peixes carrega apenas via Ajax.
 - `PBL/PBL/Controllers/DashboardController.cs` — dashboard de leituras com carregamento Ajax; usa `FiwareSthCometService`.
-- `PBL/PBL/Controllers/SmartLampController.cs` — personalização da lâmpada (modo, brilho, RGB) e envio MQTT.
+- `PBL/PBL/Controllers/SmartLampController.cs` — personalização da lâmpada (modo, brilho, RGB) e envio MQTT; o fluxo ativo da Smart Lamp fica em `Personalizar()`.
 - `PBL/PBL/Controllers/SobreController.cs` — página institucional.
 - `PBL/PBL/Controllers/Api/LeiturasController.cs` — API pública para GET/POST de leituras IoT (documentada no Swagger).
 
@@ -116,12 +116,12 @@ Observação: o projeto prefere Stored Procedures (evita concatenação), e `Pad
 
 - Layout global: `PBL/PBL/Views/Shared/_Layout.cshtml` (navbar condicional por sessão) e `PBL/PBL/Views/Shared/_LayoutLogin.cshtml`.
 - Login/Cadastro: `PBL/PBL/Views/Login/Index.cshtml` — abas Entrar / Cadastrar, verificação AJAX de e-mail.
-- Home (menu): `PBL/PBL/Views/Home/Index.cshtml` — atalhos para CRUDs, dashboard e IA.
+- Home (menu): `PBL/PBL/Views/Home/Index.cshtml` — cards/atalhos para CRUDs, dashboard, consulta e API Swagger.
 - Aquários: `PBL/PBL/Views/Aquario/index.cshtml`, `PBL/PBL/Views/Aquario/form.cshtml`.
 - Peixes: `PBL/PBL/Views/Peixe/index.cshtml`, `PBL/PBL/Views/Peixe/form.cshtml` — upload de foto, botões para detectar parâmetros por imagem ou por espécie (Ajax), seção avançada de parâmetros, validações JS.
-- Consultas: `PBL/PBL/Views/Consulta/Peixes.cshtml` (Ajax parcial `_TabelaPeixes.cshtml`), `PBL/PBL/Views/Consulta/Leituras.cshtml`.
+- Consultas: `PBL/PBL/Views/Consulta/Peixes.cshtml` (carrega resultados exclusivamente via Ajax parcial `_TabelaPeixes.cshtml`), `PBL/PBL/Views/Consulta/Leituras.cshtml`.
 - Dashboard: `PBL/PBL/Views/Dashboard/Index.cshtml` e partial `_TabelaLeituras.cshtml` (carregamento Ajax e gráfico opcional no front).
-- Smart Lamp: `PBL/PBL/Views/SmartLamp/Personalizar.cshtml` — sliders, color picker, leitura em tempo real via MQTT e gráfico de luminosidade (Chart.js).
+- Smart Lamp: `PBL/PBL/Views/SmartLamp/Personalizar.cshtml` — sliders, color picker, leitura em tempo real via MQTT e gráfico de luminosidade (Chart.js). A view `Views/SmartLamp/Dashboard.cshtml` não faz parte do fluxo atual.
 - Sobre: `PBL/PBL/Views/Sobre/Index.cshtml` — descrição do projeto e integrantes.
 
 ---

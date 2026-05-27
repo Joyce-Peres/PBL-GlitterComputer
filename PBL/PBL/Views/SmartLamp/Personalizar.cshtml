@@ -1,10 +1,10 @@
 @model PBL.Models.SmartLampConfigViewModel
 @{
-    ViewData["Title"] = "Personalização";
+    ViewData["Title"] = "Monitoramento IoT";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Personalização</h2>
+<h2>Monitoramento IoT</h2>
 <hr />
 
 @if (ViewBag.Mensagem != null)
@@ -14,7 +14,7 @@
 
 <form asp-action="Salvar" method="post" class="card mb-4">
     <div class="card-header card-header-palette-aqua">
-        <h5 class="mb-0">Configuração da luz</h5>
+        <h5 class="mb-0">Configuração do dispositivo</h5>
     </div>
     <div class="card-body">
         <div class="form-row">
@@ -74,12 +74,12 @@
             </div>
         </div>
 
-        <button type="submit" class="btn btn-palette-pink">Salvar e enviar para a lâmpada</button>
+        <button type="submit" class="btn btn-palette-pink">Salvar e publicar</button>
     </div>
 </form>
 
 <section class="lamp-dashboard" aria-labelledby="lamp-dashboard-title">
-    <h3 id="lamp-dashboard-title" class="menu-section-title">Dashboard de luminosidade</h3>
+    <h3 id="lamp-dashboard-title" class="menu-section-title">Painel de monitoramento</h3>
     <p class="menu-section-desc mb-3">Leitura em tempo real via MQTT e histórico da sessão atual.</p>
 
     <div class="card mb-3">
