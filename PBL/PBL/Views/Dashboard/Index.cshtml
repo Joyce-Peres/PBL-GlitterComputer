@@ -1,18 +1,18 @@
 @{
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = "Histórico do aquário";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Dashboard — Monitoramento IoT</h2>
+<h2>Histórico de leituras do aquário</h2>
 <hr />
-<p class="lead">Acompanhe o histórico das leituras do dispositivo IoT armazenado no MongoDB via STH-Comet.</p>
-<p class="text-muted">Fonte ativa: <strong>@ViewBag.OrigemDados</strong></p>
+<p class="lead">Veja as medições coletadas pelos sensores e acompanhe a evolução dos parâmetros do aquário.</p>
+<p class="text-muted">Fonte dos dados: <strong>@ViewBag.OrigemDados</strong></p>
 
 <div class="card mb-4">
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
-            <h5 class="card-title mb-0">Filtros do dashboard</h5>
-            <small class="text-muted">Use a combinação de campos para refinar o histórico exibido.</small>
+            <h5 class="card-title mb-0">Filtrar histórico</h5>
+            <small class="text-muted">Combine os campos para refinar as leituras exibidas.</small>
         </div>
         <form id="formFiltroDashboard">
             <div class="form-row">

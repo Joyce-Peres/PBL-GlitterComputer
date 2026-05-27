@@ -9,7 +9,7 @@
     <header class="menu-page-header">
         <h1 class="menu-page-title">Home</h1>
         <p class="menu-page-intro">
-            Central do <strong>Aquamarine</strong> — gerencie aquários, acompanhe sensores IoT e use recomendações por IA.
+            Central do <strong>Aquamarine</strong> para acessar os módulos principais do sistema.
         </p>
     </header>
 
@@ -17,8 +17,7 @@
         <p class="menu-welcome-label">Bem-vindo de volta</p>
         <h2 class="menu-hello">Olá, @(string.IsNullOrWhiteSpace(nome) ? "!" : (nome + "!"))</h2>
         <p class="menu-sub">
-            Monitore temperatura, TDS, salinidade e nível de água em tempo real, cadastre peixes com foto
-            e personalize a iluminação do aquário pelo painel web.
+            Use os atalhos abaixo para gerenciar aquários, consultar peixes e acompanhar os dados do sistema.
         </p>
     </section>
 
@@ -50,43 +49,26 @@
                         <span class="menu-tile-link">Configurar →</span>
                     </a>
                 </div>
-            </div>
-        </section>
-
-        <section class="menu-section" aria-labelledby="menu-recursos">
-            <h2 id="menu-recursos" class="menu-section-title">O que o sistema oferece</h2>
-            <p class="menu-section-desc">Recursos principais organizados por área.</p>
-
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <article class="menu-info-card menu-info-aqua">
-                        <h3>Gerencie</h3>
-                        <p>Cadastre aquários e peixes com fotos, vinculados ao responsável e ao aquário escolhido.</p>
-                        <div class="menu-info-links">
-                            <a asp-controller="Aquario" asp-action="Index">Aquários</a>
-                            <a asp-controller="Peixe" asp-action="Index">Peixes</a>
-                        </div>
-                    </article>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <a class="menu-tile menu-tile-aqua" asp-controller="Dashboard" asp-action="Index">
+                        <span class="menu-tile-title">Histórico do aquário</span>
+                        <span class="menu-tile-text">Acompanhe leituras, filtros e gráficos do monitoramento IoT.</span>
+                        <span class="menu-tile-link">Abrir histórico →</span>
+                    </a>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <article class="menu-info-card menu-info-pink">
-                        <h3>Monitore</h3>
-                        <p>Acompanhe histórico de sensores, consultas filtradas e o painel da Smart Lamp.</p>
-                        <div class="menu-info-links">
-                            <a asp-controller="Dashboard" asp-action="Index">Dashboard</a>
-                            <a asp-controller="SmartLamp" asp-action="Personalizar">Personalização</a>
-                        </div>
-                    </article>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <a class="menu-tile menu-tile-orange" asp-controller="Consulta" asp-action="Peixes">
+                        <span class="menu-tile-title">Consulta de peixes</span>
+                        <span class="menu-tile-text">Filtre peixes por nome, espécie e aquário com visão em tabela.</span>
+                        <span class="menu-tile-link">Consultar →</span>
+                    </a>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <article class="menu-info-card menu-info-yellow">
-                        <h3>Integre</h3>
-                        <p>Envie dados do dispositivo IoT pela API REST e consulte a documentação interativa.</p>
-                        <div class="menu-info-links">
-                            <a href="/swagger" target="_blank" rel="noopener">Swagger</a>
-                            <a asp-controller="Consulta" asp-action="Peixes">Consulta peixes</a>
-                        </div>
-                    </article>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <a class="menu-tile menu-tile-pink" href="/swagger" target="_blank" rel="noopener">
+                        <span class="menu-tile-title">API Swagger</span>
+                        <span class="menu-tile-text">Abra a documentação interativa da API para integrações IoT.</span>
+                        <span class="menu-tile-link">Ver documentação →</span>
+                    </a>
                 </div>
             </div>
         </section>

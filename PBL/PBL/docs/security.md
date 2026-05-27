@@ -1,4 +1,4 @@
-# Auditoria de Segurança — Resumo e Recomendações
+                                                                                                                     # Auditoria de Segurança — Resumo e Recomendações
 
 **Status geral:** Projeto usa parâmetros SQL e stored procedures — risco de SQL Injection mitigado.
 

@@ -9,8 +9,8 @@
 
 <div class="card mb-4">
     <div class="card-body">
-        <h5 class="card-title">Filtros (mínimo 2)</h5>
-        <form id="formFiltroPeixes" method="get" asp-action="Peixes" class="form-row">
+        <h5 class="card-title">Filtros</h5>
+        <form id="formFiltroPeixes" class="form-row">
             <div class="form-group col-md-4">
                 <label for="nome">Nome</label>
                 <input type="text" id="nome" name="nome" class="form-control" value="@ViewBag.NomeFiltro" placeholder="Parte do nome..." />
@@ -26,28 +26,40 @@
                 </select>
             </div>
             <div class="form-group col-12">
-                <button type="button" id="btnFiltrarPeixes" class="btn btn-primary">Filtrar (Ajax)</button>
-                <button type="submit" class="btn btn-secondary">Filtrar (página)</button>
+                <button type="button" id="btnFiltrarPeixes" class="btn btn-primary">Filtrar</button>
             </div>
         </form>
     </div>
 </div>
 
 <div id="resultadoPeixes">
-    @{ await Html.RenderPartialAsync("_TabelaPeixes", Model); }
+    <p class="text-muted">Use o filtro para carregar os peixes.</p>
 </div>
 
 @section Scripts {
     <script>
-        $('#btnFiltrarPeixes').click(function () {
+        function carregarPeixes() {
             var params = {
                 nome: $('#nome').val(),
                 especie: $('#especie').val(),
                 aquarioId: $('#aquarioId').val() || null
             };
+
+            $('#resultadoPeixes').html('<p class="text-info">Carregando...</p>');
+
             $.get('/Consulta/PeixesAjax', params, function (html) {
                 $('#resultadoPeixes').html(html);
+            }).fail(function () {
+                $('#resultadoPeixes').html('<div class="alert alert-danger">Erro ao carregar peixes.</div>');
             });
+        }
+
+        $('#btnFiltrarPeixes').click(function () {
+            carregarPeixes();
+        });
+
+        $(function () {
+            carregarPeixes();
         });
     </script>
 }

@@ -39,8 +39,7 @@ namespace PBL.Controllers
                 ViewBag.Aquarios = new SelectList(aquarios, "Id", "Nome", aquarioId);
                 ViewBag.NomeFiltro = nome;
                 ViewBag.EspecieFiltro = especie;
-                var lista = new PeixeDAO().ConsultaComFiltro(nome, especie, aquarioId);
-                return View(lista);
+                return View();
             }
             catch (Exception erro)
             {
@@ -54,6 +53,23 @@ namespace PBL.Controllers
             try
             {
                 var lista = new PeixeDAO().ConsultaComFiltro(nome, especie, aquarioId);
+
+                ViewBag.TotalPeixes = lista?.Count ?? 0;
+                ViewBag.TotalEspecies = lista == null ? 0 : lista
+                    .Where(x => !string.IsNullOrWhiteSpace(x.Especie))
+                    .Select(x => x.Especie.Trim())
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .Count();
+                ViewBag.ComFoto = lista == null ? 0 : lista.Count(x => !string.IsNullOrWhiteSpace(x.Foto));
+                ViewBag.ComParametrosCompletos = lista == null ? 0 : lista.Count(x =>
+                    x.TemperaturaIdeal.HasValue &&
+                    x.LuminosidadeIdeal.HasValue &&
+                    x.TdsPpmMin.HasValue &&
+                    x.TdsPpmMax.HasValue &&
+                    x.SalinidadePptMin.HasValue &&
+                    x.SalinidadePptMax.HasValue &&
+                    x.VolumeMinLitros.HasValue);
+
                 return PartialView("_TabelaPeixes", lista);
             }
             catch (Exception erro)

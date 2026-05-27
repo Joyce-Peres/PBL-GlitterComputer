@@ -40,8 +40,8 @@ namespace PBL.Controllers
 
                 ViewBag.Aquarios = new SelectList(aquarios, "Id", "Nome");
                 ViewBag.OrigemDados = _historicoService.EstaConfigurado
-                    ? "MongoDB via STH-Comet"
-                    : "SQL legado";
+                    ? "STH-Comet com MongoDB"
+                    : "Banco local (SQL Server)";
 
                 return View();
             }

@@ -1,5 +1,43 @@
 @model IEnumerable<PBL.Models.PeixeViewModel>
 
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <h6 class="text-muted">Peixes filtrados</h6>
+                <h3>@ViewBag.TotalPeixes</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <h6 class="text-muted">Espécies distintas</h6>
+                <h3>@ViewBag.TotalEspecies</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <h6 class="text-muted">Com foto</h6>
+                <h3>@ViewBag.ComFoto</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <h6 class="text-muted">Parâmetros completos</h6>
+                <h3>@ViewBag.ComParametrosCompletos</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
 <table class="table table-striped table-bordered">
     <thead class="thead-dark">
         <tr>
