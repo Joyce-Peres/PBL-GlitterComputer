@@ -12,8 +12,10 @@ using System.Threading.Tasks;
 
 namespace PBL.Services
 {
+    // Serviço responsável por buscar e transformar o histórico de sensores vindo do FIWARE/STH-Comet.
     public class FiwareSthCometService
     {
+        // Cliente HTTP reutilizado para consultar o STH-Comet com timeout curto.
         private static readonly HttpClient HttpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(8) };
 
         private readonly IConfiguration _config;
@@ -23,6 +25,7 @@ namespace PBL.Services
             _config = config;
         }
 
+        // Indica se a integração FIWARE está pronta para uso.
         public bool EstaConfigurado
         {
             get
@@ -53,11 +56,13 @@ namespace PBL.Services
             // Se nenhum aquário for selecionado, usa o EntityId padrão do appsettings.
             var contextoAquario = ResolverContextoAquario(aquarioId);
 
+            // Descobre qual entidade FIWARE representa o aquário selecionado.
             if (string.IsNullOrWhiteSpace(contextoAquario.EntityId))
                 return new List<LeituraSensorViewModel>();
 
             // Atributos realmente gravados pela subscription do STH-Comet.
             // Consultar apenas estes evita chamadas vazias e deixa o dashboard mais rápido.
+            // Atributos históricos que o dashboard realmente precisa exibir.
             var atributos = new[]
             {
                 "temp_agua",
@@ -80,9 +85,11 @@ namespace PBL.Services
                 .SelectMany(tarefa => tarefa.Result)
                 .ToList();
 
+            // Junta os valores por instante para devolver uma lista de leituras pronta para a tela.
             return MesclarPontos(pontos, contextoAquario);
         }
 
+        // Consulta uma série histórica de um atributo específico no STH-Comet.
         private async Task<List<PontoHistorico>> ConsultarSerieAtributoAsync(
             string atributo,
             string entityId,
@@ -94,6 +101,7 @@ namespace PBL.Services
 
             using var request = new HttpRequestMessage(HttpMethod.Get, url);
 
+            // Prepara a requisição HTTP e inclui os headers FIWARE quando configurados.
             // Adiciona headers Fiware se configurados (muitos deploys exigem 'fiware-service')
             var fiwareService = _config["FiwareSthComet:FiwareService"];
             if (!string.IsNullOrWhiteSpace(fiwareService))
@@ -126,6 +134,7 @@ namespace PBL.Services
                 return new List<PontoHistorico>();
             }
         }
+        // Monta a URL exata usada para consultar o histórico do atributo no STH-Comet.
 
         private string MontarUrlConsulta(string atributo, string entityId, DateTime inicio, DateTime fim, int? lastN)
         {
@@ -133,11 +142,13 @@ namespace PBL.Services
             var entityType = Uri.EscapeDataString(GetEntityType().Trim());
             var entityIdUrl = Uri.EscapeDataString(entityId.Trim());
             var attr = Uri.EscapeDataString(atributo.Trim());
+            // O projeto usa lastN porque essa consulta se mostrou mais confiável do que fromDate/toDate.
 
             // O STH-Comet do projeto está retornando corretamente com lastN.
             // fromDate/toDate estava fazendo o dashboard retornar "Nenhuma leitura encontrada".
             var quantidade = lastN.HasValue && lastN.Value > 0 ? lastN.Value : 20;
 
+            // Extrai os pontos históricos do JSON retornado pelo STH-Comet.
             return $"{baseUrl}/STH/v1/contextEntities/type/{entityType}/id/{entityIdUrl}/attributes/{attr}?lastN={quantidade}";
         }
 
@@ -204,6 +215,7 @@ namespace PBL.Services
                 Valor = valor,
                 Texto = texto,
                 DataLeituraUtc = DateTime.SpecifyKind(data.Value, DateTimeKind.Utc)
+                // Agrupa os pontos por instante de leitura e monta a lista final exibida no dashboard.
             });
         }
 
@@ -283,6 +295,7 @@ namespace PBL.Services
 
             return linhas.Values
                 .OrderByDescending(item => item.DataLeitura)
+                // Resolve o aquário e a entidade FIWARE que devem ser usados na consulta.
                 .ToList();
         }
 

@@ -77,38 +77,22 @@ namespace PBL.Controllers
         {
             try
             {
-                var aquario = DAO.Consulta(id);
-                if (aquario == null)
-                    return RedirectToAction(NomeViewIndex);
-
+                // Verifica se existem peixes vinculados
                 var peixeDao = new PeixeDAO();
                 var peixes = peixeDao.ConsultaComFiltro(null, null, id);
+                if (peixes != null && peixes.Any())
+                {
+                    return View("Error", new ErrorViewModel($"Não é possível excluir o aquário porque existem {peixes.Count} peixe(s) cadastrado(s). Remova-os primeiro."));
+                }
+
+                // Verifica se existe configuração de lâmpada vinculada
                 var lampConfig = new SmartLampConfigDAO().ConsultaPorAquario(id);
+                if (lampConfig != null)
+                {
+                    return View("Error", new ErrorViewModel("Não é possível excluir o aquário porque existe uma configuração de Smart Lamp associada. Remova-a primeiro."));
+                }
 
-                ViewBag.QtdPeixes = peixes?.Count ?? 0;
-                ViewBag.TemLampConfig = lampConfig != null;
-                ViewBag.MensagemConfirmacao = ViewBag.QtdPeixes > 0
-                    ? $"Este aquário possui {ViewBag.QtdPeixes} peixe(s) vinculado(s). Ao confirmar, o sistema vai remover o aquário, os peixes, as leituras e a configuração da Smart Lamp associados."
-                    : (ViewBag.TemLampConfig == true
-                        ? "Este aquário possui configuração de Smart Lamp associada. Ao confirmar, o sistema vai remover o aquário e os dados relacionados."
-                        : "Confirme a exclusão do aquário.");
-
-                return View("DeleteConfirm", aquario);
-            }
-            catch (Exception erro)
-            {
-                return View("Error", new ErrorViewModel(erro.ToString()));
-            }
-        }
-
-        [HttpPost]
-        public IActionResult ExcluirConfirmado(int id)
-        {
-            try
-            {
-                ((AquarioDAO)DAO).ExcluirComDependentes(id);
-                TempData["Mensagem"] = "Aquário excluído com sucesso.";
-                return RedirectToAction(NomeViewIndex);
+                return base.Delete(id);
             }
             catch (Exception erro)
             {
