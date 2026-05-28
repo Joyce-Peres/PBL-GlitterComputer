@@ -29,7 +29,7 @@
                     <td>@(item.TemperaturaAr.HasValue ? item.TemperaturaAr.Value.ToString("0.0") : "-")</td>
                     <td>@(item.UmidadeAr.HasValue ? item.UmidadeAr.Value.ToString("0") + "%" : "-")</td>
                     <td>@(item.TdsPpm.HasValue ? item.TdsPpm.Value.ToString("0") : "-")</td>
-                    <td>@(!string.IsNullOrWhiteSpace(item.QualidadeAgua) ? item.QualidadeAgua : (!string.IsNullOrWhiteSpace(item.QualidadeTds) ? item.QualidadeTds : "-"))</td>
+                    <td>@(!string.IsNullOrWhiteSpace(item.QualidadeExibicao) ? item.QualidadeExibicao : "-")</td>
                     <td>@(item.SalinidadePpt.HasValue ? item.SalinidadePpt.Value.ToString("0.00") + " ppt" : "-")</td>
                     <td>@(item.LdrRaw.HasValue ? item.LdrRaw.Value.ToString() : "-")</td>
                     <td>@(item.NivelPct.HasValue ? item.NivelPct.Value.ToString("0.0") + "%" : item.NivelAgua.ToString("0.0") + "%")</td>

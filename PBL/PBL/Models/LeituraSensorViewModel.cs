@@ -38,6 +38,12 @@ namespace PBL.Models
             ? QualidadeAgua
             : (TdsPpm.HasValue ? ClassificarTds(TdsPpm.Value) : null);
 
+        /// <summary>Qualidade exibida no dashboard, com fallback quando o valor bruto vier vazio ou Indeterminada.</summary>
+        public string QualidadeExibicao => !string.IsNullOrWhiteSpace(QualidadeAgua) &&
+                                           !string.Equals(QualidadeAgua, "Indeterminada", StringComparison.OrdinalIgnoreCase)
+            ? QualidadeAgua
+            : QualidadeTds;
+
         /// <summary>Mensagem textual do alerta calculado.</summary>
         public string Alerta { get; set; }
 
