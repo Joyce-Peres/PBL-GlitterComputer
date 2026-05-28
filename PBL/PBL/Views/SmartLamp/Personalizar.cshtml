@@ -185,8 +185,23 @@
 
             client.on('message', function (topic, msg) {
                 if (topic !== topicSensor) return;
-                var v = parseInt(msg.toString()) || 0;
-                v = Math.max(0, Math.min(100, v));
+
+                // O ESP32 publica JSON completo, ex: {"ldr_raw":2359,"temp_agua":22}
+                // Precisamos parsear o JSON e extrair ldr_raw (0-4095) → normalizar 0-100
+                var v = 0;
+                try {
+                    var parsed = JSON.parse(msg.toString());
+                    if (parsed && typeof parsed.ldr_raw === 'number') {
+                        // ldr_raw já vem invertido no firmware (4095 - raw),
+                        // então 0 = escuro, 4095 = luz máxima → normaliza para 0-100
+                        v = Math.round((parsed.ldr_raw / 4095) * 100);
+                        v = Math.max(0, Math.min(100, v));
+                    }
+                } catch (e) {
+                    // fallback: se por algum motivo vier valor simples
+                    v = parseInt(msg.toString()) || 0;
+                    v = Math.max(0, Math.min(100, v));
+                }
 
                 $('#valorAtual').text(v + ' %');
 

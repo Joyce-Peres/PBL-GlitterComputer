@@ -3,6 +3,8 @@ using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Client.Options;
 using System;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace PBL.Services
@@ -16,42 +18,42 @@ namespace PBL.Services
             _config = config;
         }
 
-        public async Task<bool> PublicarAsync(params string[] comandos)
+        /// <summary>
+        /// Publica um único payload JSON no tópico de comando do ESP32.
+        /// Usa TCP puro (porta 1883) — compatível com Mosquitto/FIWARE sem WebSocket.
+        /// </summary>
+        public async Task<bool> PublicarJsonAsync(string jsonPayload)
         {
-            if (comandos == null || comandos.Length == 0)
+            if (string.IsNullOrWhiteSpace(jsonPayload))
                 return true;
 
-            var brokerUrl = _config["SmartLampMqtt:BrokerUrl"];
-            var topicCmd = _config["SmartLampMqtt:TopicCmd"];
+            var brokerHost = _config["SmartLampMqtt:BrokerHost"];
+            var brokerPort = int.TryParse(_config["SmartLampMqtt:BrokerPort"], out var p) ? p : 1883;
+            var topicCmd   = _config["SmartLampMqtt:TopicCmd"];
 
-            if (string.IsNullOrWhiteSpace(brokerUrl) || string.IsNullOrWhiteSpace(topicCmd))
+            if (string.IsNullOrWhiteSpace(brokerHost) || string.IsNullOrWhiteSpace(topicCmd))
                 return false;
 
             var factory = new MqttFactory();
             using var client = factory.CreateMqttClient();
 
+            // TCP puro — NÃO usa WithWebSocketServer
             var options = new MqttClientOptionsBuilder()
                 .WithClientId("pbl_aquario_" + Guid.NewGuid().ToString("N"))
-                .WithWebSocketServer(brokerUrl)
+                .WithTcpServer(brokerHost, brokerPort)
+                .WithCleanSession()
                 .Build();
 
             try
             {
                 await client.ConnectAsync(options);
 
-                foreach (var cmd in comandos)
-                {
-                    if (string.IsNullOrWhiteSpace(cmd))
-                        continue;
+                var message = new MqttApplicationMessageBuilder()
+                    .WithTopic(topicCmd)
+                    .WithPayload(Encoding.UTF8.GetBytes(jsonPayload))
+                    .Build();
 
-                    var message = new MqttApplicationMessageBuilder()
-                        .WithTopic(topicCmd)
-                        .WithPayload(cmd)
-                        .Build();
-
-                    await client.PublishAsync(message);
-                }
-
+                await client.PublishAsync(message);
                 await client.DisconnectAsync();
                 return true;
             }
@@ -62,10 +64,33 @@ namespace PBL.Services
             }
         }
 
+        /// <summary>
+        /// Publica os parâmetros de iluminação no formato JSON esperado pelo ESP32:
+        /// {"tipo":"peixe","luz_r":R,"luz_g":G,"luz_b":B,"luz_brilho":brilho}
+        /// O brilho do ESP32 vai de 0-255; o campo Brilho do model vai de 0-100,
+        /// por isso é remapeado proporcionalmente.
+        /// </summary>
+        public Task<bool> PublicarLuzAsync(int r, int g, int b, int brilhoPercent)
+        {
+            // Remapeia 0-100 → 0-255 para corresponder ao campo luz_brilho do ESP32
+            var brilho255 = (int)Math.Round(Math.Max(0, Math.Min(100, brilhoPercent)) * 255.0 / 100.0);
+
+            var payload = JsonSerializer.Serialize(new
+            {
+                tipo       = "peixe",
+                luz_r      = Math.Max(0, Math.Min(255, r)),
+                luz_g      = Math.Max(0, Math.Min(255, g)),
+                luz_b      = Math.Max(0, Math.Min(255, b)),
+                luz_brilho = brilho255
+            });
+
+            return PublicarJsonAsync(payload);
+        }
+
+        // Mantido para retrocompatibilidade — não usado pelo SmartLampController novo
         public Task<bool> AplicarBrilhoAsync(int brilho)
         {
-            var val = Math.Max(0, Math.Min(100, brilho));
-            return PublicarAsync("setMode|4", $"setBrightness|{val}");
+            return PublicarLuzAsync(255, 255, 255, brilho);
         }
     }
 }

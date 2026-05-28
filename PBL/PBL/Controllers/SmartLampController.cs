@@ -132,10 +132,8 @@ namespace PBL.Controllers
 
                 _dao.Salvar(model);
 
-                await _mqtt.PublicarAsync(
-                    $"setMode|{model.Modo}",
-                    $"setRGB|{model.R},{model.G},{model.B}",
-                    $"setBrightness|{model.Brilho}");
+                // Publica JSON no formato esperado pelo ESP32 (campo "tipo":"peixe")
+                await _mqtt.PublicarLuzAsync(model.R, model.G, model.B, model.Brilho);
 
                 TempData["Mensagem"] = "Configuração salva e enviada para a lâmpada (MQTT).";
                 return RedirectToAction("Personalizar");
