@@ -239,7 +239,8 @@
                 $('#cardTempAgua').text(formatarNumero(ultimo.tempAgua, 1) + ' °C');
                 $('#cardUmidade').text(formatarNumero(ultimo.umidade, 0) + ' %');
                 $('#cardNivel').text(formatarNumero(ultimo.nivel, 1) + ' %');
-                $('#cardEc').text(formatarNumero(ultimo.ec, 0));
+                const tds = ultimo.tdsPpm !== undefined && ultimo.tdsPpm !== null ? ultimo.tdsPpm : ultimo.ec;
+                $('#cardEc').text(formatarNumero(tds, 0) + ' ppm');
 
                 const labels = dados.map(x => x.dataHora);
 

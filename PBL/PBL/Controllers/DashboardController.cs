@@ -162,7 +162,10 @@ namespace PBL.Controllers
                         tempAgua = x.TemperaturaAgua,
                         tempAr = x.TemperaturaAr,
                         umidade = x.UmidadeAr,
+                        tdsPpm = x.TdsPpm,
                         ec = x.TdsPpm,
+                        salinidadePpt = x.SalinidadePpt,
+                        qualidadeAgua = !string.IsNullOrWhiteSpace(x.QualidadeAgua) ? x.QualidadeAgua : x.QualidadeTds,
                         nivel = x.NivelPct,
                         volume = x.VolumeLitros,
                         ldr = x.LdrRaw
@@ -289,6 +292,7 @@ namespace PBL.Controllers
                 var q = qualidade.Trim();
                 leituras = leituras
                     .Where(x => (!string.IsNullOrWhiteSpace(x.QualidadeAgua) && x.QualidadeAgua.Contains(q, StringComparison.OrdinalIgnoreCase))
+                                || (!string.IsNullOrWhiteSpace(x.QualidadeTds) && x.QualidadeTds.Contains(q, StringComparison.OrdinalIgnoreCase))
                                 || (!string.IsNullOrWhiteSpace(x.Alerta) && x.Alerta.Contains(q, StringComparison.OrdinalIgnoreCase)))
                     .ToList();
             }
