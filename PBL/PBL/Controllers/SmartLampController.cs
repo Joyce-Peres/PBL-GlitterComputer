@@ -7,6 +7,7 @@ using PBL.DAO;
 using PBL.Models;
 using PBL.Services;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,12 +17,14 @@ namespace PBL.Controllers
     {
         private readonly IConfiguration _config;
         private readonly SmartLampMqttService _mqtt;
+        private readonly FiwareSthCometService _historicoService;
         private readonly SmartLampConfigDAO _dao = new SmartLampConfigDAO();
 
-        public SmartLampController(IConfiguration config, SmartLampMqttService mqtt)
+        public SmartLampController(IConfiguration config, SmartLampMqttService mqtt, FiwareSthCometService historicoService)
         {
             _config = config;
             _mqtt = mqtt;
+            _historicoService = historicoService;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -59,8 +62,35 @@ namespace PBL.Controllers
                 new { Value = 3, Text = "3 - Forte" },
                 new { Value = 4, Text = "4 - Personalizada" }
             }, "Value", "Text");
-            ViewBag.BrokerUrl = _config["SmartLampMqtt:BrokerUrl"];
-            ViewBag.TopicSensor = _config["SmartLampMqtt:TopicSensor"];
+        }
+
+        private static string ResolverTopicComando(string entityId)
+        {
+            if (string.IsNullOrWhiteSpace(entityId))
+                return null;
+
+            var normalizado = entityId.Trim();
+            var separador = normalizado.LastIndexOf(':');
+            if (separador >= 0 && separador < normalizado.Length - 1)
+                normalizado = normalizado.Substring(separador + 1);
+
+            return "/TEF/" + normalizado + "/cmd";
+        }
+
+        private string ResolverTopicComandoPorAquario(int aquarioId)
+        {
+            if (aquarioId <= 0)
+                return _config["SmartLampMqtt:TopicCmd"];
+
+            var aquario = new AquarioDAO().Consulta(aquarioId);
+            if (aquario != null)
+            {
+                var topicAquario = ResolverTopicComando(aquario.FiwareEntityId);
+                if (!string.IsNullOrWhiteSpace(topicAquario))
+                    return topicAquario;
+            }
+
+            return _config["SmartLampMqtt:TopicCmd"];
         }
 
         [HttpGet]
@@ -133,7 +163,8 @@ namespace PBL.Controllers
                 _dao.Salvar(model);
 
                 // Publica JSON no formato esperado pelo ESP32 (campo "tipo":"peixe")
-                await _mqtt.PublicarLuzAsync(model.R, model.G, model.B, model.Brilho);
+                var topicCmd = ResolverTopicComandoPorAquario(model.AquarioId);
+                await _mqtt.PublicarLuzAsync(model.R, model.G, model.B, model.Brilho, topicCmd);
 
                 TempData["Mensagem"] = "Configuração salva e enviada para a lâmpada (MQTT).";
                 return RedirectToAction("Personalizar");
@@ -148,6 +179,32 @@ namespace PBL.Controllers
         public IActionResult Dashboard()
         {
             return RedirectToAction("Personalizar");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> HistoricoLuminosidade(int? aquarioId)
+        {
+            try
+            {
+                var leituras = await _historicoService.ConsultarHistoricoAsync(aquarioId, null, null, lastN: 60);
+
+                var dados = leituras
+                    .Where(x => x.LdrRaw.HasValue)
+                    .OrderBy(x => x.DataLeitura)
+                    .Select(x => new
+                    {
+                        dataHora = x.DataLeitura.ToString("HH:mm:ss"),
+                        ldrRaw = x.LdrRaw.Value,
+                        luminosidade = Math.Max(0, Math.Min(100, (int)Math.Round((x.LdrRaw.Value / 4095.0) * 100.0))),
+                        fonteDados = x.FonteDados
+                    });
+
+                return Json(dados);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest(new { erro = erro.Message });
+            }
         }
     }
 }

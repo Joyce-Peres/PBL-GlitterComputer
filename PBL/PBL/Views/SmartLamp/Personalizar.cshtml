@@ -88,11 +88,11 @@
                 <div class="col-md-6">
                     <h5 class="card-title mb-0">Leitura atual</h5>
                     <div class="display-4" id="valorAtual">--</div>
-                    <div class="text-muted" id="statusMqtt">desconectado</div>
+                    <div class="text-muted" id="statusMqtt">aguardando histórico</div>
                 </div>
                 <div class="col-md-6">
                     <h5 class="card-title">Histórico (sessão)</h5>
-                    <p class="text-muted mb-0">Os valores recebidos pelo sensor são exibidos no gráfico abaixo.</p>
+                    <p class="text-muted mb-0">Os valores são consultados no histórico do STH-Comet e atualizados periodicamente.</p>
                 </div>
             </div>
         </div>
@@ -106,12 +106,10 @@
 </section>
 
 @section Scripts {
-    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
         (function () {
-            var brokerUrl = '@(ViewBag.BrokerUrl ?? "")';
-            var topicSensor = '@(ViewBag.TopicSensor ?? "")';
+            var historicoUrl = '@Url.Action("HistoricoLuminosidade", "SmartLamp")';
 
             function toHex(n) {
                 var h = parseInt(n || 0).toString(16);
@@ -133,11 +131,6 @@
             $('#corPicker').on('input', function () { syncRgbFromPicker($(this).val()); });
             $('#R,#G,#B').on('input', syncPickerFromRgb);
             syncPickerFromRgb();
-
-            if (!brokerUrl || !topicSensor) {
-                $('#statusMqtt').text('MQTT não configurado no appsettings.json');
-                return;
-            }
 
             var labels = [];
             var data = [];
@@ -169,49 +162,44 @@
 
             function setStatus(text) { $('#statusMqtt').text(text); }
 
-            var client = mqtt.connect(brokerUrl, {
-                connectTimeout: 5000,
-                keepalive: 60,
-                clientId: 'pbl_lamp_' + Math.random().toString(36).substr(2, 8),
-                reconnectPeriod: 3000
-            });
+            function carregarHistoricoLuminosidade() {
+                var aquarioId = $('#AquarioId').val() || null;
+                setStatus('consultando STH-Comet...');
 
-            client.on('connect', function () {
-                setStatus('conectado');
-                client.subscribe(topicSensor);
-            });
-            client.on('offline', function () { setStatus('offline'); });
-            client.on('error', function () { setStatus('erro'); });
+                $.get(historicoUrl, { aquarioId: aquarioId }, function (dados) {
+                    labels = [];
+                    data = [];
 
-            client.on('message', function (topic, msg) {
-                if (topic !== topicSensor) return;
-
-                // O ESP32 publica JSON completo, ex: {"ldr_raw":2359,"temp_agua":22}
-                // Precisamos parsear o JSON e extrair ldr_raw (0-4095) → normalizar 0-100
-                var v = 0;
-                try {
-                    var parsed = JSON.parse(msg.toString());
-                    if (parsed && typeof parsed.ldr_raw === 'number') {
-                        // ldr_raw já vem invertido no firmware (4095 - raw),
-                        // então 0 = escuro, 4095 = luz máxima → normaliza para 0-100
-                        v = Math.round((parsed.ldr_raw / 4095) * 100);
-                        v = Math.max(0, Math.min(100, v));
+                    if (!dados || !dados.length) {
+                        $('#valorAtual').text('--');
+                        setStatus('sem leituras no STH-Comet');
+                        chart.update('none');
+                        return;
                     }
-                } catch (e) {
-                    // fallback: se por algum motivo vier valor simples
-                    v = parseInt(msg.toString()) || 0;
-                    v = Math.max(0, Math.min(100, v));
-                }
 
-                $('#valorAtual').text(v + ' %');
+                    dados.forEach(function (item) {
+                        labels.push(item.dataHora);
+                        data.push(item.luminosidade);
+                    });
 
-                var now = new Date();
-                var t = now.toLocaleTimeString();
-                labels.push(t);
-                data.push(v);
-                if (labels.length > maxPoints) { labels.shift(); data.shift(); }
-                chart.update('none');
-            });
+                    if (labels.length > maxPoints) {
+                        labels = labels.slice(labels.length - maxPoints);
+                        data = data.slice(data.length - maxPoints);
+                    }
+
+                    $('#valorAtual').text(data[data.length - 1] + ' %');
+                    setStatus('histórico atualizado via STH-Comet');
+                    chart.data.labels = labels;
+                    chart.data.datasets[0].data = data;
+                    chart.update('none');
+                }).fail(function () {
+                    setStatus('erro ao consultar STH-Comet');
+                });
+            }
+
+            $('#AquarioId').on('change', carregarHistoricoLuminosidade);
+            carregarHistoricoLuminosidade();
+            setInterval(carregarHistoricoLuminosidade, 10000);
         })();
     </script>
 }

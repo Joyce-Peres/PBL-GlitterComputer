@@ -22,16 +22,18 @@ namespace PBL.Services
         /// Publica um único payload JSON no tópico de comando do ESP32.
         /// Usa TCP puro (porta 1883) — compatível com Mosquitto/FIWARE sem WebSocket.
         /// </summary>
-        public async Task<bool> PublicarJsonAsync(string jsonPayload)
+        public async Task<bool> PublicarJsonAsync(string jsonPayload, string topicCmd = null)
         {
             if (string.IsNullOrWhiteSpace(jsonPayload))
                 return true;
 
             var brokerHost = _config["SmartLampMqtt:BrokerHost"];
             var brokerPort = int.TryParse(_config["SmartLampMqtt:BrokerPort"], out var p) ? p : 1883;
-            var topicCmd   = _config["SmartLampMqtt:TopicCmd"];
+            var topicFinal = string.IsNullOrWhiteSpace(topicCmd)
+                ? _config["SmartLampMqtt:TopicCmd"]
+                : topicCmd;
 
-            if (string.IsNullOrWhiteSpace(brokerHost) || string.IsNullOrWhiteSpace(topicCmd))
+            if (string.IsNullOrWhiteSpace(brokerHost) || string.IsNullOrWhiteSpace(topicFinal))
                 return false;
 
             var factory = new MqttFactory();
@@ -49,7 +51,7 @@ namespace PBL.Services
                 await client.ConnectAsync(options);
 
                 var message = new MqttApplicationMessageBuilder()
-                    .WithTopic(topicCmd)
+                    .WithTopic(topicFinal)
                     .WithPayload(Encoding.UTF8.GetBytes(jsonPayload))
                     .Build();
 
@@ -70,7 +72,7 @@ namespace PBL.Services
         /// O brilho do ESP32 vai de 0-255; o campo Brilho do model vai de 0-100,
         /// por isso é remapeado proporcionalmente.
         /// </summary>
-        public Task<bool> PublicarLuzAsync(int r, int g, int b, int brilhoPercent)
+        public Task<bool> PublicarLuzAsync(int r, int g, int b, int brilhoPercent, string topicCmd = null)
         {
             // Remapeia 0-100 → 0-255 para corresponder ao campo luz_brilho do ESP32
             var brilho255 = (int)Math.Round(Math.Max(0, Math.Min(100, brilhoPercent)) * 255.0 / 100.0);
@@ -84,7 +86,7 @@ namespace PBL.Services
                 luz_brilho = brilho255
             });
 
-            return PublicarJsonAsync(payload);
+            return PublicarJsonAsync(payload, topicCmd);
         }
 
         // Mantido para retrocompatibilidade — não usado pelo SmartLampController novo
