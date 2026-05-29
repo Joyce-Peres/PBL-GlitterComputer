@@ -103,7 +103,11 @@ namespace PBL.Services
             _config = config;
             _logger = logger;
 
+            // Tentar carregar o modelo da config, senão usa o padrão mais rápido (flash)
+            // Gemini 2.5 flash é bem mais rápido para análise de imagens do que o pro
             _model = string.IsNullOrWhiteSpace(_config["FishAi:Model"]) ? "gemini-2.5-flash" : _config["FishAi:Model"];
+            // Prioridade: env vars (.env) > env vars do sistema > appsettings
+            // Assim dev pode usar .env no local sem tocar no appsettings.json
             var apiKey = System.Environment.GetEnvironmentVariable("GEMINI_API_KEY")
                 ?? System.Environment.GetEnvironmentVariable("GOOGLE_API_KEY")
                 ?? System.Environment.GetEnvironmentVariable("FishAi__ApiKey")
@@ -119,7 +123,8 @@ namespace PBL.Services
 
             try
             {
-                // Calcular hash do arquivo para rastreabilidade
+                // Calcula hash da imagem para rastreabilidade dos resultados
+                // Se a API retorna resultado diferente com mesma imagem, fica fácil debugar
                 string fileHash = null;
                 try
                 {
@@ -131,7 +136,8 @@ namespace PBL.Services
                 }
                 catch (Exception exHash)
                 {
-                    _logger?.LogWarning(exHash, "Falha ao calcular hash da imagem para rastreabilidade");
+                    // Não falha se hash falhar - é só logging, não é crítico
+                    _logger?.LogWarning(exHash, "Falha ao calcular hash da imagem");
                 }
 
                 var promptComando =

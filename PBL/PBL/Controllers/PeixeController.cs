@@ -40,7 +40,8 @@ namespace PBL.Controllers
         protected override void ValidaDados(PeixeViewModel model, string operacao)
         {
             base.ValidaDados(model, operacao);
-            // Sanitizar e normalizar entradas simples
+            // Limpar espaços e codificar HTML pra evitar XSS simples
+            // Não é proteção completa mas ajuda contra ataques óbvios no form
             model.Nome = WebUtility.HtmlEncode(model.Nome?.Trim());
             model.Especie = WebUtility.HtmlEncode(model.Especie?.Trim());
             model.NomeCientifico = WebUtility.HtmlEncode(model.NomeCientifico?.Trim());
@@ -64,6 +65,9 @@ namespace PBL.Controllers
             try
             {
                 _logger?.LogInformation("Salvando peixe Id={Id} Operacao={Operacao}", model?.Id, Operacao);
+                
+                // Processa arquivo de foto se enviado
+                // Senão, em edição, mantém a foto antiga
                 var arquivoFoto = Request.Form.Files["arquivoFoto"];
                 if (arquivoFoto != null && arquivoFoto.Length > 0)
                     model.Foto = SalvarFoto(arquivoFoto, model.Id);
@@ -74,7 +78,7 @@ namespace PBL.Controllers
                         model.Foto = existente.Foto;
                 }
 
-                // Repete a lógica do PadraoController para permitir ação pós-save.
+                // Roda validações antes de salvar
                 ValidaDados(model, Operacao);
                 if (ModelState.IsValid == false)
                 {
@@ -83,7 +87,8 @@ namespace PBL.Controllers
                     return View(NomeViewForm, model);
                 }
 
-                // Marcar origem e timestamp
+                // Registra quando o peixe foi adicionado/modificado
+                // Útil pra saber se os parâmetros vieram da IA ou foram editados manualmente depois
                 model.Parameters.UpdatedAt = System.DateTime.Now;
 
                 if (Operacao == "I")
@@ -93,13 +98,16 @@ namespace PBL.Controllers
 
                 _logger?.LogInformation("Peixe salvo com sucesso Id={Id}", model.Id);
 
-                // Automação: aplica parâmetros ideais (se existirem) à configuração da lâmpada.
+                // Quando user cadastra um peixe, automaticamente aplica os parâmetros ideais à lâmpada
+                // Se o peixe requer 40% de brilho, a lâmpada já vai pra 40%
+                // Uso fire-and-forget (_) porque é não-crítico falhar aqui
                 if (model.LuminosidadeIdeal.HasValue || model.TemperaturaIdeal.HasValue)
                 {
                     _lampDao.AplicarAlvos(model.AquarioId, model.LuminosidadeIdeal, model.TemperaturaIdeal);
                     if (model.LuminosidadeIdeal.HasValue)
                     {
-                        // tenta enviar para a smart lamp automaticamente
+                        // Tenta enviar pra lâmpada MQTT se o chip esiver conectado
+                        // Se falhar, DB fica atualizado mesmo assim
                         _ = _mqtt.AplicarBrilhoAsync(model.LuminosidadeIdeal.Value);
                     }
                 }
@@ -125,10 +133,12 @@ namespace PBL.Controllers
                 if (!Directory.Exists(pastaTemp))
                     Directory.CreateDirectory(pastaTemp);
 
+                // Extrai extensão do arquivo. Se não tiver, assume JPG (é mais comum pra foto)
                 var extensao = Path.GetExtension(arquivoFoto.FileName);
                 if (string.IsNullOrWhiteSpace(extensao))
                     extensao = ".jpg";
 
+                // Prefixo "peixe_ai" facilita identificar arquivos temporários que vieram da IA depois
                 var nomeArquivo = $"peixe_ai_{DateTime.Now:yyyyMMddHHmmssfff}{extensao}";
                 var caminho = Path.Combine(pastaTemp, nomeArquivo);
 
@@ -136,9 +146,11 @@ namespace PBL.Controllers
                     await arquivoFoto.CopyToAsync(stream);
 
                 var result = await _fishAi.AnalisarImagemAsync(caminho);
+                // Deleta arquivo temporário - não precisa manter a imagem no servidor depois da IA analisar
                 try { System.IO.File.Delete(caminho); } catch { }
 
-                // Marcar como originário da IA
+                // Monta resposta com flag indicando que veio da IA
+                // Frontend usa isso pra mostrar um badge "🧠 Gerado pela IA" nos campos
                 var response = new
                 {
                     sucesso = true,

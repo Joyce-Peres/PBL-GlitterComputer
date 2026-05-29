@@ -74,7 +74,9 @@ namespace PBL.Models
         {
             mensagemErro = null;
 
-            // Validar temperatura
+            // Valida a coerência dos parâmetros: min <= ideal <= max
+            // Evita usuario digitar 30°C de mín e 20°C de máx
+            // Temperatura
             if (TemperaturaMin.HasValue && TemperaturaIdeal.HasValue && TemperaturaMin > TemperaturaIdeal)
             {
                 mensagemErro = "Temperatura mínima não pode ser maior que a ideal.";

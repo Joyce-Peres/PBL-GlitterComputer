@@ -40,6 +40,9 @@ namespace PBL.Controllers
 
         private int ResolverAquarioId()
         {
+            // Tenta usar o aquário configurado (se houver um padrão na config)
+            // Senão, usa o primeiro aquário disponível
+            // Isso facilita pro usuário se só tiver um aquário
             if (int.TryParse(_config["FiwareSthComet:DefaultAquarioId"], out var idConfig) && idConfig > 0)
                 return idConfig;
 

@@ -10,6 +10,8 @@ namespace PBL.Controllers
 {
     public class AquarioController : PadraoController<AquarioViewModel>
     {
+        // Controller de aquários - herda do PadraoController que já tem Create/Edit/Delete
+        // Só precisa implementar o que é específico (usuário logado, tipos de água)
         public AquarioController()
         {
             DAO = new AquarioDAO();
@@ -19,6 +21,8 @@ namespace PBL.Controllers
         protected override void PreencheDadosParaView(string operacao, AquarioViewModel model)
         {
             base.PreencheDadosParaView(operacao, model);
+            // Coloca o user logado automaticamente no aquário
+            // Assim user não consegue criar aquário pra outro user
             DefinirUsuarioLogado(model, operacao);
             ViewBag.TiposAgua = new SelectList(new[] { "Doce", "Salgada", "Mista" });
         }

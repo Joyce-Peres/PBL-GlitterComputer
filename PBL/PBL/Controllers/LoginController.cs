@@ -20,6 +20,8 @@ namespace PBL.Controllers
 
             if (usuarioLogado != null && usuarioLogado.Senha == senha)
             {
+                // Cria sessão pro usuário logado
+                // Controllers checam HttpContext.Session["Logado"] pra saber se é pra bloquear
                 HttpContext.Session.SetString("Logado", "true");
                 HttpContext.Session.SetInt32("UsuarioId", usuarioLogado.Id);
                 HttpContext.Session.SetString("UsuarioNome", usuarioLogado.Nome);

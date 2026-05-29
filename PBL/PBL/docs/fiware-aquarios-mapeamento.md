@@ -1,7 +1,5 @@
 # Mapeamento Aquário x FIWARE
 
-Esta versão permite associar cada aquário cadastrado no SQL Server a uma entidade técnica do FIWARE/STH-Comet.
-
 ## Como funciona
 
 O FIWARE identifica o dispositivo pelo `EntityId`, por exemplo:
@@ -10,7 +8,7 @@ O FIWARE identifica o dispositivo pelo `EntityId`, por exemplo:
 Thing:lamp001
 ```
 
-O sistema ASP.NET mostra o nome amigável cadastrado no SQL Server, por exemplo:
+O sistema ASP.NET mostra o nome cadastrado no SQL Server, por exemplo:
 
 ```text
 Aquário IoT
@@ -49,11 +47,11 @@ ESP32 tópico -> /json/TEF/lamp002/attrs
 Caso já exista um aquário cadastrado, rode:
 
 ```sql
-UPDATE Aquarios
+UPDATE Aquarios  
 SET fiwareEntityId = 'Thing:lamp001'
 WHERE id = 1;
 ```
 
 ## Observação
 
-Não é necessário mudar o FIWARE para alterar o nome do aquário. O nome amigável fica no SQL Server. O FIWARE continua com o identificador técnico.
+Não é necessário mudar o FIWARE para alterar o nome do aquário. O nome fica no SQL Server. O FIWARE continua com o identificador técnico.

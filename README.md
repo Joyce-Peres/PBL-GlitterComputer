@@ -15,6 +15,18 @@ A aplicação permite cadastrar usuários, gerenciar aquários e peixes, consult
 - **API IoT**: endpoints REST para leituras (`/api/leituras`) documentados no **Swagger** (`/swagger`).
 - **IA**: detecção de espécie e parâmetros ideais por imagem no cadastro de peixe.
 
+## 🚀 Como Começar?
+
+> ⚠️ **Se está perdido**, leia [`INDEX.md`](PBL/PBL/docs/INDEX.md) primeiro — índice completo com recomendações personalizadas!
+
+Escolha seu caminho conforme seu perfil:
+
+| Perfil | Comece por |
+|--------|-----------|| 📋 **Só quer entender rápido** | [`EXECUTIVE_SUMMARY.md`](PBL/PBL/docs/EXECUTIVE_SUMMARY.md) (1 página) || 🎯 **Quero usar agora** | [`QUICKSTART.md`](PBL/PBL/docs/QUICKSTART.md) (5 min) |
+| 👤 **Quero conhecer as funcionalidades** | [`FEATURES.md`](PBL/PBL/docs/FEATURES.md) (guia prático) |
+| 👨‍💻 **Quero entender como funciona** | [`ARCHITECTURE.md`](PBL/PBL/docs/ARCHITECTURE.md) (fluxos técnicos) |
+| � **Quero ver os fluxos de comunicação** | [`COMMUNICATION_MAP.md`](PBL/PBL/docs/COMMUNICATION_MAP.md) (visual) |
+
 ## Requisitos
 
 - [.NET SDK](https://dotnet.microsoft.com/download) compatível com `netcoreapp3.1`
@@ -96,6 +108,33 @@ URLs comuns (conforme `launchSettings.json`):
 
 A rota padrão abre a **tela de login**. Após autenticar, o usuário é redirecionado ao **Menu** (`/Home`).
 
+## 🏗️ Arquitetura do Projeto
+
+O Aquamarine segue o padrão **MVC + DAO + Services**:
+
+```
+👤 Usuário
+    ↓
+🌐 View (Razor HTML)
+    ↓
+🎮 Controller (validações, lógica)
+    ↓
+⚙️ Services (IA, MQTT, etc)
+    ↓
+💾 DAO (Stored Procedures)
+    ↓
+🗄️ SQL Server
+```
+
+### Principais fluxos
+
+- **Cadastro com IA**: Form → Controller → Google Gemini → Preenche campos automaticamente
+- **Smart Lamp**: User controla brilho → MQTT → ESP32 → LED muda em tempo real
+- **Leituras IoT**: Sensores enviam → API REST → BD → Dashboard mostra gráficos
+- **CRUDs**: Padrão genérico com `PadraoDAO` + Stored Procedures (reduz duplicação)
+
+**Quer entender a comunicação completa?** Leia [`ARCHITECTURE.md`](PBL/PBL/docs/ARCHITECTURE.md).
+
 ## Fluxo de navegação
 
 1. **Login** (`/Login`) — entrar ou cadastrar; sem acesso ao menu, aquários, peixes ou sobre sem sessão.
@@ -116,17 +155,21 @@ Requisitos: chave válida no ambiente e imagem enviada no cadastro/edição.
 
 ## API e testes
 
-- **Swagger UI**: `/swagger`
-- **Coleção Postman**: `PBL/PBL/postman_collection_min.json`
-- **Exemplos**: `PBL/PBL/docs/api_demo.md`
 
 ## Documentação adicional
 
-| Arquivo | Conteúdo |
-|---------|----------|
-| `PBL/PBL/docs/checklist.md` | Checklist de entrega PBL / evidências |
-| `PBL/PBL/docs/security.md` | Boas práticas de segurança |
-| `PBL/PBL/docs/api_demo.md` | Demonstração da API IoT |
+Explore a documentação completa sobre como o projeto funciona:
+
+| Arquivo | Para quem | Conteúdo |
+|---------|-----------|---------|
+| `PBL/PBL/docs/INDEX.md` | 🗂️ Começando | **Comece aqui!** Índice completo com recomendações |
+| `PBL/PBL/docs/EXECUTIVE_SUMMARY.md` | 👔 Gestores/Apresentações | Uma página impressível com o resumo executivo |
+| `PBL/PBL/docs/QUICKSTART.md` | 🚀 Iniciantes | Começar em 5 minutos |
+| `PBL/PBL/docs/FEATURES.md` | 👤 Usuários | Como usar cada funcionalidade |
+| `PBL/PBL/docs/ARCHITECTURE.md` | 👨‍💻 Desenvolvedores | Fluxos de comunicação e arquitetura |
+| `PBL/PBL/docs/COMMUNICATION_MAP.md` | 🔍 Analistas | Mapa visual de todos os fluxos |
+| `PBL/PBL/docs/COHERENCE_REPORT.md` | 🔎 QA/Verificação | Validação de coerência doc ↔ código |
+| `PBL/PBL/docs/fiware-aquarios-mapeamento.md` | 🌐 FIWARE | Integração com plataforma FIWARE |
 
 ## CI
 

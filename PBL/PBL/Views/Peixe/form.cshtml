@@ -199,8 +199,12 @@
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     <script>
+        // Variável pra guardar a capacidade do aquário selecionado
+        // Usada nas validações abaixo pra alertar se o peixe precisa de mais espaço
         var capacidadeAquarioAtual = null;
 
+        // Valida se o volume mínimo que o peixe precisa cabe no aquário
+        // Aqui é pra evitar usar um peixe Marlin num aquário de 10L
         function avaliarVolumeIdeal() {
             var volumeMin = parseFloat($('#VolumeMinLitros').val());
             if (!capacidadeAquarioAtual || isNaN(volumeMin)) {
@@ -209,15 +213,17 @@
 
                 function avaliarTipoAgua() {
                     try {
+                        // Extrai o tipo de água do card de info do aquário
+                        // O backend monta assim: "Nome — X L, água Doce" ou Salgada
                         var tipo = null;
                         if ($('#infoAquario').is(':visible')) {
                             var texto = $('#infoAquario').text();
-                            // infoAquario shows 'Nome — X L, água Tipo'
-                            var m = texto.match(/água\s+(Doce|Salgada|Mista)/i);
+                            var m = texto.match(/\u00e1gua\s+(Doce|Salgada|Mista)/i);
                             if (m && m.length > 1) tipo = m[1];
                         }
 
-                        // Se não tivermos informação sobre o aquário, nada a fazer
+                        // Se a gente não conseguiu extrair tipo, deixa passar
+                        // (pode ser que não tenha aquário selecionado ainda)
                         if (!tipo) return true;
 
                         var salMin = parseFloat($('#SalinidadePptMin').val());
@@ -225,16 +231,17 @@
                         if (isNaN(salMin)) salMin = null;
                         if (isNaN(salMax)) salMax = null;
 
-                        // Se não houver parâmetros de salinidade, não avisar
+                        // Se usuário não preencheu sal, pode deixar
                         if (salMin === null && salMax === null) return true;
 
-                        // Regra simples: se aquário é Doce (fresh) e o peixe tem salinidade mínima significativa (>0.5 ppt), avisar
+                        // Se o peixe é marinho mas o aquário é doce, reclama
+                        // Threshold 0.5 ppt porque água doce é <0.5, salgada é >1.025
                         var precisaSalgada = (salMin !== null && salMin > 0.5) || (salMax !== null && salMax > 0.5);
                         if (tipo.match(/Doce/i) && precisaSalgada) {
                             return confirm('Aviso: Os parâmetros de salinidade detectados para esta espécie indicam água salgada, enquanto o aquário selecionado é de água doce. Deseja continuar mesmo assim?');
                         }
 
-                        // Se aquário é Salgada e peixe indica salinidade próxima de zero, avisar
+                        // E vice versa - peixe de água doce num aquário salgado
                         var precisaDoce = (salMax !== null && salMax < 0.5);
                         if (tipo.match(/Salgada/i) && precisaDoce) {
                             return confirm('Aviso: Os parâmetros de salinidade detectados para esta espécie indicam água doce, enquanto o aquário selecionado é de água salgada. Deseja continuar mesmo assim?');
@@ -242,6 +249,7 @@
 
                         return true;
                     } catch (e) {
+                        // Se falhar alguma coisa no parsing, deixa passar
                         return true;
                     }
                 }
@@ -254,7 +262,8 @@
         }
 
         $(function () {
-            // Mostrar/ocultar card de informações do aquário
+            // Quando o usuário muda o aquário, carrega as infos (nome, capacidade, tipo de água)
+            // Depois a gente usa isso pra validar se o peixe é compatível
             $('#aquarioId').change(function () {
                 var id = $(this).val();
                 if (!id) {
@@ -276,7 +285,9 @@
                 });
             });
 
-            // Detectar parâmetros pela imagem
+            // Quando clica em "Detectar parâmetros pela imagem"
+            // Manda a foto pra IA analisar e preenche os campos automaticamente
+            // Assim o user não precisa chutar temperatura ideal, brilho, etc
             $('#btnDetectarIA').click(function () {
                 var fileInput = $('#arquivoFoto')[0];
                 if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
@@ -296,19 +307,14 @@
                     contentType: false
                 }).done(function (data) {
                     if (data && data.sucesso) {
-                        // Preencher campos básicos
                         if (data.especie) $('#Especie').val(data.especie);
                         if (data.nomeCientifico) $('#NomeCientifico').val(data.nomeCientifico);
-
-                        // Preencher temperatura
                         if (data.temperaturaIdeal !== null && data.temperaturaIdeal !== undefined)
                             $('#TemperaturaIdeal').val(data.temperaturaIdeal);
                         if (data.temperaturaMin !== null && data.temperaturaMin !== undefined)
                             $('#TemperaturaMin').val(data.temperaturaMin);
                         if (data.temperaturaMax !== null && data.temperaturaMax !== undefined)
                             $('#TemperaturaMax').val(data.temperaturaMax);
-
-                        // Preencher luminosidade
                         if (data.luminosidadeIdeal !== null && data.luminosidadeIdeal !== undefined)
                             $('#LuminosidadeIdeal').val(data.luminosidadeIdeal);
                         if (data.luminosidadeMin !== null && data.luminosidadeMin !== undefined)
@@ -328,8 +334,6 @@
 
                         if (data.volumeMinLitros !== null && data.volumeMinLitros !== undefined)
                             $('#VolumeMinLitros').val(data.volumeMinLitros);
-
-                        // Expandir a seção de parâmetros avançados
                         $('#advancedParams').collapse('show');
 
                         $('#iaStatus').text(' Parâmetros preenchidos!').removeClass('text-danger').addClass('text-success');
@@ -341,7 +345,8 @@
                 });
             });
 
-            // Detectar parâmetros pela espécie
+            // Alternativa: user digita só a espécie e IA busca parâmetros ideais
+            // Más lento que imagem mas funciona se não tiver foto
             $('#btnDetectarEspecieIA').click(function () {
                 var especie = $('#Especie').val();
                 if (!especie || especie.trim() === '') {
@@ -353,19 +358,14 @@
                 $.post('/Peixe/DetectarParametrosPorEspecie', { especie: especie })
                     .done(function (data) {
                         if (data && data.sucesso) {
-                            // Preencher campos básicos
                             if (data.especie) $('#Especie').val(data.especie);
                             if (data.nomeCientifico) $('#NomeCientifico').val(data.nomeCientifico);
-
-                            // Preencher temperatura
                             if (data.temperaturaIdeal !== null && data.temperaturaIdeal !== undefined)
                                 $('#TemperaturaIdeal').val(data.temperaturaIdeal);
                             if (data.temperaturaMin !== null && data.temperaturaMin !== undefined)
                                 $('#TemperaturaMin').val(data.temperaturaMin);
                             if (data.temperaturaMax !== null && data.temperaturaMax !== undefined)
                                 $('#TemperaturaMax').val(data.temperaturaMax);
-
-                            // Preencher luminosidade
                             if (data.luminosidadeIdeal !== null && data.luminosidadeIdeal !== undefined)
                                 $('#LuminosidadeIdeal').val(data.luminosidadeIdeal);
                             if (data.luminosidadeMin !== null && data.luminosidadeMin !== undefined)
@@ -385,8 +385,6 @@
 
                             if (data.volumeMinLitros !== null && data.volumeMinLitros !== undefined)
                                 $('#VolumeMinLitros').val(data.volumeMinLitros);
-
-                            // Expandir a seção de parâmetros avançados
                             $('#advancedParams').collapse('show');
 
                             $('#iaStatus').text(' Parâmetros preenchidos!').removeClass('text-danger').addClass('text-success');
@@ -399,6 +397,8 @@
                     });
             });
 
+            // Valida o formulário antes de enviar
+            // Roda as checks de volume e compatibilidade de água
             $('form.form-peixe').on('submit', function (e) {
                 if (!avaliarVolumeIdeal()) {
                     e.preventDefault();
