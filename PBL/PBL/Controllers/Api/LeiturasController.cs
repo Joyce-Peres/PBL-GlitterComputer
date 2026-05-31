@@ -28,7 +28,7 @@ namespace PBL.Controllers.Api
     [Route("api/[controller]")]
     [ApiController]
     [Produces("application/json")]
-    [ApiExplorerSettings(GroupName = "iot")]
+    [ApiExplorerSettings(GroupName = "v1")]
     public class LeiturasController : ControllerBase
     {
         private readonly FiwareSthCometService _historicoService;
