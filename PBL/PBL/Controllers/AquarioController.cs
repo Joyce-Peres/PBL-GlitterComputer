@@ -10,8 +10,6 @@ namespace PBL.Controllers
 {
     public class AquarioController : PadraoController<AquarioViewModel>
     {
-        // Controller de aquários - herda do PadraoController que já tem Create/Edit/Delete
-        // Só precisa implementar o que é específico (usuário logado, tipos de água)
         public AquarioController()
         {
             DAO = new AquarioDAO();

@@ -286,8 +286,8 @@
             });
 
             // Quando clica em "Detectar parâmetros pela imagem"
-            // Manda a foto pra IA analisar e preenche os campos automaticamente
-            // Assim o user não precisa chutar temperatura ideal, brilho, etc
+            // Envia a foto para análise e preenche os campos automaticamente
+            // Assim o usuário não precisa estimar temperatura ideal, brilho, etc.
             $('#btnDetectarIA').click(function () {
                 var fileInput = $('#arquivoFoto')[0];
                 if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
@@ -341,12 +341,12 @@
                         $('#iaStatus').text(' ' + (data && data.mensagem ? data.mensagem : 'Falha ao analisar.')).addClass('text-danger').removeClass('text-warning');
                     }
                 }).fail(function () {
-                    $('#iaStatus').text('Erro ao chamar a IA.').addClass('text-danger').removeClass('text-warning');
+                    $('#iaStatus').text('Erro ao chamar o serviço de análise.').addClass('text-danger').removeClass('text-warning');
                 });
             });
 
-            // Alternativa: user digita só a espécie e IA busca parâmetros ideais
-            // Más lento que imagem mas funciona se não tiver foto
+            // Alternativa: digitar apenas a espécie e consultar parâmetros automaticamente
+            // Mais lento que por imagem, mas funciona sem foto
             $('#btnDetectarEspecieIA').click(function () {
                 var especie = $('#Especie').val();
                 if (!especie || especie.trim() === '') {
@@ -354,7 +354,7 @@
                     return;
                 }
 
-                $('#iaStatus').text(' Consultando IA...').removeClass('text-danger').addClass('text-warning');
+                $('#iaStatus').text(' Consultando...').removeClass('text-danger').addClass('text-warning');
                 $.post('/Peixe/DetectarParametrosPorEspecie', { especie: especie })
                     .done(function (data) {
                         if (data && data.sucesso) {
@@ -393,7 +393,7 @@
                         }
                     })
                     .fail(function () {
-                        $('#iaStatus').text(' Erro ao chamar a IA.').addClass('text-danger').removeClass('text-warning');
+                        $('#iaStatus').text(' Erro ao chamar o serviço de análise.').addClass('text-danger').removeClass('text-warning');
                     });
             });
 

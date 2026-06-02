@@ -11,9 +11,6 @@ namespace PBL.DAO
 {
     public abstract class PadraoDAO<T> where T : PadraoViewModel
     {
-        // DAO genérico que serve pra todas as entidades (Peixes, Aquarios, etc)
-        // Cada subclasse só precisa implementar SetTabela() e CriaParametros()
-        // O resto (Insert, Update, Delete, Consulta) funciona pra tudo via Stored Procedures
         public PadraoDAO()
         {
             SetTabela();
@@ -28,7 +25,6 @@ namespace PBL.DAO
 
         public virtual void Insert(T model)
         {
-            // Chama spInsert_Peixes, spInsert_Aquarios, etc
             HelperDAO.ExecutaProc("spInsert_" + Tabela, CriaParametros(model));
         }
 
@@ -39,8 +35,6 @@ namespace PBL.DAO
 
         public virtual void Delete(int id)
         {
-            // Usa uma SP genérica que deleta de qualquer tabela
-            // Mais seguro que SQL dinâmico ou concatenação
             var p = new SqlParameter[]
             {
                 new SqlParameter("id", id),
@@ -75,9 +69,6 @@ namespace PBL.DAO
 
         public virtual List<T> Listagem()
         {
-            // Listagem padrão ordenada pelo primeiro campo (ID)
-            // Subclasses podem fazer override pra usar procedures customizadas
-            // ex: ConsultaPeixesFiltro em PeixeDAO pra filtrar por aquário
             var p = new SqlParameter[]
              {
                 new SqlParameter("tabela", Tabela),

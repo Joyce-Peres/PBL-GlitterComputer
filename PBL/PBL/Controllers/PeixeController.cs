@@ -88,7 +88,7 @@ namespace PBL.Controllers
                 }
 
                 // Registra quando o peixe foi adicionado/modificado
-                // Útil pra saber se os parâmetros vieram da IA ou foram editados manualmente depois
+                // Útil para auditoria e para identificar alterações posteriores dos parâmetros
                 model.Parameters.UpdatedAt = System.DateTime.Now;
 
                 if (Operacao == "I")
@@ -138,7 +138,7 @@ namespace PBL.Controllers
                 if (string.IsNullOrWhiteSpace(extensao))
                     extensao = ".jpg";
 
-                // Prefixo "peixe_ai" facilita identificar arquivos temporários que vieram da IA depois
+                // Prefixo "peixe_ai" facilita identificar arquivos temporários deste fluxo
                 var nomeArquivo = $"peixe_ai_{DateTime.Now:yyyyMMddHHmmssfff}{extensao}";
                 var caminho = Path.Combine(pastaTemp, nomeArquivo);
 
@@ -146,11 +146,10 @@ namespace PBL.Controllers
                     await arquivoFoto.CopyToAsync(stream);
 
                 var result = await _fishAi.AnalisarImagemAsync(caminho);
-                // Deleta arquivo temporário - não precisa manter a imagem no servidor depois da IA analisar
+                // Deleta arquivo temporário - não precisa manter a imagem no servidor após a análise
                 try { System.IO.File.Delete(caminho); } catch { }
 
-                // Monta resposta com flag indicando que veio da IA
-                // Frontend usa isso pra mostrar um badge "🧠 Gerado pela IA" nos campos
+                // Monta resposta com flag de origem para a UI indicar preenchimento automático
                 var response = new
                 {
                     sucesso = true,

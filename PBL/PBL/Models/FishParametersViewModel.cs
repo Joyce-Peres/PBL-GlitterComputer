@@ -58,7 +58,7 @@ namespace PBL.Models
         public decimal? VolumeMinLitros { get; set; }
 
         /// <summary>
-        /// Indica se os parâmetros foram gerados pela IA (true) ou digitados manualmente (false)
+        /// Indica se os parâmetros foram preenchidos automaticamente (true) ou digitados manualmente (false)
         /// </summary>
         public bool? OriginFromAI { get; set; }
 
