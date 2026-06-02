@@ -78,44 +78,5 @@ namespace PBL.Controllers
             }
         }
 
-        public async Task<IActionResult> Leituras(int? aquarioId, DateTime? dataInicio, DateTime? dataFim,
-            decimal? temperaturaMin, decimal? temperaturaMax)
-        {
-            try
-            {
-                var aquarios = new AquarioDAO().Listagem();
-                ViewBag.Aquarios = new SelectList(aquarios, "Id", "Nome", aquarioId);
-                ViewBag.DataInicio = dataInicio?.ToString("yyyy-MM-dd");
-                ViewBag.DataFim = dataFim?.ToString("yyyy-MM-dd");
-                ViewBag.TemperaturaMin = temperaturaMin;
-                ViewBag.TemperaturaMax = temperaturaMax;
-                ViewBag.OrigemDados = _historicoService.EstaConfigurado
-                    ? "MongoDB via STH-Comet"
-                    : "SQL legado";
-
-                var lista = await _historicoService.ConsultarHistoricoAsync(aquarioId, dataInicio, dataFim, lastN: 20);
-                if (!lista.Any() && !_historicoService.EstaConfigurado)
-                    lista = new LeituraSensorDAO().ConsultaComFiltro(aquarioId, dataInicio, dataFim, temperaturaMin, temperaturaMax);
-
-                if (temperaturaMin.HasValue || temperaturaMax.HasValue)
-                {
-                    lista = lista.FindAll(item =>
-                    {
-                        var temperatura = item.TemperaturaAgua.HasValue ? item.TemperaturaAgua.Value : item.Temperatura;
-                        if (temperaturaMin.HasValue && temperatura < temperaturaMin.Value)
-                            return false;
-                        if (temperaturaMax.HasValue && temperatura > temperaturaMax.Value)
-                            return false;
-                        return true;
-                    });
-                }
-
-                return View(lista);
-            }
-            catch (Exception erro)
-            {
-                return View("Error", new ErrorViewModel(erro.ToString()));
-            }
-        }
     }
 }
